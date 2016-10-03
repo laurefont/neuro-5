@@ -6,3 +6,4 @@ Laurine Kolly <laurine.kolly@epfl.ch>
 Gael Reganha <gael.reganha@epfl.ch>
 Julie Brancato <julie.brancato.epfl.ch>
 Fiona Joseph <fiona.joseph@epfl.ch>
+Johannes Brune <johannes.brune@epfl.ch>

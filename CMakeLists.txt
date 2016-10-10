@@ -58,3 +58,12 @@ if (test)
     target_link_libraries (${project_name}_test ${GTEST_BOTH_LIBRARIES} pthread)
     add_test (${project_name} ${project_name}_test)
 endif ()
+
+# Doxygen
+find_package (Doxygen)
+add_custom_target (doc
+    ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/Doxyfile
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Generating API documentation with Doxygen"
+    VERBATIM)
+

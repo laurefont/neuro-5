@@ -8,29 +8,38 @@
 class Neuron {
 	
 	public :
-	Neuron();
-	virtual ~Neuron(); //heritage ?
+	Neuron(); ///add arguments
+	virtual ~Neuron(); ///heritage ?
 	
-	void update(sf::Time dt);
-	void set_thresh_f();
+	void update(sf::Time dt); ///adapt to chrono library
+    bool has_reached_threshold();
+    void input(sf::Time dt); ///modifies current
+    void output(sf::Time dt); ///modifies current
+    
+    
+    
+
 	
 	
 	private :
 	
-	int inhib_connexions; //number of connections from other inhibitatory neurons
-	int excit_connexions; //number of connections from other excitatory neurons
-	double I; //synaptic currents arriving at the soma
-	double V; //membrane potential
-	double Vr; //reset potential
-	double R; //membrane resistance
-	double D; //transmission delay
-	double J; //amplitude
-	double tau; //time constant of the circuit
-	double tau_rp; //refractory period
-	double teta; //firing threshold
-	double thresh_f; //frequency that is needed for a neuron to reach threshold in absence of feedback
-	double ext_f; //external frequency
-	bool has_reached_threshold;
+    bool excitatory_;
+	int inhib_connections_; ///number of connections from other inhibitatory neurons
+	int excit_connections_; ///number of connections from other excitatory neurons
+    double epsilon_; ///connection density
+    double I_; ///synaptic currents arriving at the soma
+	double V_; ///membrane potential
+	double tau_; ///time constant of the circuit
+	double tau_rp_; ///refractory period
+	double ext_f_; ///external frequency
+    
+    static const Physics::Potential firing_threshold_;
+    static const Physics::Potential rest_potential_; ///Vr
+    static const Physics::Time transmission_delay_; ///D
+    static const Physics::Time refactory_period_;
+    static const Physics::Resistance membrane_resistance_; ///R
+    static const Physics::Amplitude amplitude_ ///J
+    
 	
 };
 

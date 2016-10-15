@@ -10,12 +10,12 @@
 class Network
 {
 public:
-    Network(/* arguments */);
-    virtual ~Network();
+	Network(/* arguments */);
+	virtual ~Network();
 
 private:
-    std::vector<Neuron> neurons_;
-    std::vector<Connection> connections_from_surroundings_;
+	std::vector<Neuron> neurons_;
+	std::vector<Connection> connections_from_surroundings_;
 };
 
 #endif // NETWORK_HPP

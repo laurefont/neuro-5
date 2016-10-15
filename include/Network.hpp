@@ -4,13 +4,21 @@
 #include <vector>
 #include <Neuron.hpp>
 
-/**
- * @brief Sparsely connected network of neurons
- */
+///
+/// @brief Sparsely connected network of neurons
+///
 class Network
 {
 public:
-	Network(/* arguments */);
+	/// 
+	/// Create a network of excitatory and inhibitatory neurons.
+	///
+	/// The copy constructor and assignment operator are deleted.
+	/// 
+	Network(int number_excitatory_neurons, int number_inhibitory_neurons);
+	Network(const Network&) = delete;
+	Network& operator=(const Network&) = delete;
+
 	virtual ~Network();
 
 	void update(/* arguments */);

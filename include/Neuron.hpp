@@ -3,30 +3,32 @@
 
 #include <iostream>
 
-
+/*!
+ * Allow to calculate the membrane potential for each step of time, check if the treshold is reached, if yes, the neuron spikes. 
+ */
 
 class Neuron      
 {
 	private :
 	
-	/// valeurs qui varient au cours du temps
+	// valeurs qui varient au cours du temps
 	
-	bool excitatory_;          /// is the neuron excitatory or inhibitory ?
-	int Ci_;                   /// each neuron receives C randomly chosen connections from other neurons in the network
-	int Ce_;           	       /// Ci = connections with inhibitory neurons Ce = connections with excitatory neurons
-	double C_proba_;           /// connection probability
-	double V_;                 /// membrane potential
-	double ext_frequency_;     /// external frequency
-	double R_;                 /// membrane resistance
+	bool excitatory_;          ///>is the neuron excitatory or inhibitory ?
+	int Ci_;                   ///>each neuron receives C randomly chosen connections from other neurons in the network
+	int Ce_;           	       ///>Ci = connections with inhibitory neurons Ce = connections with excitatory neurons
+	double C_proba_;           ///>connection probability
+	double V_;                 ///>membrane potential
+	double ext_frequency_;     ///>external frequency
+	double R_;                 ///>membrane resistance
 	
 	///ces attributs prennent des valeurs constantes qui ne varient pas en fonction du temps que nous initialiserons dans la classe Physics
 	
-	double theta_;             /// firing treshold
-	double Vr_;                /// reset potential
-	double Tau_rp_;            /// refractory period (potential insensitive to stimulation)
-	double D_;  		       /// transmission delay
-	double J_;                 /// postsynaptic potential amplitude
-	double Tau_;               /// membrane time constant
+	double theta_;             ///>firing treshold
+	double Vr_;                ///>reset potential
+	double Tau_rp_;            ///>refractory period (potential insensitive to stimulation)
+	double D_;  		       ///>transmission delay
+	double J_;                 ///>postsynaptic potential amplitude
+	double Tau_;               ///>membrane time constant
 	
 	public :	
 	
@@ -47,7 +49,7 @@ class Neuron
      * si true, appelle spikes
      */
      
-    virtual void spikes(); //Inhibitory : transmet potentiel négatif alors que excitatory transmet potentiel positif
+    virtual void spikes(); ///>Inhibitory : transmet potentiel négatif alors que excitatory transmet potentiel positif
     /*!
      * @brief transmet le potentiel d'action aux neurones connectés/voisins
      */

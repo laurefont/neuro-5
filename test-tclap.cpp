@@ -4,19 +4,19 @@ int main (int argc, char** argv)
 {
 	try {
 		
-	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
+	TCLAP::CmdLine cmd("Simulation of neurons network", ' ', "0.9");
 	
 	
-	//le false veut dire que l'utilisateur n'est pas forcément obliger d'entrer une valeur de temps dans les lignes de commande
-	//s'il ne saisit pas de valeur, la valeur par défaut (1000 ici) sera prise.
+	///le false veut dire que l'utilisateur n'est pas forcément obliger d'entrer une valeur de temps dans les lignes de commande
+	///s'il ne saisit pas de valeur, la valeur par défaut (1000 ici) sera prise.
 	TCLAP::ValueArg<double> timeArg("t","time","total simulation time",false,1000,"double");
 	cmd.add(timeArg);
 	
-	//pas obligatoire de saisir une valeur, valeur par défaut = 12500
+	///pas obligatoire de saisir une valeur, valeur par défaut = 12500
 	TCLAP::ValueArg<int> neuronArg("n","neurons","total number of neurons to consider for the simulation",false,12500,"int"); 
 	cmd.add(neuronArg);
 	
-	//pour mettre le temps de simulation à zéro, valeur par défaut false, si on veut mettre le temps à zéro : ajouter -z ou --zero dans les lignes de commande
+	///pour mettre le temps de simulation à zéro, valeur par défaut false, si on veut mettre le temps à zéro : ajouter -z ou --zero dans les lignes de commande
 	TCLAP::SwitchArg simulation_time_zero_switch("z","zero","Simulation time to zero", cmd, false); 
 	
 	cmd.parse(argc, argv);
@@ -57,8 +57,9 @@ int main (int argc, char** argv)
    The simulation time is now zero
  */
 
-//Remarques : les lettres n, t et z sont appelées "flags". Tous les flags ont un type bien défini. 
-//On peut aussi écrire --neurons --time --zero dans le terminal, cela revient au même que de mettre uniquement le "flag"
+///Remarques : les lettres n, t et z sont appelées "flags". Tous les flags ont un type bien défini. 
+///On peut aussi écrire --neurons --time --zero dans le terminal, cela revient au même que de mettre uniquement le "flag"
+///Pour vous renseigner sur les divers arguments, leur type et leur description, il existe la commande --help
 
 
 

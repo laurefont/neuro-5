@@ -60,3 +60,10 @@ void main(int argc, char* argv[])
     target_link_libraries (${project_name}_test ${GTEST_BOTH_LIBRARIES} pthread)
     add_test (${project_name} ${project_name}_test)
 endif ()
+
+#doxygen
+set(doxyfile ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+add_custom_target(doc
+COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
+WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+COMMENT "Generating API documentation with Doxygen" VERBATIM)

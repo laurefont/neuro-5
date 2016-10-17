@@ -6,6 +6,7 @@ project (${project_name})
 set (CMAKE_BUILD_TYPE "Debug")
 
 option (test "Build tests" ON)
+option (only-tests "Build  ONLY tests and no source" OFF)
 
 # Use modern C++
 set (CMAKE_CXX_STANDARD "14")
@@ -28,11 +29,15 @@ endif ()
 set (common_includes ${PROJECT_SOURCE_DIR}/include)
 include_directories (${common_includes})
 
-# Generate the list of source files
-file (GLOB_RECURSE source_files src/*.cpp)
+if (only-tests)  
+  file (GLOB_RECURSE source_files test/*.cpp)
+else()
+  # Generate the list of source files
+  file (GLOB_RECURSE source_files src/*.cpp)
+  # Create executable
+  add_executable (${project_name} ${source_files})
+endif()
 
-# Create executable
-add_executable (${project_name} ${source_files})
 
 # Testing with GTest
 if (test)

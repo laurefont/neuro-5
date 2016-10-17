@@ -61,6 +61,7 @@ endif ()
 
 #doxygen
 set(doxyfile ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+find_package (Doxygen)
 add_custom_target(doc
 COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

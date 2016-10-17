@@ -35,9 +35,11 @@ file (GLOB_RECURSE source_files src/*.cpp)
 add_executable (${project_name} ${source_files})
 
 # Testing with GTest
-if (test)
-    enable_testing ()
-    find_package (GTest)
+void main(int argc, char* argv[])
+  {
+ 		::testing::InitGoogleTest(&argc, argv);
+  		RUN_ALL_TESTS(); 
+  }
 
     # location of GTest header files
     include_directories (${GTEST_INCLUDE_DIRS})

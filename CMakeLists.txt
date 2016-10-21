@@ -29,13 +29,11 @@ endif ()
 set (common_includes ${PROJECT_SOURCE_DIR}/include)
 include_directories (${common_includes})
 
-file (GLOB_RECURSE source_files test/*.cpp)
-if (only-tests)  
-else()
-  # Create executable
-  add_executable (${project_name} ${source_files})
+if (NOT only-tests)
+    # Create main executable
+    file (GLOB_RECURSE source_files src/*.cpp)
+    add_executable (${project_name} ${source_files})
 endif()
-
 
 # Testing with GTest
 if (test)
@@ -52,8 +50,10 @@ if (test)
     # Generate the list of test files
     file (GLOB_RECURSE test_files test/*.cpp)
 
-    # remove main.cpp from the list of source files
-    list (REMOVE_ITEM source_files ${PROJECT_SOURCE_DIR}/src/main.cpp)
+    if (NOT only-tests)
+      # remove main.cpp from the list of source files
+      list (REMOVE_ITEM source_files ${PROJECT_SOURCE_DIR}/src/main.cpp)
+    endif()
 
     # Create executable
     add_executable (${project_name}_test ${test_files} ${source_files})

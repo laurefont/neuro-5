@@ -29,11 +29,9 @@ endif ()
 set (common_includes ${PROJECT_SOURCE_DIR}/include)
 include_directories (${common_includes})
 
+file (GLOB_RECURSE source_files test/*.cpp)
 if (only-tests)  
-  file (GLOB_RECURSE source_files test/*.cpp)
 else()
-  # Generate the list of source files
-  file (GLOB_RECURSE source_files src/*.cpp)
   # Create executable
   add_executable (${project_name} ${source_files})
 endif()

@@ -6,6 +6,7 @@ project (${project_name})
 set (CMAKE_BUILD_TYPE "Debug")
 
 option (test "Build tests" ON)
+option (only-tests "Build  ONLY tests and no source" OFF)
 
 # Use modern C++
 set (CMAKE_CXX_STANDARD "14")
@@ -28,11 +29,11 @@ endif ()
 set (common_includes ${PROJECT_SOURCE_DIR}/include)
 include_directories (${common_includes})
 
-# Generate the list of source files
-file (GLOB_RECURSE source_files src/*.cpp)
-
-# Create executable
-add_executable (${project_name} ${source_files})
+if (NOT only-tests)
+    # Create main executable
+    file (GLOB_RECURSE source_files src/*.cpp)
+    add_executable (${project_name} ${source_files})
+endif()
 
 # Testing with GTest
 if (test)
@@ -49,8 +50,10 @@ if (test)
     # Generate the list of test files
     file (GLOB_RECURSE test_files test/*.cpp)
 
-    # remove main.cpp from the list of source files
-    list (REMOVE_ITEM source_files ${PROJECT_SOURCE_DIR}/src/main.cpp)
+    if (NOT only-tests)
+      # remove main.cpp from the list of source files
+      list (REMOVE_ITEM source_files ${PROJECT_SOURCE_DIR}/src/main.cpp)
+    endif()
 
     # Create executable
     add_executable (${project_name}_test ${test_files} ${source_files})
@@ -61,6 +64,7 @@ endif ()
 
 #doxygen
 set(doxyfile ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+find_package (Doxygen)
 add_custom_target(doc
 COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

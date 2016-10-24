@@ -1,67 +1,54 @@
-#pragma once
-
 #include <iostream>
+#include "Physics.hpp"
+#include "Event.hpp"
 #include <queue>
 
-#include "CurrentEvent.hpp"
 
-/*!
- * Allow to calculate the membrane potential for each step of time, check if the treshold is reached, if yes, the neuron spikes. 
- */
+#ifndef NEURON_H
+#define NEURON_H
 
-class Neuron      
-{
+class Neuron {
+	
+	public :
+    Neuron(bool const& exc, double const& eps, double const& tau, double const& ext_f, double const& time);
+    ~Neuron();
+	
+	void update(double const& dt); ///>adapt to chrono library
+    bool has_reached_threshold() const;
+    void input(); ///>modifies current
+    double output(double const & dt) const; ///>modifies current
+    void reset_potential(); ///>potential goes back to Vr
+	void add_event(double const& a_time, double const& a_current);
+	double sum_events(double const& dt) const;
+	void spike();
+	
+
+	
+	
 	private :
 	
-	// valeurs qui varient au cours du temps
-	
-	bool excitatory_;          ///>is the neuron excitatory or inhibitory ?
-	int Ci_;                   ///>each neuron receives C randomly chosen connections from other neurons in the network
-	int Ce_;           	       ///>Ci = connections with inhibitory neurons Ce = connections with excitatory neurons
-	double C_proba_;           ///>connection probability
-	double V_;                 ///>membrane potential
-	double ext_frequency_;     ///>external frequency
-	double R_;                 ///>membrane resistance
-	
-	///ces attributs prennent des valeurs constantes qui ne varient pas en fonction du temps que nous initialiserons dans la classe Physics
-	
-	double theta_;             ///>firing treshold
-	double Vr_;                ///>reset potential
-	double Tau_rp_;            ///>refractory period (potential insensitive to stimulation)
-	double D_;  		       ///>transmission delay
-	double J_;                 ///>postsynaptic potential amplitude
-	double Tau_;               ///>membrane time constant
-	
-        std::priority_queue<CurrentEvent> events; ///< queue of incoming currents sorted by time
-	public :	
-	
-	Neuron(bool const& exc, int const& Ci, int const& Ce, double const& Cp, double const& PSP, double const& transmission_delay, int const& M_time_constant, int const& firing_treshold, int const& reset_potential, int const& refr_period, double const& ext_f, double const& mem_res);
+    bool excitatory_;
+	int inhib_connections_; ///>number of connections from other inhibitatory neurons
+	int excit_connections_; ///>number of connections from other excitatory neurons
+    double epsilon_; ///>connection density
+    double I_; ///>synaptic currents arriving at the soma
+	double V_; ///>membrane potential
+	double tau_; ///>time constant of the circuit
+	double ext_f_; ///>external frequency
     
-    ~Neuron(); 
+    double t_;
+	std::priority_queue <Event> events_;
+	std::vector <Neuron*> synapses_;
     
-    double membrane_potential(sf::Time dt);
-    /*!
-     * @brief calcule le potentiel d'un neurone en fonction des courants entrant aux différents somas et en fonction du temps
-     * appelle treshold après chaque pas de temps passé pour vérifier si le seuil est atteint
-     */
-     
-    bool treshold();
-    /*!
-     * @brief vérifie si le potentiel seuil est atteint
-     * si true, appelle spikes
-     */
-     
-    virtual void spikes(); ///>Inhibitory : transmet potentiel négatif alors que excitatory transmet potentiel positif
-    /*!
-     * @brief transmet le potentiel d'action aux neurones connectés/voisins
-     */
+    static const Physics::Potential firing_threshold_;
+    static const Physics::Potential rest_potential_; ///>Vr
+    static const Physics::Time transmission_delay_; ///>D
+    static const Physics::Time refactory_period_; ///>tau_rp
+    static const Physics::Resistance membrane_resistance_; ///>R
+    static const Physics::Amplitude amplitude_; ///>J
     
-    void reset_potential();
-    /*!
-     * @brief remet le potentiel à Vr après que le neurone ait transmis le potential d'action
-     */
-     
-        
-              
+	
 };
 
+
+#endif

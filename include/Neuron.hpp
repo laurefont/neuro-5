@@ -13,10 +13,10 @@ class Neuron {
     Neuron(bool const& exc, double const& eps, double const& tau, double const& ext_f, double const& time);
     ~Neuron();
 	
-	void update(double const& dt); ///>adapt to chrono library
-    bool has_reached_threshold() const;
-    void input(); ///>modifies current
-    double output(double const & dt) const; ///>modifies current
+	void update(double const& dt); ///< adapt to chrono library
+    bool has_reached_threshold() const; ///< has reached AP threshold
+    void input(); ///< modifies current
+    double output(double const & dt) const; ///< modifies current
     void reset_potential(); ///>potential goes back to Vr
 	void add_event(double const& a_time, double const& a_current);
 	double sum_events(double const& dt) const;

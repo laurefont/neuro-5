@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.1.3)
 set (project_name "simulation")
 project (${project_name})
 
-# Build type : None or Debug
+# Build type : Release or Debug
 set (CMAKE_BUILD_TYPE "Debug")
 
 option (test "Build tests" ON)
@@ -38,7 +38,7 @@ endif()
 # Testing with GTest
 if (test)
     enable_testing ()
-    find_package (GTest)
+    find_package (GTest REQUIRED)
 
     # location of GTest header files
     include_directories (${GTEST_INCLUDE_DIRS})

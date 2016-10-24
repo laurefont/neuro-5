@@ -19,3 +19,8 @@ double Event::get_i() const
 {
 	return i_;
 }
+
+double Event::get_t() const
+{
+	return t_;
+}

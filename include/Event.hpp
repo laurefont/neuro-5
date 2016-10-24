@@ -7,8 +7,9 @@ class Event {
 	
 	Event(double const& time, double const& current);
 	~Event();
-	bool operator<(Event const&, Event const&) const;
+	bool operator<(Event const&) const;
 	double get_i() const;
+	double get_t() const;
 	
 	private:
 	

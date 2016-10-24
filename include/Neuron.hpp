@@ -16,10 +16,10 @@ class Neuron {
 	void update(double const& dt); ///>adapt to chrono library
     bool has_reached_threshold() const;
     void input(); ///>modifies current
-    double output() const; ///>modifies current
+    double output(double const & dt) const; ///>modifies current
     void reset_potential(); ///>potential goes back to Vr
 	void add_event(double const& a_time, double const& a_current);
-	double sum_events() const;
+	double sum_events(double const& dt) const;
 	void spike();
 	
 
@@ -37,7 +37,7 @@ class Neuron {
 	double ext_f_; ///>external frequency
     
     double t_;
-	std::queue <Event> events_;
+	std::priority_queue <Event> events_;
 	std::vector <Neuron*> synapses_;
     
     static const Physics::Potential firing_threshold_;

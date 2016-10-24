@@ -1,9 +1,16 @@
 #include "Neuron.hpp"
 
+Physics::Potential const Neuron::firing_threshold_= 20;
+Physics::Potential const Neuron::rest_potential_= 10;
+Physics::Time const Neuron::transmission_delay_= 1.5;
+Physics::Time const Neuron::refactory_period_= 2;
+Physics::Resistance const Neuron::membrane_resistance_= 5; ///< nbre qulconque
+Physics::Amplitude const Neuron::amplitude_= 0.1;
 
-Neuron::Neuron(bool const& exc, double const& eps, double const& tau, double const& ext_f, double const& time) : excitatory_(exc), inhib_connections_(250), excit_connections_(1000), epsilon_(eps), tau_(20), ext_f_(ext_f), firing_threshold_(20), rest_potential_(10),transmission_delay_(1.5), refactory_period_(2), amplitude_(0.1), t_(time)
+
+Neuron::Neuron(bool const& exc, double const& eps, double const& tau, double const& ext_f, double const& time) : excitatory_(exc), inhib_connections_(250), excit_connections_(1000), epsilon_(eps), tau_(20), ext_f_(ext_f), t_(0)
 {
-	synapses_(1250, nullptr);
+	synapses_ = std::vector<Neuron*>(1250);
 }
 
 Neuron::~Neuron()
@@ -34,24 +41,25 @@ void Neuron::input()
 }
 
 
-double Neuron::sum_events() const
+double Neuron::sum_events(double const& dt) const
 {
 	double sum(0);
 	
-	for (size_t i(0); i < events_.size(); ++i)
+	while(events_.top().get_t() < (t_ + dt))
 	{
-		sum += events_[i].get_i();
+		sum += events_.top().get_i();
+		events_.pop();
 	}
 	
 	return sum;
 }
 
 
-double Neuron::output() const
+double Neuron::output(double const& dt) const
 {
 	if (has_reached_threshold())
 	{
-		return sum_events(); 
+		return sum_events(dt); 
 	} else {
 		return 0;
 	}

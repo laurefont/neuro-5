@@ -4,11 +4,10 @@
 #include <queue>
 
 
-#ifndef NEURON_H
-#define NEURON_H
 
-class Neuron {
-	
+class Neuron      
+{
+
 	public :
     Neuron(bool const& exc, double const& eps, double const& tau, double const& ext_f, double const& time);
     ~Neuron();
@@ -21,20 +20,15 @@ class Neuron {
 	void add_event(double const& a_time, double const& a_current);
 	double sum_events(double const& dt) const;
 	void spike();
-	
-
-	
-	
-	private :
-	
-    bool excitatory_;
-	int inhib_connections_; ///>number of connections from other inhibitatory neurons
-	int excit_connections_; ///>number of connections from other excitatory neurons
-    double epsilon_; ///>connection density
-    double I_; ///>synaptic currents arriving at the soma
-	double V_; ///>membrane potential
-	double tau_; ///>time constant of the circuit
-	double ext_f_; ///>external frequency
+    
+    private :
+	bool excitatory_;          ///>is the neuron excitatory or inhibitory ?
+	int Ci_;                   ///>each neuron receives C randomly chosen connections from other neurons in the network
+	int Ce_;           	       ///>Ci = connections with inhibitory neurons Ce = connections with excitatory neurons
+	double C_proba_;           ///>connection probability
+	double V_;                 ///>membrane potential
+	double ext_frequency_;     ///>external frequency
+	double R_;                 ///>membrane resistance
     
     double t_;
 	std::priority_queue <Event> events_;
@@ -46,9 +40,7 @@ class Neuron {
     static const Physics::Time refactory_period_; ///>tau_rp
     static const Physics::Resistance membrane_resistance_; ///>R
     static const Physics::Amplitude amplitude_; ///>J
-    
-	
+   
+              
 };
 
-
-#endif

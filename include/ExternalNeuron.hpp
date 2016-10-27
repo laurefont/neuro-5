@@ -1,5 +1,5 @@
-#ifndef CONNECTION_HPP
-#define CONNECTION_HPP
+#ifndef EXTERNAL_NEURON
+#define EXTERNAL_NEURON
 
 #include <memory>
 
@@ -7,19 +7,19 @@
 #include <Neuron.hpp>
 
 /**
- * @brief Connection between two neurons or with the surrounding
+ * @brief Connexions comming from outside the network
  *
  * Provide a link to show where the electrical current need to go.
  */
-class Connection
+class ExternalConnexion
 {
 public:
-    Connection(/* arguments */);
-    virtual ~Connection();
+    ExternalConnexion(/* arguments */);
+    virtual ~ExternalConnexion();
 
 private:
     std::unique_ptr<Neuron> target_neuron_;
     physics::Potential postsynaptic_potential_amplitude_;
 };
 
-#endif // CONNECTION_HPP
+#endif // EXTERNAL_NEURON

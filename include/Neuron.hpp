@@ -55,7 +55,7 @@ class Neuron {
     
     static const Physics::Potential firing_threshold_; ///<membrane potential level at which neuron fires
     static const Physics::Potential rest_potential_; ///<Vr (reset potential after the neuron has fired)
-    static const Physics::Time transmission_delay_; ///D (time taken by a signal after it's been produced to reach the receiving neuron)
+    static const Physics::Time transmission_delay_; ///<D (time taken by a signal after it's been produced to reach the receiving neuron)
     static const Physics::Time refactory_period_; ///<tau_rp (period after an output, during which neuron can't receive inputs and can't fire)
     static const Physics::Resistance membrane_resistance_; ///<R (resistance of the membrane)
     static const Physics::Amplitude amplitude_; ///<J (amplitude of an input)

@@ -2,7 +2,9 @@
 #define NETWORK_HPP
 
 #include <vector>
+
 #include <Neuron.hpp>
+#include <Physics.hpp>
 
 ///
 /// @brief Sparsely connected network of neurons
@@ -13,22 +15,32 @@ public:
 	/// 
 	/// Create a network of excitatory and inhibitatory neurons.
 	///
-	/// The copy constructor and assignment operator are deleted.
-	/// 
-	Network(int number_excitatory_neurons, int number_inhibitory_neurons);
-	Network(const Network&) = delete;
-	Network& operator=(const Network&) = delete;
+	/// @param number_neurons number of neurons in the network
+	/// @param epsilon proportion of excitatory neurons over inhibitatory neurons
+	Network(int number_neurons, double epsilon);
+	Network(Network const &) = delete;
+	Network& operator=(Network const &) = delete;
 
 	virtual ~Network();
 
-	void update(/* arguments */);
+	///
+	/// Update each neurons of the network
+	///
+	/// @param dt time interval
+	void update(Physics::Time dt);
 
 private:
-	int N_; /// total number of neurons
-	int Ne_; /// number of excitatory neurons
-	int Ni_; /// number of inhibitatory neurons
+	///
+	/// Create connections between neurons
+	///
+	void make_connections();
+
+private:
+	int N_; ///< total number of neurons
+	int Ne_; ///< number of excitatory neurons
+	int Ni_; ///< number of inhibitatory neurons
 	std::vector<Neuron> neurons_;
-	std::vector<Connection> connections_from_surroundings_;
+	std::vector<ExternalNeuron> connections_from_surroundings_;
 };
 
 #endif // NETWORK_HPP

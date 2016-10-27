@@ -28,7 +28,7 @@ private:
 	int Ne_; /// number of excitatory neurons
 	int Ni_; /// number of inhibitatory neurons
 	std::vector<Neuron> neurons_;
-	std::vector<Connection> connections_from_surroundings_;
+	std::vector<ExternalNeuron> connections_from_surroundings_;
 };
 
 #endif // NETWORK_HPP

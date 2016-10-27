@@ -36,9 +36,9 @@ private:
 	void make_connections();
 
 private:
-	int N_; /// total number of neurons
-	int Ne_; /// number of excitatory neurons
-	int Ni_; /// number of inhibitatory neurons
+	int N_; ///< total number of neurons
+	int Ne_; ///< number of excitatory neurons
+	int Ni_; ///< number of inhibitatory neurons
 	std::vector<Neuron> neurons_;
 	std::vector<ExternalNeuron> connections_from_surroundings_;
 };

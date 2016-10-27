@@ -6,11 +6,14 @@ project (${project_name})
 set (CMAKE_BUILD_TYPE "Debug")
 
 option (test "Build tests" ON)
-option (only-tests "Build  ONLY tests and no source" OFF)
+option (only-tests "Build  ONLY tests and no application" OFF)
 
 # Use modern C++
 set (CMAKE_CXX_STANDARD "14")
 set (CMAKE_CXX_STANDARD_REQUIRED 1)
+
+#Tell cmake where to find the Find*.cmake files
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 if (CMAKE_COMPILER_IS_GNUCXX)
     # Compiler flags
@@ -25,9 +28,9 @@ else ()
     message ("GNU Compiler Collection is not used")
 endif ()
 
-# Add the include folder to the preprocessor search path
-set (common_includes ${PROJECT_SOURCE_DIR}/include)
-include_directories (${common_includes})
+#TCLAP (via cmake/Modules/FindTCLAP.cmake)
+find_package (TCLAP REQUIRED)
+include_directories (${TCLAP_INCLUDE_DIR})
 
 if (NOT only-tests)
     # Create main executable
@@ -62,10 +65,10 @@ if (test)
     add_test (${project_name} ${project_name}_test)
 endif ()
 
-#doxygen
+#DOXYGEN
 set(doxyfile ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
 find_package (Doxygen)
 add_custom_target(doc
-COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
-WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-COMMENT "Generating API documentation with Doxygen" VERBATIM)
+    COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Generating API documentation with Doxygen" VERBATIM)

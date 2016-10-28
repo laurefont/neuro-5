@@ -10,11 +10,18 @@ namespace Physics
     using Potential = double;
 
     // Time unit
-    using Time = double;
+    using Time = unsigned int;
     
     using Resistance = double;
     
     using Amplitude = double;
+
+	///
+	/// @brief Dirac delta function
+	///
+	/// It is zero everywhere except at zero
+	///
+	int dirac_distribution(Physics::Time argument);
 }
 
 #endif // PHYSICS_HPP

@@ -11,6 +11,6 @@
 - Laurine Kolly <laurine.kolly@epfl.ch>
 - Gael Reganha <gael.reganha@epfl.ch>
 - Violette Zanotti <violette.zanotti@epfl.ch>
-- Julie Brancato <julie.brancato.epfl.ch>
+- Julie Brancato <julie.brancato@epfl.ch> 
 - Fiona Joseph <fiona.joseph@epfl.ch>
 - Clara David-Vaudey <clara.david-vaudey@epfl.ch>

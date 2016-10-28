@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <Neuron.hpp>
+#include <ExternalNeuron.hpp>
 #include <Physics.hpp>
 
 ///

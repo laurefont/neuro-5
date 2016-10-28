@@ -3,9 +3,8 @@
 
 ## members
 
-Bruno Magalhaes <bruno.magalhaes@epfl.ch>
-
-Leo Sumi <leo.sumi@epfl.ch>
+- Bruno Magalhaes <bruno.magalhaes@epfl.ch>
+- Leo Sumi <leo.sumi@epfl.ch>
 
 Thais Lindemann <thais.lindemann@epfl.ch>
 

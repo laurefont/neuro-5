@@ -1,3 +1,14 @@
+# folders
 build/
-.DS_Store
 doc/
+
+# cmake generate files
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Makefile
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+
+.DS_Store

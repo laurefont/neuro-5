@@ -38,20 +38,7 @@ Neuron::~Neuron()
 
 
 
-// En fait je me rends compte que cette fonction sert à rien vu qu'on peut direct push
-/*
- void Neuron::add_event(double const& a_time, double const& a_current)
- {
-	Event e1(a_time, a_current);
-	events_in_.push(e1);
- }
- 
- */
-
-
-
-
-void Neuron::input(double const& dt)
+void Neuron::input(Physics::Time const& dt)
 {
     
     int nb_of_inputs (0);
@@ -81,9 +68,6 @@ void Neuron::input(double const& dt)
     
     
 }
-
-
-
 
 
 
@@ -122,23 +106,6 @@ void Neuron::output(double const& x)
 
 
 
-// Cette méthode est aussi inutile car c'est bcp plus simple de faire ça dans update
-/*
- void Neuron::spike()
- {
-	
-	if (has_reached_threshold())
-	{
- reset_potential();
-	}
- }
- */
-
-
-
-
-
-
 
 bool Neuron::has_reached_threshold() const
 {
@@ -167,18 +134,10 @@ void Neuron::reset_potential()
 
 
 
-void Neuron::update(double const& dt)
+void Neuron::update(Physics::Time const& dt)
 {
     
     input(dt); //met d'abord à jour les input
-    
-    /*
-     double X = sum_events(dt); // petit problème ici :on va perdre la somme X
-     // dans laquelle sont stockés tous les éléments de events_in_
-     // (parce qu'en faisant sum_events on vide aussi le tableau)
-     
-     */
-    
     
     
     // puis met à jour les output dans le cas où le threshold est atteint
@@ -207,8 +166,10 @@ void Neuron::clear_top_output()
 
 
 
-	
-	
+void Neuron::set_connection(Neuron* neuron)
+{
+	synapses_.push_back(neuron);
+}
 	
 	
 	

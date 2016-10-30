@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-Event::Event(double const& time, double const& current) : t_(time), i_(current)
+Event::Event(Physics::Time const& time, double const& current) : t_(time), i_(current)
 {
 }
 

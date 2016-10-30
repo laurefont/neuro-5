@@ -17,21 +17,19 @@ class Neuron {
     
     
     //méthode publique
-    void update(Physics::Time const& dt); ///>adapt to chrono library
+    void update(Physics::Time const& dt);
     void set_connection(Neuron* neuron);
     
     
     
-    
-    
-    
+   
     private :
     
     //méthodes privées
     bool has_reached_threshold() const;
-    void input(Physics::Time const& dt); ///>modifies current
-    void output(double const& x); ///>modifies current
-    void reset_potential(); ///>potential goes back to Vr
+    void input(Physics::Time const& dt); ///<modifies current
+    void output(double const& x); ///<modifies current
+    void reset_potential(); ///<potential goes back to Vr
     double sum_events(Physics::Time const& dt);
     double get_t_output() const;
     void clear_top_output();

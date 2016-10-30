@@ -2,7 +2,7 @@
 
 Physics::Potential const Neuron::firing_threshold_= 20;
 Physics::Potential const Neuron::rest_potential_= 10;
-Physics::Time const Neuron::transmission_delay_= 1.5;
+Physics::Time const Neuron::transmission_delay_= 2; ///< vraie valeur est 1.5
 Physics::Time const Neuron::refactory_period_= 2;
 Physics::Resistance const Neuron::membrane_resistance_= 5; ///< nbre qulconque
 Physics::Amplitude const Neuron::amplitude_= 0.1;
@@ -76,7 +76,7 @@ void Neuron::input(Physics::Time const& dt)
 // additionne tous les courants contenus dans les éléments de events_in_ ayant un t < t_ (notre attribut)
 // pour ce faire on delete tous ces éléments un par un, après avoir incrémenté la valeur de leur courant
 // à notre total (sum), qui va être retourné par la fonction en question
-double Neuron::sum_events(double const& dt)
+double Neuron::sum_events(Physics::Time const& dt)
 {
     double sum(0);
     

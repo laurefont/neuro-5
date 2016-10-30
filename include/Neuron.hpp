@@ -17,23 +17,20 @@ class Neuron {
     
     
     //méthode publique
-    void update(double const& dt); ///>adapt to chrono library
-    
-    //méthode inutiles
-    //void add_event(double const& a_time, double const& a_current);
-    //void spike();
+    void update(Physics::Time const& dt);
+    void set_connection(Neuron* neuron);
     
     
     
-    
+   
     private :
     
     //méthodes privées
     bool has_reached_threshold() const;
-    void input(double const& dt); ///>modifies current
-    void output(double const& x); ///>modifies current
-    void reset_potential(); ///>potential goes back to Vr
-    double sum_events(double const& dt);
+    void input(Physics::Time const& dt); ///<modifies current
+    void output(double const& x); ///<modifies current
+    void reset_potential(); ///<potential goes back to Vr
+    double sum_events(Physics::Time const& dt);
     double get_t_output() const;
     void clear_top_output();
     
@@ -48,7 +45,7 @@ class Neuron {
     double  const tau_; ///<time constant of the circuit
     double ext_f_; ///<external frequency
     
-    double t_; ///<time
+    Physics::Time t_; ///<time
     std::priority_queue <Event> events_in_; ///<queue of input events 
     std::priority_queue <Event> events_out_; ///<queue of output events
     std::vector <Neuron*> synapses_; ///<table with the neurons it's sending signals to

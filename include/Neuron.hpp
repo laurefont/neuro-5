@@ -30,9 +30,8 @@ class Neuron {
     void input(Physics::Time const& dt); ///<modifies current
     void output(double const& x); ///<modifies current
     void reset_potential(); ///<potential goes back to Vr
-    double sum_events(Physics::Time const& dt);
-    double get_t_output() const;
-    void clear_top_output();
+    //double sum_events(Physics::Time const& dt);
+    void add_event_in(Event const& ev);
     
     
     //attributs
@@ -47,7 +46,6 @@ class Neuron {
     
     Physics::Time t_; ///<time
     std::priority_queue <Event> events_in_; ///<queue of input events 
-    std::priority_queue <Event> events_out_; ///<queue of output events
     std::vector <Neuron*> synapses_; ///<table with the neurons it's sending signals to
     
     static const Physics::Potential firing_threshold_; ///<membrane potential level at which neuron fires

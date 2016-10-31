@@ -1,7 +1,7 @@
-#include "Physics.hpp"
-
 #ifndef EVENT_H
 #define EVENT_H
+
+#include "Physics.hpp"
 
 
 class Event {

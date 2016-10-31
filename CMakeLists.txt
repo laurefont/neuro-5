@@ -28,6 +28,9 @@ else ()
     message ("GNU Compiler Collection is not used")
 endif ()
 
+# Header files
+include_directories (${PROJECT_SOURCE_DIR}/include)
+
 #TCLAP (via cmake/Modules/FindTCLAP.cmake)
 find_package (TCLAP REQUIRED)
 include_directories (${TCLAP_INCLUDE_DIR})

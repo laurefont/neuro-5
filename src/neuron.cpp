@@ -2,7 +2,7 @@
 
 Physics::Potential const Neuron::firing_threshold_= 20;
 Physics::Potential const Neuron::rest_potential_= 10;
-Physics::Time const Neuron::transmission_delay_= 1.5;
+Physics::Time const Neuron::transmission_delay_= 2; ///< vraie valeur est 1.5
 Physics::Time const Neuron::refactory_period_= 2;
 Physics::Resistance const Neuron::membrane_resistance_= 5; ///< nbre qulconque
 Physics::Amplitude const Neuron::amplitude_= 0.1;
@@ -38,20 +38,7 @@ Neuron::~Neuron()
 
 
 
-// En fait je me rends compte que cette fonction sert à rien vu qu'on peut direct push
-/*
- void Neuron::add_event(double const& a_time, double const& a_current)
- {
-	Event e1(a_time, a_current);
-	events_in_.push(e1);
- }
- 
- */
-
-
-
-
-void Neuron::input(double const& dt)
+void Neuron::input(Physics::Time const& dt)
 {
     
     int nb_of_inputs (0);
@@ -86,13 +73,10 @@ void Neuron::input(double const& dt)
 
 
 
-
-
-
 // additionne tous les courants contenus dans les éléments de events_in_ ayant un t < t_ (notre attribut)
 // pour ce faire on delete tous ces éléments un par un, après avoir incrémenté la valeur de leur courant
 // à notre total (sum), qui va être retourné par la fonction en question
-double Neuron::sum_events(double const& dt)
+double Neuron::sum_events(Physics::Time const& dt)
 {
     double sum(0);
     
@@ -117,23 +101,6 @@ void Neuron::output(double const& x)
     Event ev(t_, x);
     events_out_.push(ev);
 }
-
-
-
-
-
-// Cette méthode est aussi inutile car c'est bcp plus simple de faire ça dans update
-/*
- void Neuron::spike()
- {
-	
-	if (has_reached_threshold())
-	{
- reset_potential();
-	}
- }
- */
-
 
 
 
@@ -167,18 +134,10 @@ void Neuron::reset_potential()
 
 
 
-void Neuron::update(double const& dt)
+void Neuron::update(Physics::Time const& dt)
 {
     
     input(dt); //met d'abord à jour les input
-    
-    /*
-     double X = sum_events(dt); // petit problème ici :on va perdre la somme X
-     // dans laquelle sont stockés tous les éléments de events_in_
-     // (parce qu'en faisant sum_events on vide aussi le tableau)
-     
-     */
-    
     
     
     // puis met à jour les output dans le cas où le threshold est atteint
@@ -207,8 +166,10 @@ void Neuron::clear_top_output()
 
 
 
-	
-	
+void Neuron::set_connection(Neuron* neuron)
+{
+	synapses_.push_back(neuron);
+}
 	
 	
 	

@@ -1,67 +1,61 @@
+#ifndef NEURON_H
+#define NEURON_H
+
 #include <iostream>
 #include "Physics.hpp"
 #include "Event.hpp"
 #include <queue>
 
 
-#ifndef NEURON_H
-#define NEURON_H
-
 class Neuron {
     
     public :
     
     //constructeur et destructeur
-    Neuron(bool const& exc, double const& eps, double const& ext_f); ///> constructor takes arguments that will be modified during time 
-																	///> other arguments like tau, tau,t_, inhib_connections and excit_connections have a fixed value in the cpp 
-                                                                   ///> dans le corps du constructeur, we initialize events_in_ and events_out_ to an empty queue
-
-    ~Neuron(); ///> destructor delete all the pointers of synapse table
-		
+    Neuron(bool const& exc, double const& eps, double const& ext_f);
+    ~Neuron();
+    
+    
     //méthode publique
-    void update(double const& dt); ///> in a first step, the function updates inputs, then if the thresold is reached, the function update ouputs
-    
-    //méthode inutiles
-    //void add_event(double const& a_time, double const& a_current);
-    //void spike();
+    void update(Physics::Time const& dt);
+    void set_connection(Neuron* neuron);
     
     
     
-    
+   
     private :
     
     //méthodes privées
-    bool has_reached_threshold() const; ///> verify if Vm is >= thresold 
-    void input(double const& dt); ///>uses function of dirac to know if the current has been added and updates Vm
-    void output(double const& x); ///> updates the output
-    void reset_potential(); ///> function reset the potential, it makes the potentiel return to the state potential
-    double sum_events(double const& dt); ///> sum all the currents contained in elements of events_in with a t < t_, to do that we delete all these elements one by one, after having incremented the value of their current
-										 ///>to our total (sum), which will be returned by the function in question
-    double get_t_output() const; ///>return the time of the older output, it could be used to a neuron find at which time another neuron send him a signal 
-								///>(the neuron will find on the queue the output that the other one send to him --> for himself it's the input)
-    void clear_top_output(); ///>function that remove the older output on the queue events_out, so the one that arrives first
-							 ///> (to use only in the case that the output has been used
+    bool has_reached_threshold() const;
+    void input(Physics::Time const& dt); ///<modifies current
+    void output(double const& x); ///<modifies current
+    void reset_potential(); ///<potential goes back to Vr
+    double sum_events(Physics::Time const& dt);
+    double get_t_output() const;
+    void clear_top_output();
+    
+    
     //attributs
-    bool  const excitatory_;
-    int const inhib_connections_; ///>number of connections from other inhibitatory neurons
-    int const excit_connections_; ///>number of connections from other excitatory neurons
-    double const epsilon_; ///>connection density
-    double I_; ///>synaptic currents arriving at the soma
-    double Vm_; ///>membrane potential
-    double  const tau_; ///>time constant of the circuit
-    double ext_f_; ///>external frequency
+    bool  const excitatory_; ///<true if neuron excitatory OR false if neuron inhibatory
+    int const inhib_connections_; ///<number of connections from other inhibitatory neurons
+    int const excit_connections_; ///<number of connections from other excitatory neurons
+    double const epsilon_; ///<connection density
+    double I_; ///<synaptic currents arriving at the soma
+    double Vm_; ///<membrane potential
+    double  const tau_; ///<time constant of the circuit
+    double ext_f_; ///<external frequency
     
-    double t_;
-    std::priority_queue <Event> events_in_;
-    std::priority_queue <Event> events_out_;
-    std::vector <Neuron*> synapses_;
+    Physics::Time t_; ///<time
+    std::priority_queue <Event> events_in_; ///<queue of input events 
+    std::priority_queue <Event> events_out_; ///<queue of output events
+    std::vector <Neuron*> synapses_; ///<table with the neurons it's sending signals to
     
-    static const Physics::Potential firing_threshold_;
-    static const Physics::Potential rest_potential_; ///>Vr
-    static const Physics::Time transmission_delay_; ///>D
-    static const Physics::Time refactory_period_; ///>tau_rp
-    static const Physics::Resistance membrane_resistance_; ///>R
-    static const Physics::Amplitude amplitude_; ///>J
+    static const Physics::Potential firing_threshold_; ///<membrane potential level at which neuron fires
+    static const Physics::Potential rest_potential_; ///<Vr (reset potential after the neuron has fired)
+    static const Physics::Time transmission_delay_; ///<D (time taken by a signal after it's been produced to reach the receiving neuron)
+    static const Physics::Time refactory_period_; ///<tau_rp (period after an output, during which neuron can't receive inputs and can't fire)
+    static const Physics::Resistance membrane_resistance_; ///<R (resistance of the membrane)
+    static const Physics::Amplitude amplitude_; ///<J (amplitude of an input)
     
     
 };

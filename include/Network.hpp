@@ -44,6 +44,8 @@ private:
 	///
 	/// Create connections between neurons
 	///
+	/// Each neurons has epsilon_ chance to make a connection with each other neurons
+	///
 	void make_connections();
 
 private:

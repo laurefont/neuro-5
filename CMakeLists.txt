@@ -6,6 +6,7 @@ project (${project_name})
 set (CMAKE_BUILD_TYPE "Debug")
 
 option (test "Build tests" ON)
+option (doc "Generate Documentation" ON)
 option (only-tests "Build  ONLY tests and no application" OFF)
 
 # Use modern C++
@@ -69,9 +70,15 @@ if (test)
 endif ()
 
 #DOXYGEN
-set(doxyfile ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
-find_package (Doxygen)
-add_custom_target(doc
-    COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMENT "Generating API documentation with Doxygen" VERBATIM)
+if (doc)
+    find_package (Doxygen)
+    if (DOXYGEN_FOUND)
+        set(doxyfile ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+        add_custom_target(doc
+        COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen" VERBATIM)
+    else()
+        MESSAGE(FATAL_ERROR "Doxygen not found. Re-run cmake with -Ddoc=OFF to disable generation of documentation")
+    endif()
+endif()

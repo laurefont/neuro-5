@@ -7,7 +7,8 @@ class CurrentEvent
     CurrentEvent();
     ~CurrentEvent();
     
-    double t;
-    double current;
-    int source_neuron_id;
+    double time;
+    double voltage;
+    int source_neuron_id; /*!whether the current comes from an excitatory
+							or an ihibitory neuron */
 }

@@ -2,42 +2,46 @@
 
 #include <iostream>
 #include <queue>
-
 #include "CurrentEvent.hpp"
 
 /*!
- * Allow to calculate the membrane potential for each step of time, check if the treshold is reached, if yes, the neuron spikes. 
+ * Allows to calculate the membrane potential for each step of time, check if the treshold is reached, if yes, the neuron spikes. 
  */
 
-class Neuron      
+enum class Neuron_State {AT_REST, FIRING};
+enum class Neuron_Type {EXCITATORY, INHIBIROTY};
+
+class Neuron: public Physics 
 {
 	private :
 	
-	// valeurs qui varient au cours du temps
+	/// valeurs qui varient au cours du temps
 	
 	bool excitatory_;          ///>is the neuron excitatory or inhibitory ?
-	int Ci_;                   ///>each neuron receives C randomly chosen connections from other neurons in the network
-	int Ce_;           	       ///>Ci = connections with inhibitory neurons Ce = connections with excitatory neurons
-	double C_proba_;           ///>connection probability
-	double V_;                 ///>membrane potential
-	double ext_frequency_;     ///>external frequency
+	int connections_inh_;      ///>each neuron receives C randomly chosen connections from other neurons in the network
+	int connections_exc_;      ///>Ci = connections with inhibitory neurons Ce = connections with excitatory neurons
+	double neuron_voltage_;                 ///>membrane potential
 	double R_;                 ///>membrane resistance
+	double neuron_id_;
+	///Gives a title to the current activity of the neuron
 	
-	///ces attributs prennent des valeurs constantes qui ne varient pas en fonction du temps que nous initialiserons dans la classe Physics
+	Neuron_State neuron_state;
 	
-	double theta_;             ///>firing treshold
-	double Vr_;                ///>reset potential
-	double Tau_rp_;            ///>refractory period (potential insensitive to stimulation)
-	double D_;  		       ///>transmission delay
-	double J_;                 ///>postsynaptic potential amplitude
-	double Tau_;               ///>membrane time constant
+	///< queue of incoming currents sorted by time
 	
-        std::priority_queue<CurrentEvent> events; ///< queue of incoming currents sorted by time
+    std::priority_queue<CurrentEvent> events; 
+        
 	public :	
 	
-	Neuron(bool const& exc, int const& Ci, int const& Ce, double const& Cp, double const& PSP, double const& transmission_delay, int const& M_time_constant, int const& firing_treshold, int const& reset_potential, int const& refr_period, double const& ext_f, double const& mem_res);
+	Neuron(bool const& exc, int const& connections_inh_, int const& connections_exc_, 
+	double const& Cp, double const& PSP, double const& transmission_delay, 
+	int const& M_time_constant, int const& firing_treshold, int const& reset_potential, 
+	int const& refr_period, double const& ext_f, double const& mem_res);
     
     ~Neuron(); 
+    
+    void test_neuron_type(Neuron_Type);
+    /*!*/
     
     double membrane_potential(sf::Time dt);
     /*!
@@ -45,23 +49,17 @@ class Neuron
      * appelle treshold après chaque pas de temps passé pour vérifier si le seuil est atteint
      */
      
-    bool treshold();
-    /*!
-     * @brief vérifie si le potentiel seuil est atteint
-     * si true, appelle spikes
-     */
-     
-    virtual void spikes(); ///>Inhibitory : transmet potentiel négatif alors que excitatory transmet potentiel positif
-    /*!
-     * @brief transmet le potentiel d'action aux neurones connectés/voisins
+     virtual void spikes(double current);
+     /*!
+     * @brief within this function we check if the neuron has reached
+     * the threshold if so it sends its current to the neurons connected 
+     * to it 
      */
     
     void reset_potential();
     /*!
      * @brief remet le potentiel à Vr après que le neurone ait transmis le potential d'action
-     */
-     
-        
+     */   
               
 };
 

@@ -1,13 +1,11 @@
-#ifndef NETWORK_HPP
-#define NETWORK_HPP
-
-#include <vector>
+#pragma once
+#include <queue>
 #include <Neuron.hpp>
 
 ///
 /// @brief Sparsely connected network of neurons
 ///
-class Network
+class Network: Public Neuron
 {
 public:
 	/// 
@@ -21,14 +19,13 @@ public:
 
 	virtual ~Network();
 
-	void update(/* arguments */);
+	void update(Neuron_State neuron_state, sf::Time);
 
 private:
 	int N_; /// total number of neurons
 	int Ne_; /// number of excitatory neurons
 	int Ni_; /// number of inhibitatory neurons
-	std::vector<Neuron> neurons_;
-	std::vector<Connection> connections_from_surroundings_;
+	std::priority_queue<Neuron> neurons_;
+	std::queue<Connections> connections_from_surroundings_;
 };
 
-#endif // NETWORK_HPP

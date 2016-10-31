@@ -1,5 +1,4 @@
-#ifndef SIMULATION_HPP
-#define SIMULATION_HPP
+#pragma once
 
 #include <Network.hpp>
 #include <Plot.hpp>
@@ -9,15 +8,18 @@
  *
  * Make the simulation of the network and draw the results plot.
  */
-class Simulation
+
+class Simulation: public Plot, public Neuron
 {
 public:
-    Simulation(/* arguments */);
+    Simulation(Neuron_State neuron_state, sf::Time);
     virtual ~Simulation();
 
 private:
     Network network_;
-    Plot plot_;
+    
+    void update(); 
+    
+    double current_generator();
+    
 };
-
-#endif // SIMULATION_HPP

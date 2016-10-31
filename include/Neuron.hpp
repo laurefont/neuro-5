@@ -1,11 +1,11 @@
+#ifndef NEURON_H
+#define NEURON_H
+
 #include <iostream>
 #include "Physics.hpp"
 #include "Event.hpp"
 #include <queue>
 
-
-#ifndef NEURON_H
-#define NEURON_H
 
 class Neuron {
     

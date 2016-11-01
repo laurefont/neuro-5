@@ -26,22 +26,18 @@ void Network::make_connections()
 	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
 
-	// Use a uniform distribution of numbers between 1 and 100
-	std::uniform_int_distribution<int> distribution(1,100);
+	// Use a bernoulli distribution with a epsilon_ chance of success
+	std::bernoulli_distribution distribution(epsilon_);
 
 	for (auto& neuron : neurons_)
 	{
 		for (auto& potential_neuron_connected : neurons_)
 		{
-			// Checks that it's not connecting to itself
-			if (&neuron != &potential_neuron_connected)
+			// Checks that it's not connecting to itself and
+			// if it has the chance to connect to potential_neuron_connected
+			if (&neuron != &potential_neuron_connected && distribution(generator))
 			{
-				// epsilon_ chance of connecting to neuron_connected
-				bool do_connection (distribution(generator) <= epsilon_ * 100);
-				if (do_connection)
-				{
-					neuron.set_connection(&potential_neuron_connected);
-				}
+				neuron.set_connection(&potential_neuron_connected);
 			}
 		}
 	}

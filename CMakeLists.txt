@@ -2,11 +2,11 @@ cmake_minimum_required (VERSION 3.1.3)
 set (project_name "simulation")
 project (${project_name})
 
-#user options
+# user options
 option (test "Build test units" ON)
 option (doc  "Generate Documentation" ON)
 
-#Compilation mode (Debug or Release) and flags
+# Compilation mode (Debug or Release) and flags
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug)
 endif()
@@ -18,20 +18,20 @@ message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 set (CMAKE_CXX_STANDARD "14")
 set (CMAKE_CXX_STANDARD_REQUIRED 1)
 
-#Tell cmake where to find the Find*.cmake files
+# Tell cmake where to find the Find*.cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 # Header files
 include_directories (${PROJECT_SOURCE_DIR}/include)
 
-#TCLAP (via cmake/Modules/FindTCLAP.cmake)
+# TCLAP (via cmake/Modules/FindTCLAP.cmake)
 find_package (TCLAP REQUIRED)
 include_directories (${TCLAP_INCLUDE_DIR})
 
-#TODO create library from src
+# src
 add_subdirectory(src)
 
-#main executables
+# main executables
 add_subdirectory(apps)
 
 # Testing with GTest
@@ -41,7 +41,7 @@ else()
     MESSAGE(STATUS "Testing disabled by used (-Dtest=OFF)")
 endif ()
 
-#Doxygen
+# Doxygen
 if (doc)
     find_package (Doxygen)
     if (DOXYGEN_FOUND)

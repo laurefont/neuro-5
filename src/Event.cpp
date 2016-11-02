@@ -24,4 +24,3 @@ double Event::get_t() const
 {
 	return t_;
 }
-

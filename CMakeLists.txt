@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.1.3)
 set (project_name "simulator")
 project (${project_name})
 
-# user options
+# User options
 option (test "Build test units" ON)
 option (doc  "Generate Documentation" ON)
 
@@ -18,26 +18,26 @@ message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 set (CMAKE_CXX_STANDARD "14")
 set (CMAKE_CXX_STANDARD_REQUIRED 1)
 
-# tell CMake to automatically include all files inside include folder 
+# Tell CMake to automatically include all files inside include folder 
 include_directories (${PROJECT_SOURCE_DIR}/include)
 
 # Tell cmake where to find extra Find*.cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
-# simulation library (libsimulation)
+# Simulation library (libsimulation)
 add_subdirectory(src)
 
-# main executables (linking to libsimulation)
+# Executables (linking to libsimulation)
 add_subdirectory(apps)
 
-# Testing with GTest (linking to libsimulation)
+# Optional testing with GTest (linking to libsimulation)
 if (test)
     add_subdirectory(test)
 else()
     MESSAGE(STATUS "Testing disabled by user (-Dtest=OFF)")
 endif ()
 
-# Doxygen
+# Option documentation generation with doxygen
 if (doc)
     add_subdirectory(doc)
 else()

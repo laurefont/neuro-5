@@ -1,6 +1,5 @@
 #TCLAP is a dependency of the applications only
-#find TCLAP (via apps/FindTCLAP.cmake)
-find_package (TCLAP REQUIRED)
+find_package (TCLAP REQUIRED) #via cmake/Modules/FindTCLAP.cmake
 include_directories (${TCLAP_INCLUDE_DIR})
 
 # Create main for Fixed-Step simulation with Explicit solver

@@ -1,3 +1,8 @@
+#TCLAP is a dependency of the applications only
+#find TCLAP (via apps/FindTCLAP.cmake)
+find_package (TCLAP REQUIRED)
+include_directories (${TCLAP_INCLUDE_DIR})
+
 # Create main for Fixed-Step simulation with Explicit solver
 file (GLOB_RECURSE source_fs_exp ${CMAKE_SOURCE_DIR}/apps/main_fs_exp.cpp)
 add_executable (${project_name}_fs_exp ${source_fs_exp})

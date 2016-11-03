@@ -18,15 +18,11 @@ message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 set (CMAKE_CXX_STANDARD "14")
 set (CMAKE_CXX_STANDARD_REQUIRED 1)
 
-# Tell cmake where to find the Find*.cmake files
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-
-# TCLAP (via cmake/Modules/FindTCLAP.cmake)
-find_package (TCLAP REQUIRED)
-include_directories (${TCLAP_INCLUDE_DIR})
-
 # tell CMake to automatically include all files inside include folder 
 include_directories (${PROJECT_SOURCE_DIR}/include)
+
+# Tell cmake where to find extra Find*.cmake files
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 # simulation library (libsimulation)
 add_subdirectory(src)
@@ -38,7 +34,7 @@ add_subdirectory(apps)
 if (test)
     add_subdirectory(test)
 else()
-    MESSAGE(STATUS "Testing disabled by used (-Dtest=OFF)")
+    MESSAGE(STATUS "Testing disabled by user (-Dtest=OFF)")
 endif ()
 
 # Doxygen
@@ -51,6 +47,6 @@ if (doc)
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen" VERBATIM)
     else()
-        MESSAGE(FATAL_ERROR "Doxygen not found. Re-run cmake with -Ddoc=OFF to disable generation of documentation")
+        MESSAGE(FATAL_ERROR "Doxygen not found. Re-run cmake with -Ddoc=OFF to disable generation of documentation.")
     endif()
 endif()

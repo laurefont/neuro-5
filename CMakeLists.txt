@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.1.3)
-set (project_name "simulation")
+set (project_name "simulator")
 project (${project_name})
 
 # user options
@@ -21,20 +21,20 @@ set (CMAKE_CXX_STANDARD_REQUIRED 1)
 # Tell cmake where to find the Find*.cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
-# Header files
-include_directories (${PROJECT_SOURCE_DIR}/include)
-
 # TCLAP (via cmake/Modules/FindTCLAP.cmake)
 find_package (TCLAP REQUIRED)
 include_directories (${TCLAP_INCLUDE_DIR})
 
-# src
+# tell CMake to automatically include all files inside include folder 
+include_directories (${PROJECT_SOURCE_DIR}/include)
+
+# simulation library (libsimulation)
 add_subdirectory(src)
 
-# main executables
+# main executables (linking to libsimulation)
 add_subdirectory(apps)
 
-# Testing with GTest
+# Testing with GTest (linking to libsimulation)
 if (test)
     add_subdirectory(test)
 else()

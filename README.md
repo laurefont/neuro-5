@@ -1,4 +1,4 @@
-# neuro-5
+# Simulator neuro-5
 
 ![alt text](https://d30y9cdsu7xlg0.cloudfront.net/png/79860-200.png "Our logo")
 

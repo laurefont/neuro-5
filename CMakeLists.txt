@@ -3,7 +3,7 @@ set (project_name "simulator")
 project (${project_name})
 
 # User options
-option (test "Build test units" ON)
+option (test "Build test units"       ON)
 option (doc  "Generate Documentation" ON)
 
 # Compilation mode (Debug or Release) and flags
@@ -20,9 +20,6 @@ set (CMAKE_CXX_STANDARD_REQUIRED 1)
 
 # Tell CMake to automatically include all files inside include folder 
 include_directories (${PROJECT_SOURCE_DIR}/include)
-
-# Tell cmake where to find extra Find*.cmake files
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 # Simulation library (libsimulation)
 add_subdirectory(src)

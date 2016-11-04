@@ -1,0 +1,126 @@
+#ifndef NEURON_H
+#define NEURON_H
+
+#include <iostream>
+#include "Physics.hpp"
+#include "Event.hpp"
+#include <queue>
+<<<<<<< HEAD
+#include "CurrentEvent.hpp"
+
+/*!
+ * Allows to calculate the membrane potential for each step of time, check if the treshold is reached, if yes, the neuron spikes. 
+ */
+
+enum class Neuron_State {AT_REST, FIRING};
+enum class Neuron_Type {EXCITATORY, INHIBIROTY};
+
+class Neuron: public Physics 
+{
+	private :
+	
+	/// valeurs qui varient au cours du temps
+	
+	bool excitatory_;          ///>is the neuron excitatory or inhibitory ?
+	int connections_inh_;      ///>each neuron receives C randomly chosen connections from other neurons in the network
+	int connections_exc_;      ///>Ci = connections with inhibitory neurons Ce = connections with excitatory neurons
+	double neuron_voltage_;                 ///>membrane potential
+	double R_;                 ///>membrane resistance
+	double neuron_id_;
+	///Gives a title to the current activity of the neuron
+	
+	Neuron_State neuron_state;
+	
+	///< queue of incoming currents sorted by time
+	
+    std::priority_queue<CurrentEvent> events; 
+        
+	public :	
+	
+	Neuron(bool const& exc, int const& connections_inh_, int const& connections_exc_, 
+	double const& Cp, double const& PSP, double const& transmission_delay, 
+	int const& M_time_constant, int const& firing_treshold, int const& reset_potential, 
+	int const& refr_period, double const& ext_f, double const& mem_res);
+=======
+
+
+class Neuron {
+    
+    public :
+    
+    //constructeur et destructeur
+    Neuron(bool const& exc, double const& eps, double const& ext_f);
+    ~Neuron();
+    
+    
+    //méthode publique
+    void update(Physics::Time const& dt);
+    void set_connection(Neuron* neuron);
+    
+    
+>>>>>>> upstream/master
+    
+   
+    private :
+    
+    //méthodes privées
+    bool has_reached_threshold() const;
+    void input(Physics::Time const& dt); ///<modifies current
+    void output(double const& x); ///<modifies current
+    void reset_potential(); ///<potential goes back to Vr
+    double sum_events(Physics::Time const& dt);
+    double get_t_output() const;
+    void clear_top_output();
+    
+    
+    //attributs
+    bool  const excitatory_; ///<true if neuron excitatory OR false if neuron inhibatory
+    int const inhib_connections_; ///<number of connections from other inhibitatory neurons
+    int const excit_connections_; ///<number of connections from other excitatory neurons
+    double const epsilon_; ///<connection density
+    double I_; ///<synaptic currents arriving at the soma
+    double Vm_; ///<membrane potential
+    double  const tau_; ///<time constant of the circuit
+    double ext_f_; ///<external frequency
+    
+    Physics::Time t_; ///<time
+    std::priority_queue <Event> events_in_; ///<queue of input events 
+    std::priority_queue <Event> events_out_; ///<queue of output events
+    std::vector <Neuron*> synapses_; ///<table with the neurons it's sending signals to
+    
+    static const Physics::Potential firing_threshold_; ///<membrane potential level at which neuron fires
+    static const Physics::Potential rest_potential_; ///<Vr (reset potential after the neuron has fired)
+    static const Physics::Time transmission_delay_; ///<D (time taken by a signal after it's been produced to reach the receiving neuron)
+    static const Physics::Time refactory_period_; ///<tau_rp (period after an output, during which neuron can't receive inputs and can't fire)
+    static const Physics::Resistance membrane_resistance_; ///<R (resistance of the membrane)
+    static const Physics::Amplitude amplitude_; ///<J (amplitude of an input)
+    
+<<<<<<< HEAD
+    void test_neuron_type(Neuron_Type);
+    /*!*/
+    
+    double membrane_potential(sf::Time dt);
+    /*!
+     * @brief calcule le potentiel d'un neurone en fonction des courants entrant aux différents somas et en fonction du temps
+     * appelle treshold après chaque pas de temps passé pour vérifier si le seuil est atteint
+     */
+     
+     virtual void spikes(double current);
+     /*!
+     * @brief within this function we check if the neuron has reached
+     * the threshold if so it sends its current to the neurons connected 
+     * to it 
+     */
+    
+    void reset_potential();
+    /*!
+     * @brief remet le potentiel à Vr après que le neurone ait transmis le potential d'action
+     */   
+              
+=======
+    
+>>>>>>> upstream/master
+};
+
+
+#endif

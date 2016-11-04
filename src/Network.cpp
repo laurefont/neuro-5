@@ -1,6 +1,8 @@
 #include <Network.hpp>
 
 #include <cmath>
+#include <random>
+#include <chrono>
 
 #include <Physics.hpp>
 
@@ -20,6 +22,25 @@ Network::~Network()
 
 void Network::make_connections()
 {
+	// Construct a random generator engine from a time-based seed
+	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::default_random_engine generator(seed);
+
+	// Use a bernoulli distribution with a epsilon_ chance of success
+	std::bernoulli_distribution distribution(epsilon_);
+
+	for (auto& neuron : neurons_)
+	{
+		for (auto& potential_neuron_connected : neurons_)
+		{
+			// Checks that it's not connecting to itself and
+			// if it has the chance to connect to potential_neuron_connected
+			if (&neuron != &potential_neuron_connected && distribution(generator))
+			{
+				neuron.set_connection(&potential_neuron_connected);
+			}
+		}
+	}
 }
 
 void Network::update(Physics::Time dt)

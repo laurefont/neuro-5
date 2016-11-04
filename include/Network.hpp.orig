@@ -1,8 +1,13 @@
+<<<<<<< HEAD
+#pragma once
+#include <queue>
+=======
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
 #include <vector>
 
+>>>>>>> upstream/master
 #include <Neuron.hpp>
 #include <ExternalNeuron.hpp>
 #include <Physics.hpp>
@@ -10,6 +15,9 @@
 ///
 /// @brief Sparsely connected network of neurons
 ///
+<<<<<<< HEAD
+class Network: Public Neuron
+=======
 /// This model assume that the connection density is small: the number of 
 /// excitatory connections over the number of excitatory neurons is equal
 /// to the number of inhibitory connections over the number of inhibitory
@@ -18,6 +26,7 @@
 /// \f$\epsilon = C_e/N_e = C_i/N_i \ll 1\f$
 ///
 class Network
+>>>>>>> upstream/master
 {
 public:
 	/// 
@@ -34,6 +43,16 @@ public:
 
 	virtual ~Network();
 
+<<<<<<< HEAD
+	void update(Neuron_State neuron_state, sf::Time);
+
+private:
+	int N_; /// total number of neurons
+	int Ne_; /// number of excitatory neurons
+	int Ni_; /// number of inhibitatory neurons
+	std::priority_queue<Neuron> neurons_;
+	std::queue<Connections> connections_from_surroundings_;
+=======
 	///
 	/// Update each neurons of the network
 	///
@@ -43,8 +62,6 @@ public:
 private:
 	///
 	/// Create connections between neurons
-	///
-	/// Each neurons has epsilon_ chance to make a connection with each other neurons
 	///
 	void make_connections();
 
@@ -76,6 +93,6 @@ private:
 
 	std::vector<Neuron> neurons_;
 	std::vector<ExternalNeuron> connections_from_surroundings_;
+>>>>>>> upstream/master
 };
 
-#endif // NETWORK_HPP

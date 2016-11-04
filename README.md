@@ -1,7 +1,30 @@
-# neuro-5
+# Simulator neuro-5
+
+![alt text](https://d30y9cdsu7xlg0.cloudfront.net/png/79860-200.png "Our logo")
+
+## About
+
+A Simulation of Leaky Integrate-and-Fire Neuron models with the Network activity defined by intra-network or extra-network currents (Event);
 
 
-## members
+## External Documentation
+
+- The Brunel Model ( [github](doc/Brunel_2000.pdf) or [doxygen](Brunel_2000.pdf) version )
+- Project Description( [github](doc/Project_Description.pdf) or [doxygen](Project_Description.pdf) version )
+
+
+## Manual
+
+To execute the application, run
+
+    ./simulation
+
+For help and parameters, type
+
+    ./simulation --help
+
+
+## Team Members
 
 - Bruno Magalhaes <bruno.magalhaes@epfl.ch>
 - Leo Sumi <leo.sumi@epfl.ch>

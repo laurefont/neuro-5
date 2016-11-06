@@ -39,16 +39,15 @@ Neuron::~Neuron()
 
 void Neuron::input(Physics::Time const& dt)
 { 
- 
-	// I_ = 0 ??
+
 	
 	while(events_in_.top().get_t() < (t_ + dt))
 	{
-		
+		// si la différence entre le temps courant et (transmission_delay_ + temps où le courant a été envoyé) = 0
+		// la fonction de dirac retourne 1 et dans ce cas on incrémente le courant
 		if (Physics::dirac_distribution(t_- transmission_delay_ - events_in_.top().get_t()) == 1)
 		{
 			I_ += amplitude_;
-			
 			events_in_.pop();
 					
 		}
@@ -104,15 +103,17 @@ void Neuron::reset_potential()
 void Neuron::update(Physics::Time const& dt)
 {
     
-    input(dt); //met d'abord à jour les input
+    input(dt); //met d'abord à jour les input (ce que le neurone reçoit)
     
     
-    // puis met à jour les output dans le cas où le threshold est atteint
+    // output à toutes ses connexions dans le cas où le threshold est atteint 
+    // et le courant est remis à 0
     if (has_reached_threshold())
     {
 
         output(I_);
         reset_potential();
+        I_ = 0;
     }
     
 }

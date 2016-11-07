@@ -31,6 +31,7 @@ class Neuron {
     private :
     
     //méthodes privées
+<<<<<<< HEAD
     bool has_reached_threshold() const; ///> verify if Vm is >= thresold 
     void input(double const& dt); ///>uses function of dirac to know if the current has been added and updates Vm
     void output(double const& x); ///> updates the output
@@ -41,6 +42,16 @@ class Neuron {
 								///>(the neuron will find on the queue the output that the other one send to him --> for himself it's the input)
     void clear_top_output(); ///>function that remove the older output on the queue events_out, so the one that arrives first
 							 ///> (to use only in the case that the output has been used
+=======
+    bool has_reached_threshold() const;
+    void input(Physics::Time const& dt); ///<modifies current
+    void output(double const& x); ///<modifies current
+    void reset_potential(); ///<potential goes back to Vr
+    //double sum_events(Physics::Time const& dt);
+    void add_event_in(Event const& ev);
+    
+    
+>>>>>>> upstream/master
     //attributs
     bool  const excitatory_;
     int const inhib_connections_; ///>number of connections from other inhibitatory neurons
@@ -51,10 +62,16 @@ class Neuron {
     double  const tau_; ///>time constant of the circuit
     double ext_f_; ///>external frequency
     
+<<<<<<< HEAD
     double t_;
     std::priority_queue <Event> events_in_;
     std::priority_queue <Event> events_out_;
     std::vector <Neuron*> synapses_;
+=======
+    Physics::Time t_; ///<time
+    std::priority_queue <Event> events_in_; ///<queue of input events 
+    std::vector <Neuron*> synapses_; ///<table with the neurons it's sending signals to
+>>>>>>> upstream/master
     
     static const Physics::Potential firing_threshold_;
     static const Physics::Potential rest_potential_; ///>Vr

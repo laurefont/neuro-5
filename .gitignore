@@ -1,6 +1,5 @@
 # folders
 build/
-doc/
 
 # cmake generate files
 CMakeCache.txt

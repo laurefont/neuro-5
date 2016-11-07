@@ -41,7 +41,7 @@ void Neuron::input(Physics::Time const& dt)
 { 
 
 	
-	while(events_in_.top().get_t() < (t_ + dt))
+	while((events_in_.top().get_t() < (t_ + dt)) && (refractory_period_ == 0))
 	{
 		// si la différence entre le temps courant et (transmission_delay_ + temps où le courant a été envoyé) = 0
 		// la fonction de dirac retourne 1 et dans ce cas on incrémente le courant
@@ -104,7 +104,7 @@ void Neuron::update(Physics::Time const& dt)
 {
     
     input(dt); //met d'abord à jour les input (ce que le neurone reçoit)
-    
+    //décrémenter refractory period jusqu'à 0 pas en dessous
     
     // output à toutes ses connexions dans le cas où le threshold est atteint 
     // et le courant est remis à 0
@@ -114,6 +114,8 @@ void Neuron::update(Physics::Time const& dt)
         output(I_);
         reset_potential();
         I_ = 0;
+        //mettre refractory period au max
+        
     }
     
 }

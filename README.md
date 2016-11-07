@@ -31,7 +31,7 @@ For help and parameters, type
 - Thais Lindemann <thais.lindemann@epfl.ch> LOL
 - Johannes Brune <johannes.brune@epfl.ch> LOL
 - Laure Font <laure.font@epfl.ch> LOL
-- Laurine Kolly <laurine.kolly@epfl.ch> LOL
+- Laurine Kolly <laurine.kolly@epfl.ch>
 - Gael Reganha <gael.reganha@epfl.ch> LOL
 - Violette Zanotti <violette.zanotti@epfl.ch> 
 - Julie Brancato <julie.brancato@epfl.ch> LOL

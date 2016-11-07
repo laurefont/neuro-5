@@ -35,5 +35,5 @@ For help and parameters, type
 - Gael Reganha <gael.reganha@epfl.ch> LOL
 - Violette Zanotti <violette.zanotti@epfl.ch> 
 - Julie Brancato <julie.brancato@epfl.ch>
-- Fiona Joseph <fiona.joseph@epfl.ch> LOL
+- Fiona Joseph <fiona.joseph@epfl.ch>
 - Clara David-Vaudey <clara.david-vaudey@epfl.ch> LOL

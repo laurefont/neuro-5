@@ -1,10 +1,8 @@
-# Simulator neuro-5
+# neuro-5
 
-![alt text](https://d30y9cdsu7xlg0.cloudfront.net/png/79860-200.png "Our logo")
 
-## About
+## members
 
-A Simulation of Leaky Integrate-and-Fire Neuron models with the Network activity defined by intra-network or extra-network currents (Event);
 
 
 ## External Documentation
@@ -36,4 +34,4 @@ For help and parameters, type
 - Violette Zanotti <violette.zanotti@epfl.ch> 
 - Julie Brancato <julie.brancato@epfl.ch>
 - Fiona Joseph <fiona.joseph@epfl.ch>
-- Clara David-Vaudey <clara.david-vaudey@epfl.ch> LOL
+- Clara David-Vaudey <clara.david-vaudey@epfl.ch> 

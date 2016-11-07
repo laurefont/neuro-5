@@ -1,10 +1,8 @@
-# Simulator neuro-5
+# neuro-5
 
-![alt text](https://d30y9cdsu7xlg0.cloudfront.net/png/79860-200.png "Our logo")
 
-## About
+## members
 
-A Simulation of Leaky Integrate-and-Fire Neuron models with the Network activity defined by intra-network or extra-network currents (Event);
 
 
 ## External Documentation
@@ -27,13 +25,13 @@ For help and parameters, type
 ## Team Members
 
 - Bruno Magalhaes <bruno.magalhaes@epfl.ch> LOL
-- Leo Sumi <leo.sumi@epfl.ch> LOL
+- Leo Sumi <leo.sumi@epfl.ch>
 - Thais Lindemann <thais.lindemann@epfl.ch> LOL
-- Johannes Brune <johannes.brune@epfl.ch> LOL
+- Johannes Brune <johannes.brune@epfl.ch>
 - Laure Font <laure.font@epfl.ch> LOL
-- Laurine Kolly <laurine.kolly@epfl.ch> LOL
+- Laurine Kolly <laurine.kolly@epfl.ch>
 - Gael Reganha <gael.reganha@epfl.ch> LOL
 - Violette Zanotti <violette.zanotti@epfl.ch> 
-- Julie Brancato <julie.brancato@epfl.ch> LOL
-- Fiona Joseph <fiona.joseph@epfl.ch> LOL
-- Clara David-Vaudey <clara.david-vaudey@epfl.ch> LOL
+- Julie Brancato <julie.brancato@epfl.ch>
+- Fiona Joseph <fiona.joseph@epfl.ch>
+- Clara David-Vaudey <clara.david-vaudey@epfl.ch> 

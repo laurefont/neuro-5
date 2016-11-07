@@ -30,7 +30,7 @@ For help and parameters, type
 - Leo Sumi <leo.sumi@epfl.ch> LOL
 - Thais Lindemann <thais.lindemann@epfl.ch> LOL
 - Johannes Brune <johannes.brune@epfl.ch> LOL
-- Laure Font <laure.font@epfl.ch> LOL
+- Laure Font <laure.font@epfl.ch> 
 - Laurine Kolly <laurine.kolly@epfl.ch> LOL
 - Gael Reganha <gael.reganha@epfl.ch> LOL
 - Violette Zanotti <violette.zanotti@epfl.ch> 

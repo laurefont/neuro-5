@@ -11,13 +11,13 @@
  */
 class Simulation
 {
-public:
-    Simulation(/* arguments */);
-    virtual ~Simulation();
+    public:
+        Simulation(/* arguments */);
+        virtual ~Simulation();
 
-private:
-    Network network_;
-    Plot plot_;
+    private:
+        Network network_;
+        Plot plot_;
 };
 
 #endif // SIMULATION_HPP

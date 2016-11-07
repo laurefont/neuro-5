@@ -1,17 +1,22 @@
-#ifndef PLOT_HPP
-#define PLOT_HPP
+# pragma once
+#include <SFML/Graphics.hpp>
 
 /**
- * @brief Represent the results plot
+ * @brief Does all the drawings
  */
+
 class Plot
 {
 public:
-    Plot(/* arguments */);
+    Plot(sf::string title, int voltage, double time_t& );
+    
     virtual ~Plot();
 
 private:
-    /* data */
+
+    void update(int time_t);
+    void drawOn (sf::RenderTarget& targetWindow) const;
+    
+     
 };
 
-#endif // PLOT_HPP

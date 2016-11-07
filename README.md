@@ -32,8 +32,8 @@ For help and parameters, type
 - Johannes Brune <johannes.brune@epfl.ch> LOL
 - Laure Font <laure.font@epfl.ch> LOL
 - Laurine Kolly <laurine.kolly@epfl.ch> LOL
-- Gael Reganha <gael.reganha@epfl.ch> LOL
-- Violette Zanotti <violette.zanotti@epfl.ch> 
+- Gael Reganha <gael.reganha@epfl.ch>
+- Violette Zanotti <violette.zanotti@epfl.ch>LOL 
 - Julie Brancato <julie.brancato@epfl.ch> LOL
 - Fiona Joseph <fiona.joseph@epfl.ch> LOL
 - Clara David-Vaudey <clara.david-vaudey@epfl.ch> LOL

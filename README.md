@@ -28,7 +28,7 @@ For help and parameters, type
 
 - Bruno Magalhaes <bruno.magalhaes@epfl.ch> LOL
 - Leo Sumi <leo.sumi@epfl.ch> LOL
-- Thais Lindemann <thais.lindemann@epfl.ch> LOL
+- Thais Lindemann <thais.lindemann@epfl.ch>
 - Johannes Brune <johannes.brune@epfl.ch> LOL
 - Laure Font <laure.font@epfl.ch> LOL
 - Laurine Kolly <laurine.kolly@epfl.ch> LOL

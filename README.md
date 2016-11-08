@@ -26,7 +26,7 @@ For help and parameters, type
 
 ## Team Members
 
-- Bruno Magalhaes <bruno.magalhaes@epfl.ch> LOL
+- Bruno Magalhaes <bruno.magalhaes@epfl.ch>
 - Leo Sumi <leo.sumi@epfl.ch>
 - Thais Lindemann <thais.lindemann@epfl.ch> 
 - Johannes Brune <johannes.brune@epfl.ch>

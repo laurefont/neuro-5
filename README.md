@@ -11,7 +11,6 @@ A Simulation of Leaky Integrate-and-Fire Neuron models with the Network activity
 
 - The Brunel Model ( [github](doc/Brunel_2000.pdf) or [doxygen](Brunel_2000.pdf) version )
 - Project Description( [github](doc/Project_Description.pdf) or [doxygen](Project_Description.pdf) version )
-Hello zork
 
 ## Manual
 
@@ -26,7 +25,7 @@ For help and parameters, type
 
 ## Team Members
 
-- Bruno Magalhaes <bruno.magalhaes@epfl.ch>
+- Bruno Magalhaes <bruno.magalhaes@epfl.ch> LOL
 - Leo Sumi <leo.sumi@epfl.ch>
 - Thais Lindemann <thais.lindemann@epfl.ch> 
 - Johannes Brune <johannes.brune@epfl.ch>

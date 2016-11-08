@@ -11,7 +11,6 @@ A Simulation of Leaky Integrate-and-Fire Neuron models with the Network activity
 
 - The Brunel Model ( [github](doc/Brunel_2000.pdf) or [doxygen](Brunel_2000.pdf) version )
 - Project Description( [github](doc/Project_Description.pdf) or [doxygen](Project_Description.pdf) version )
-LOL
 
 ## Manual
 

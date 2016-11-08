@@ -3,7 +3,7 @@
 Physics::Potential const Neuron::firing_threshold_= 20;
 Physics::Potential const Neuron::rest_potential_= 10;
 Physics::Time const Neuron::transmission_delay_= 2; ///< vraie valeur est 1.5
-Physics::Time const Neuron::refactory_period_= 2;
+Physics::Time const Neuron::refractory_period_= 2;
 Physics::Resistance const Neuron::membrane_resistance_= 5; ///< nbre qulconque
 Physics::Amplitude const Neuron::amplitude_= 0.1;
 
@@ -11,13 +11,14 @@ Physics::Amplitude const Neuron::amplitude_= 0.1;
 
 
 
-Neuron::Neuron(bool const& exc, double const& eps, double const& ext_f)
+Neuron::Neuron(int const& a_type, bool const& exc, double const& eps, double const& ext_f)
 : excitatory_(exc), inhib_connections_(250), excit_connections_(1000), epsilon_(eps), tau_(20), ext_f_(ext_f), t_(0)
 {
+	type_ = static_cast<Type>(a_type);
     synapses_ = std::vector<Neuron*>(1250);
     std::priority_queue <Event> ev;
-    events_in_ = ev;
-    // on initialise events_in_ à un tableau vide
+    events_in_ = ev; // on initialise events_in_ à un tableau vide
+
 }
 
 
@@ -47,14 +48,14 @@ void Neuron::input(Physics::Time const& dt)
 		// la fonction de dirac retourne 1 et dans ce cas on incrémente le courant
 		if (Physics::dirac_distribution(t_- transmission_delay_ - events_in_.top().get_t()) == 1)
 		{
-			I_ += amplitude_;
+			I_ += amplitude_ / membrane_resistance_;
 			events_in_.pop();
 					
 		}
 	
 	}	
 	 
-	Vm_ += -(Vm_ - membrane_resistance_ * I_) / tau_;  ///< equation
+	step(dt);
     
 }
 
@@ -128,5 +129,38 @@ void Neuron::set_connection(Neuron* neuron)
 	synapses_.push_back(neuron);
 }
 	
+void Neuron::step(Physics::Time const& dt) ///< faire en sorte que dans commandline on puisse entrer que 0,1,2
+{
+	
+	if(type_ == Type::Analytic)
+	{ 
+		step_analytic(dt);
+	} 
+	else if (type_ == Type::Explicit)
+	{
+		step_explicit(dt);
+	}
+	else if (type_ == Type::Implicit)
+	{
+		step_implicit(dt);
+	}
+	
+} 
 	
 	
+void Neuron::step_analytic(Physics::Time const& dt)
+{
+	
+}
+
+
+void Neuron::step_explicit(Physics::Time const& dt)
+{
+	Vm_ += ((-Vm_ + membrane_resistance_ * I_) * dt) / tau_;  ///< equation
+}
+
+
+void Neuron::step_implicit(Physics::Time const& dt)
+{
+	
+}

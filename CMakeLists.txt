@@ -29,6 +29,8 @@ add_subdirectory(apps)
 
 # Optional testing with GTest (linking to libsimulation)
 if (test)
+    enable_testing()
+    #include(CTest)
     add_subdirectory(test)
 else()
     MESSAGE(STATUS "Testing disabled by user (-Dtest=OFF)")

@@ -1,4 +1,3 @@
-enable_testing ()
 find_package (GTest REQUIRED)
 
 # Generate the list of test files
@@ -13,7 +12,7 @@ add_executable (${TestExecutableName} ${test_source_files})
 target_link_libraries (${TestExecutableName} ${GTEST_LIBRARIES} pthread simulation)
 
 #Add tests
-add_test (AllTests ${TestExecutableName})
+add_test (AllSimulationTests ${TestExecutableName})
 add_custom_target(check
                   COMMAND ${CMAKE_CTEST_COMMAND}
                   DEPENDS ${TestExecutableName})

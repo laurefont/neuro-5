@@ -4,7 +4,7 @@
 
 ## About
 
-A Simulation of Leaky Integrate-and-Fire Neuron models with the Network activity defined by intra-network or extra-network currents (Event);
+A Simulation of Leaky Integrate-and-Fire Neuron models with the Brunel Network activity defined by intra-network or extra-network currents (Event);
 
 
 ## External Documentation

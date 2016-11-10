@@ -23,9 +23,11 @@ For help and parameters, type
     ./simulation --help
 
 
-## Team Members
+## Misc
 
-- Bruno Magalhaes <bruno.magalhaes@epfl.ch> LOL
+### Team Members
+
+- Bruno Magalhaes <bruno.magalhaes@epfl.ch>
 - Leo Sumi <leo.sumi@epfl.ch>
 - Thais Lindemann <thais.lindemann@epfl.ch> 
 - Johannes Brune <johannes.brune@epfl.ch>
@@ -36,3 +38,9 @@ For help and parameters, type
 - Julie Brancato <julie.brancato@epfl.ch>
 - Fiona Joseph <fiona.joseph@epfl.ch>
 - Clara David-Vaudey <clara.david-vaudey@epfl.ch> 
+
+### Links you may find useful 
+
+Chat room: https://coreneuron.slack.com/
+SCRUM board: https://github.com/EPFL-SV-cpp-projects/neuro-5/#boards
+Development Milestones: https://github.com/EPFL-SV-cpp-projects/neuro-5/milestones

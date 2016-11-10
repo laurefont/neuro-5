@@ -2,7 +2,7 @@
 
 Physics::Potential const Neuron::firing_threshold_= 20;
 Physics::Potential const Neuron::rest_potential_= 10;
-Physics::Time const Neuron::transmission_delay_= 2; ///< vraie valeur est 1.5
+Physics::Time const Neuron::transmission_delay_= 2; // vraie valeur est 1.5
 Physics::Time const Neuron::tau_ = 20;
 Physics::Amplitude const Neuron::amplitude_= 0.1;
 
@@ -17,7 +17,7 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
 {
     synapses_ = std::vector<Neuron*>(1250);
     std::priority_queue <Event> ev;
-    events_in_ = ev; ///< on initialise events_in_ à un tableau vide
+    events_in_ = ev; // on initialise events_in_ à un tableau vide
 
 }
 
@@ -77,8 +77,8 @@ void Neuron::add_event_in(Event const& ev)
 
 
 
-/// remet le potentiel de membrane au potentiel au repos, cette méthode sera appelée
-/// dans update si le threshold est dépassé
+// remet le potentiel de membrane au potentiel au repos, cette méthode sera appelée
+// dans update si le threshold est dépassé
 void Neuron::reset_potential()
 {
     Vm_ = rest_potential_;
@@ -91,11 +91,11 @@ void Neuron::reset_potential()
 void Neuron::update(Physics::Time const& dt)
 {
     
-    input(dt); ///<met d'abord à jour les input (ce que le neurone reçoit)
-    ///<décrémenter refractory period jusqu'à 0 pas en dessous
+    input(dt); //<met d'abord à jour les input (ce que le neurone reçoit)
+    //<décrémenter refractory period jusqu'à 0 pas en dessous
     
-    ///< output à toutes ses connexions dans le cas où le threshold est atteint 
-    ///< et le courant est remis à 0
+    //< output à toutes ses connexions dans le cas où le threshold est atteint 
+    //< et le courant est remis à 0
     if (has_reached_threshold())
     {
 
@@ -159,7 +159,7 @@ void Neuron::update_RI(Physics::Time const& dt)
 {
 	if(type_ == Type::Analytic)
 	{ 
-		///< à coder calcul de RI
+		// à coder calcul de RI
 	} 
 	else if ((type_ == Type::Explicit) or (type_ == Type::Implicit))
 	{

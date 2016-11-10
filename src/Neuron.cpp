@@ -123,14 +123,17 @@ void Neuron::step(Physics::Time const& dt) ///< faire en sorte que dans commandl
 	{
 		case Type::Analytic :
 		step_analytic(dt);
+		t_ = events_in_.top().get_t();
 		break;
 	 
 		case Type::Explicit :
 		step_explicit(dt);
+		t_ += dt;
 		break;
 		
 		case Type::Implicit :
 		step_implicit(dt);
+		t_ += dt;
 		break;
 	}
 	

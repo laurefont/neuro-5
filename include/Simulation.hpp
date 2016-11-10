@@ -25,6 +25,7 @@ class Simulation
         Network network_;
         Plot plot_;
         Physics::Time time_of_simulation_;
+        Physics::Time time_step_;
 };
 
 #endif // SIMULATION_HPP

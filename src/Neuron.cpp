@@ -1,4 +1,5 @@
 #include "Neuron.hpp"
+#include <cmath>
 
 Physics::Potential const Neuron::firing_threshold_= 20;
 Physics::Potential const Neuron::rest_potential_= 10;
@@ -40,10 +41,29 @@ Neuron::~Neuron()
 
 void Neuron::input(Physics::Time const& dt)
 { 
-
-	update_RI(dt);
-	step(dt);
-    
+	//ANALYTIC
+	if(type_ == Type::Analytic)
+	{
+		//temps initial à partir duquel commence dt
+		Physics::Time init_time (t_);
+		
+		//sélectionne chacun leur tour les évènements qui ont lieu avant la fin de dt
+		while((events_in_.top().get_t() + transmission_delay_ < (init_time + dt)) && (refractory_period_ == 0))
+		{
+			//détermine le petit dt entre t_ et le moment auquel le spike arrive
+			Physics::Time small_dt ( (events_in_.top().get_t() + transmission_delay_) - t_ );
+			
+			update_RI(small_dt);
+			step(small_dt);
+		}
+		
+	}
+	
+	else 
+	{
+		update_RI(dt);
+		step(dt);
+    }
 }
 
 
@@ -140,6 +160,10 @@ void Neuron::step(Physics::Time const& dt) ///< faire en sorte que dans commandl
 void Neuron::step_analytic(Physics::Time const& dt)
 {
 	
+	Vm_ = Vm_*exp(-dt/tau_) + membrane_resistance_*I_*(1-exp(-dt/tau_));
+	
+	//met à jour le temps à quand neurone reçoit spike
+	t_ += events_in_.top().get_t();
 }
 
 
@@ -157,10 +181,17 @@ void Neuron::step_implicit(Physics::Time const& dt)
 
 void Neuron::update_RI(Physics::Time const& dt)
 {
+	//ANALYTIC
 	if(type_ == Type::Analytic)
-	{ 
-		///< à coder calcul de RI
-	} 
+	{
+		
+		I_ += ( events_in_.top().get_i() * tau_ ) / membrane_resistance_;
+		
+		events_in_.pop();
+		 
+
+	}
+	 
 	else if ((type_ == Type::Explicit) or (type_ == Type::Implicit))
 	{
 		

@@ -17,7 +17,7 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
 {
     synapses_ = std::vector<Neuron*>(1250);
     std::priority_queue <Event> ev;
-    events_in_ = ev; // on initialise events_in_ à un tableau vide
+    events_in_ = ev; ///< on initialise events_in_ à un tableau vide
 
 }
 
@@ -77,8 +77,8 @@ void Neuron::add_event_in(Event const& ev)
 
 
 
-// remet le potentiel de membrane au potentiel au repos, cette méthode sera appelée
-// dans update si le threshold est dépassé
+/// remet le potentiel de membrane au potentiel au repos, cette méthode sera appelée
+/// dans update si le threshold est dépassé
 void Neuron::reset_potential()
 {
     Vm_ = rest_potential_;
@@ -91,11 +91,11 @@ void Neuron::reset_potential()
 void Neuron::update(Physics::Time const& dt)
 {
     
-    input(dt); //met d'abord à jour les input (ce que le neurone reçoit)
-    //décrémenter refractory period jusqu'à 0 pas en dessous
+    input(dt); ///<met d'abord à jour les input (ce que le neurone reçoit)
+    ///<décrémenter refractory period jusqu'à 0 pas en dessous
     
-    // output à toutes ses connexions dans le cas où le threshold est atteint 
-    // et le courant est remis à 0
+    ///< output à toutes ses connexions dans le cas où le threshold est atteint 
+    ///< et le courant est remis à 0
     if (has_reached_threshold())
     {
 
@@ -116,7 +116,7 @@ void Neuron::set_connection(Neuron* neuron)
 	synapses_.push_back(neuron);
 }
 	
-void Neuron::step(Physics::Time const& dt) ///< faire en sorte que dans commandline on puisse entrer que 0,1,2
+void Neuron::step(Physics::Time const& dt) // faire en sorte que dans commandline on puisse entrer que 0,1,2
 {
 	
 	switch(type_)
@@ -143,9 +143,9 @@ void Neuron::step_analytic(Physics::Time const& dt)
 }
 
 
-void Neuron::step_explicit(Physics::Time const& dt)
+void Neuron::step_explicit(Physics::Time const& dt)// Use of V(t-1)=Vm_ to calculate the new Vm_
 {
-	Vm_ += ((-Vm_ + membrane_resistance_ * I_) * dt) / tau_;  ///< equation
+	Vm_ += ((-Vm_ + membrane_resistance_ * I_) * dt) / tau_;  
 }
 
 

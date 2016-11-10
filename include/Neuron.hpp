@@ -20,9 +20,9 @@ class Neuron {
     //méthode publique
     void update(Physics::Time const& dt);
     void set_connection(Neuron* neuron);
-    void step(Physics::Time const& dt); ///< à peut-être mettre en privé
+    void step(Physics::Time const& dt); // à peut-être mettre en privé
     void step_analytic(Physics::Time const& dt);
-    void step_explicit(Physics::Time const& dt);
+    void step_explicit(Physics::Time const& dt); ///< explicit time-stopping solution
     void step_implicit(Physics::Time const& dt);
     void update_RI(Physics::Time const& dt);
     

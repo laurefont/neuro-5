@@ -47,5 +47,9 @@ void Network::make_connections()
 
 void Network::update(Physics::Time dt)
 {
+	for (auto& neuron : neurons_)
+	{
+		neuron.update(dt);
+	}
 }
 

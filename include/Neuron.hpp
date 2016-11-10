@@ -13,16 +13,18 @@ class Neuron {
     
     //constructeur et destructeur
     Neuron(Type const& a_type, bool const& exc, double const& eps,
-			double const& ext_f, Physics::Resistance const& membrane_resistance);
+			double const& ext_f, Physics::Resistance const& membrane_resistance); ///< constructor takes arguments that will be modified during time 
+ 
+
     ~Neuron();
     
     
     //méthode publique
-    void update(Physics::Time const& dt);
+    void update(Physics::Time const& dt); ///< in a first step, the function updates inputs, then if the thresold is reached, the function update ouputs
     void set_connection(Neuron* neuron);
-    void step(Physics::Time const& dt); ///< à peut-être mettre en privé
+    void step(Physics::Time const& dt); // à peut-être mettre en privé
     void step_analytic(Physics::Time const& dt);
-    void step_explicit(Physics::Time const& dt);
+    void step_explicit(Physics::Time const& dt); ///< explicit time-stopping solution
     void step_implicit(Physics::Time const& dt);
     void update_RI(Physics::Time const& dt);
     
@@ -30,10 +32,10 @@ class Neuron {
     private :
     
     //méthodes privées
-    bool has_reached_threshold() const;
-    void input(Physics::Time const& dt); ///<modifies current
-    void output(double const& x); ///<modifies current
-    void reset_potential(); ///<potential goes back to Vr
+    bool has_reached_threshold() const;  ///< verify if Vm is >= thresold 
+    void input(Physics::Time const& dt); ///< uses function of dirac to know if the current has been added and updates Vm
+    void output(double const& x); ///< updates the output
+    void reset_potential(); ///< function reset the potential, it makes the potentiel return to the state potential
     void add_event_in(Event const& ev);
     
     

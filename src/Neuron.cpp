@@ -187,7 +187,7 @@ void Neuron::update_RI(Physics::Time const& dt)
 	if(type_ == Type::Analytic)
 	{
 		
-		I_ += ( events_in_.top().get_i() * tau_ ) / membrane_resistance_;
+		I_ += events_in_.top().get_i();
 		
 		events_in_.pop();
 		 

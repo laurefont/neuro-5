@@ -6,7 +6,6 @@ int main (int argc, char** argv)
 		
 	TCLAP::CmdLine cmd("Simulation of neurons network", ' ', "0.9");
 	
-	
 	///le false veut dire que l'utilisateur n'est pas forcément obliger d'entrer une valeur de temps dans les lignes de commande
 	///s'il ne saisit pas de valeur, la valeur par défaut (1000 ici) sera prise.
 	TCLAP::ValueArg<double> timeArg("t","time","total simulation time",false,1000,"double");

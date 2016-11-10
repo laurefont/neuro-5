@@ -41,6 +41,6 @@ For help and parameters, type
 
 ### Links you may find useful 
 
-Chat room: https://coreneuron.slack.com/
-SCRUM board: https://github.com/EPFL-SV-cpp-projects/neuro-5/#boards
-Development Milestones: https://github.com/EPFL-SV-cpp-projects/neuro-5/milestones
+- Chat room: https://coreneuron.slack.com/
+- SCRUM board: https://github.com/EPFL-SV-cpp-projects/neuro-5/#boards
+- Development Milestones: https://github.com/EPFL-SV-cpp-projects/neuro-5/milestones

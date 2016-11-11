@@ -139,14 +139,11 @@ void Neuron::update(Physics::Time const& dt)
     
     input(dt); //<met d'abord à jour les input (ce que le neurone reçoit)
     //<décrémenter refractory period jusqu'à 0 pas en dessous
-    
-<<<<<<<<< Temporary merge branch 1
     //< output à toutes ses connexions dans le cas où le threshold est atteint 
-    //< et le courant estx remis à 0
-=========
+    //< et le courant est remis à 0
     //< output à toutes ses connexions dans le cas où le threshold est atteint
     //< et le courant est remis à 0
->>>>>>>>> Temporary merge branch 2
+
     if (has_reached_threshold())
     {
 

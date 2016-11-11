@@ -23,12 +23,15 @@ public:
 	/// 
 	/// Create a network of excitatory and inhibitory neurons.
 	///
+	/// @param type type of solution
 	/// @param number_neurons number of neurons in the network
 	/// @param gamma proportion of inhibitory neurons over excitatory neurons
 	/// @param epsilon connections density
-	/// @param g relative strength of inhibitory synapses
+	/// @param membrane_resistance membrane resistance
+	/// @param ext_f external frequency
 	///
-	Network(unsigned int const number_neurons, double const gamma, double const epsilon, double const g);
+	Network(Type const type, unsigned int const number_neurons, double const gamma, double const epsilon,
+			Physics::Frequency const ext_f, Physics::Resistance const membrane_resistance);
 	Network(Network const &) = delete;
 	Network& operator=(Network const &) = delete;
 
@@ -68,11 +71,19 @@ private:
 	double const epsilon_;
 
 	///
-	/// @brief Relative strength of inhibitory synapses
+	/// external frequency
 	///
-	/// \f$g = J_i/J_e\f$
+	Physics::Frequency const ext_f_;
+
 	///
-	double const g_; 
+	/// membrane resistance
+	///
+	Physics::Resistance membrane_resistance_;
+
+	///
+	/// Type of solution
+	///
+	Type const type_;
 
 	std::vector<Neuron> neurons_;
 	std::vector<ExternalNeuron> connections_from_surroundings_;

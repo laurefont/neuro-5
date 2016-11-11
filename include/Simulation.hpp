@@ -13,19 +13,47 @@
 class Simulation
 {
     public:
-		/// in case of analytic no argument needed -> time stepping is not in option, it will be 1 by default
-        Simulation(Physics:Time const& time_of_simulation); 
-        Simulation(Physics:Time const& time_of_simulation, Type const& type,
-					Physics:Time const& time_step,
-					Physics::Resistance const& resistance);
+		/// 
+		/// Create a simulation 
+		///
+		/// @param time_of_simulation duration of the simulation
+		/// @param time_step time step duration
+		/// @param type type of solution
+		/// @param number_neurons number of neurons in the network
+		/// @param gamma proportion of inhibitory neurons over excitatory neurons
+		/// @param epsilon connections density
+		/// @param membrane_resistance membrane resistance
+		/// @param ext_f external frequency
+		///
+        Simulation(Physics::Time const& time_of_simulation, Physics::Time const& time_step, Type const& type,
+					unsigned int const number_neurons, double const gamma, double const epsilon,
+					Physics::Resistance const& membrane_resistance, Physics::Freqency ext_f);
+
+		/// 
+		/// Create a simulation with an analytic solution
+		///
+		/// time stepping is not in option, it will be 1 by default
+		///
+		/// @param time_of_simulation duration of the simulation
+		/// @param number_neurons number of neurons in the network
+		/// @param gamma proportion of inhibitory neurons over excitatory neurons
+		/// @param epsilon connections density
+		/// @param membrane_resistance membrane resistance
+		/// @param ext_f external frequency
+		///
+        Simulation(Physics::Time const& time_of_simulation, unsigned int const number_neurons,
+					double const gamma, double const epsilon, Physics::Resistance const& membrane_resistance, 
+					Physics::Freqency ext_f);
+
         virtual ~Simulation();
         void launch_simulation();
 
     private:
         Network network_;
         Plot plot_;
+
         Physics::Time time_of_simulation_;
-        Physics::Time time_step_;
+		Physics::Time time_step_;
 };
 
 #endif // SIMULATION_HPP

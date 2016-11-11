@@ -27,7 +27,10 @@ class Neuron {
     void step_explicit(Physics::Time const& dt); ///< explicit time-stopping solution
     void step_implicit(Physics::Time const& dt);
     void update_RI(Physics::Time const& dt);
-    
+    double get_Vm_(); 
+    double get_I_(); 
+    void set_Vm_(double vm); 
+    void set_I_ (double current); 
    
     private :
     

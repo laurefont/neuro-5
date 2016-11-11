@@ -37,6 +37,32 @@ Neuron::~Neuron()
 
 
 
+double Neuron::get_Vm_()
+{
+	return Vm_;
+
+}
+
+double Neuron::get_I_() 
+{
+	return I_;
+	
+}
+
+
+void Neuron::set_Vm_(double vm)
+{
+	Vm_ = vm; 
+}
+
+
+void Neuron::set_I_ (double current)
+{
+	I_= current;
+	
+}
+
+
 
 
 void Neuron::input(Physics::Time const& dt)
@@ -115,7 +141,7 @@ void Neuron::update(Physics::Time const& dt)
     //<décrémenter refractory period jusqu'à 0 pas en dessous
     
     //< output à toutes ses connexions dans le cas où le threshold est atteint 
-    //< et le courant est remis à 0
+    //< et le courant estx remis à 0
     if (has_reached_threshold())
     {
 
@@ -172,6 +198,7 @@ void Neuron::step_analytic(Physics::Time const& dt)
 void Neuron::step_explicit(Physics::Time const& dt)// Use of V(t-1)=Vm_ to calculate the new Vm_
 {
 	Vm_ += ((-Vm_ + membrane_resistance_ * I_) * dt) / tau_;  
+	
 }
 
 

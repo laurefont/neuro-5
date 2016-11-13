@@ -1,5 +1,8 @@
 #include <Network.hpp>
 
+#include <vector>
+#include <memory>
+
 #include <cmath>
 #include <random>
 #include <chrono>
@@ -11,11 +14,15 @@ Network::Network(Type const type, unsigned int const number_neurons, double cons
 	  Ne_(std::round(N_ / (1 + gamma))),
 	  Ni_(N_ - Ne_),
 	  gamma_(gamma),
-	  epsilon_(epsilon),
-	  ext_f_(ext_f),
-	  membrane_resistance_(membrane_resistance),
-	  type_(type)
+	  epsilon_(epsilon)
 {
+	for (unsigned int i(0); i < Ne_; ++i) {
+		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, true, epsilon_, ext_f, membrane_resistance)));
+	}
+
+	for (unsigned int i(0); i < Ni_; ++i) {
+		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, false, epsilon_, ext_f, membrane_resistance)));
+	}
 }
 
 Network::~Network()
@@ -37,9 +44,10 @@ void Network::make_connections()
 		{
 			// Checks that it's not connecting to itself and
 			// if it has the chance to connect to potential_neuron_connected
-			if (&neuron != &potential_neuron_connected && distribution(generator))
+			if (neuron != potential_neuron_connected && distribution(generator))
 			{
-				neuron.set_connection(&potential_neuron_connected);
+				// Do not release ownership of the pointer
+				neuron->set_connection(potential_neuron_connected.get());
 			}
 		}
 	}
@@ -49,7 +57,7 @@ void Network::update(Physics::Time dt)
 {
 	for (auto& neuron : neurons_)
 	{
-		neuron.update(dt);
+		neuron->update(dt);
 	}
 }
 

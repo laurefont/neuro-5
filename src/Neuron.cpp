@@ -12,7 +12,7 @@ Physics::Amplitude const Neuron::amplitude_= 0.1;
 
 
 Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
-				double const& ext_f, Physics::Resistance const& membrane_resistance)
+				double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm)
 : type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
  epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance)
 {

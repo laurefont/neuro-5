@@ -5,8 +5,8 @@
 TEST(ImplicitNeuronTests, TestFiring)
 {
     Neuron neurone(Type::Explicit, true, 1, 1, 3);
-    neurone.set_Vm_ (19.9);
-    neurone.set_I_(10);
+    neurone.set_Vm_ (7);
+    neurone.set_I_(5);
     int dt = 1;
     neurone.Neuron::step_explicit(1);
     int result = neurone.get_Vm_();
@@ -18,8 +18,8 @@ TEST(ImplicitNeuronTests, TestFiring)
 TEST(ExplicitNeuronTests, TestFiring)
 {
     Neuron neurone(Type::Explicit, true, 1, 1, 3);
-    neurone.set_Vm_ (19.9); 
-    neurone.set_I_(10); 
+    neurone.set_Vm_ (7); 
+    neurone.set_I_(5); 
     int dt = 1; 
     neurone.Neuron::step_explicit(1);
     int result = neurone.get_Vm_();

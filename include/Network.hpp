@@ -2,6 +2,7 @@
 #define NETWORK_HPP
 
 #include <vector>
+#include <memory>
 
 #include <Neuron.hpp>
 #include <ExternalNeuron.hpp>
@@ -71,22 +72,9 @@ private:
 	double const epsilon_;
 
 	///
-	/// external frequency
+	/// @brief Neurons of the network
 	///
-	Physics::Frequency const ext_f_;
-
-	///
-	/// membrane resistance
-	///
-	Physics::Resistance membrane_resistance_;
-
-	///
-	/// Type of solution
-	///
-	Type const type_;
-
-	std::vector<Neuron> neurons_;
-	std::vector<ExternalNeuron> connections_from_surroundings_;
+	std::vector<std::unique_ptr<Neuron>> neurons_;
 };
 
 #endif // NETWORK_HPP

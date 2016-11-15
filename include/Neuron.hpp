@@ -34,6 +34,9 @@ class Neuron {
     Physics::Time get_t_();
     void set_Vm_(double vm); 
     void set_I_ (double current); 
+    Physics::Time get_t() const;	///<returns the time of the neuron
+   
+
     
     private :
     //méthodes privées

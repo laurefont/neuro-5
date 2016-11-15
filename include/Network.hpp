@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <fstream>      // std::ofstream
 
 #include <Neuron.hpp>
 #include <ExternalNeuron.hpp>
@@ -94,6 +95,7 @@ private:
 	///
 	std::vector<std::unique_ptr<Neuron>> neurons_;
 	
+	std::ofstream flow; ///< output file for raster plot
 
 	
 	

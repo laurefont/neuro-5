@@ -55,11 +55,47 @@ void Network::make_connections()
 	}
 }
 
+
 void Network::update(Physics::Time dt)
 {
 	for (auto& neuron : neurons_)
 	{
 		neuron->update(dt);
 	}
+	
 }
 
+
+
+Neuron_last Network::get_back_neuron()
+{
+	int index(0);
+	int index_very_last(0);
+	
+	//renvoie le neuron qui est le plus en arrière dans le temps
+	Physics::Time time_very_last(neurons_[0]->get_t());
+	
+	//renvoie le neuron qui est l'avant dernier dans le temps
+	Physics::Time time_almost_last(neurons_[1]->get_t());
+	
+	for(auto& neuron : neurons_)
+	{
+		if(neuron->get_t() < time_very_last)
+		{
+			time_almost_last = time_very_last;
+			time_very_last = neuron->get_t();
+			index_very_last = index;
+			
+		}
+		
+		++index;
+		
+	}
+	
+	Neuron_last x;
+	x.very_last = index_very_last;
+	x.almost_last_time = time_almost_last;
+	
+	return x;
+	
+}

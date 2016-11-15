@@ -49,6 +49,11 @@ double Neuron::get_I_()
 	
 }
 
+Physics::Time Neuron::get_t_()
+{
+	return t_;
+}
+
 
 void Neuron::set_Vm_(double vm)
 {

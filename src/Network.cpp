@@ -9,6 +9,8 @@
 
 #include <Physics.hpp>
 
+#include <fstream>
+
 Network::Network(Type const type, unsigned int const number_neurons, double const gamma, double const epsilon, Physics::Frequency const ext_f, Physics::Resistance const membrane_resistance)
 	: N_(number_neurons),
 	  Ne_(std::round(N_ / (1 + gamma))),
@@ -57,9 +59,24 @@ void Network::make_connections()
 
 void Network::update(Physics::Time dt)
 {
-	for (auto& neuron : neurons_)
+	//for (auto& neuron : neurons_)
+	for (unsigned int i(0); i< neurons_.size(); ++i)
 	{
-		neuron->update(dt);
+		neurons_[i]->update(dt);
+		if (neurons_[i]->has_reached_threshold())
+		{
+			std::ofstream flow ("raster-plot.csv");
+			if (flow.fail()) 
+			{
+				throw std::runtime_error("file not found");
+			}
+			else
+			{
+				flow <<"neuron n°" << i <<"fired at time" << neurons_[i]->get_t_() << std::endl;
+				flow.close();
+			}
+			
+		}
 	}
 }
 

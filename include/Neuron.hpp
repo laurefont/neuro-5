@@ -20,6 +20,7 @@ class Neuron {
     
     
     //méthode publique
+    bool has_reached_threshold() const;  ///< verify if Vm is >= thresold 
     void update(Physics::Time const& dt); ///< in a first step, the function updates inputs, then if the thresold is reached, the function update ouputs
     void set_connection(Neuron* neuron);
     void step(Physics::Time const& dt); // à peut-être mettre en privé
@@ -27,22 +28,23 @@ class Neuron {
     void step_explicit(Physics::Time const& dt); ///< explicit time-stopping solution
     void step_implicit(Physics::Time const& dt);
     void update_RI(Physics::Time const& dt);
+    void reset_potential(); ///< function reset the potential, it makes the potentiel return to the state potential
     double get_Vm_(); 
     double get_I_(); 
+    Physics::Time get_t_();
     void set_Vm_(double vm); 
     void set_I_ (double current); 
     Physics::Time get_t() const;	///<returns the time of the neuron
    
-    private :
+
     
+    private :
     //méthodes privées
-    bool has_reached_threshold() const;  ///< verify if Vm is >= thresold 
     void input(Physics::Time const& dt); ///< uses function of dirac to know if the current has been added and updates Vm
     void output(double const& x); ///< updates the output
-    void reset_potential(); ///< function reset the potential, it makes the potentiel return to the state potential
     void add_event_in(Event const& ev);
     
-    
+   
     //attributs
     Type type_;
     bool  const excitatory_; ///<true if neuron excitatory OR false if neuron inhibatory

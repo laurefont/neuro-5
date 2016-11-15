@@ -8,6 +8,19 @@
 #include <ExternalNeuron.hpp>
 #include <Physics.hpp>
 
+
+///
+/// @brief structure used to return the latest neuron in time and the time of almost last neuron in time in method get_back_neuron
+///
+struct Neuron_last 
+{
+	int very_last;
+	Physics::Time almost_last_time;
+		
+};
+	
+
+
 ///
 /// @brief Sparsely connected network of neurons
 ///
@@ -51,6 +64,11 @@ private:
 	/// Each neurons has epsilon_ chance to make a connection with each other neurons
 	///
 	void make_connections();
+	
+	///
+	/// Returns time of the almost last neuron and index of the last neuron
+	///
+	Neuron_last get_back_neuron();
 
 private:
 	unsigned int const N_; ///< total number of neurons
@@ -75,6 +93,10 @@ private:
 	/// @brief Neurons of the network
 	///
 	std::vector<std::unique_ptr<Neuron>> neurons_;
+	
+
+	
+	
 };
 
 #endif // NETWORK_HPP

@@ -240,3 +240,10 @@ void Neuron::update_RI(Physics::Time const& dt)
 
 	}
 }
+
+
+Physics::Time Neuron::get_t() const
+{
+	return t_;
+	
+}

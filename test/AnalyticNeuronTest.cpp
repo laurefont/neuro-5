@@ -1,6 +1,6 @@
 #include <cmath>
 #include <gtest/gtest.h>
-#include "Neuron.hpp"
+#include "Simulation.hpp"
 
 TEST(ImplicitNeuronTests, TestFiring)
 {

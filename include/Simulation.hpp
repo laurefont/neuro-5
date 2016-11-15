@@ -1,8 +1,8 @@
 #ifndef SIMULATION_HPP
 #define SIMULATION_HPP
 
+#include <Neuron.hpp>
 #include <Network.hpp>
-#include <Plot.hpp>
 #include <Physics.hpp>
 
 /**
@@ -50,7 +50,6 @@ class Simulation
 
     private:
         Network network_;
-        Plot plot_;
 
         Physics::Time time_of_simulation_;
 		Physics::Time time_step_;

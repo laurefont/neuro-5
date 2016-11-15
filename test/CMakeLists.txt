@@ -1,19 +1,25 @@
+#add GoogleTest dependency
 find_package (GTest REQUIRED)
-
-# Generate the list of test files
-file (GLOB_RECURSE test_source_files ${CMAKE_SOURCE_DIR}/test/*.cpp)
-
-# location of GTest header files
 include_directories (${GTEST_INCLUDE_DIRS})
 
-#Create executable linked against googletest library
-set (TestExecutableName ${project_name}_test)
-add_executable (${TestExecutableName} ${test_source_files})
-target_link_libraries (${TestExecutableName} ${GTEST_LIBRARIES} pthread simulation)
+#Create executables and add tests for the three apps Neuron
+#(all are linked against googletest and simulation library)
 
-#Add tests
-add_test (AllSimulationTests ${TestExecutableName})
-add_custom_target(check
-                  COMMAND ${CMAKE_CTEST_COMMAND}
-                  DEPENDS ${TestExecutableName})
+#Explicit Neuron
+set (TestExecutableName ${project_name}_efs_test)
+add_executable (${TestExecutableName} ${CMAKE_CURRENT_SOURCE_DIR}/ExplicitNeuronTest.cpp)
+target_link_libraries (${TestExecutableName} ${GTEST_LIBRARIES} pthread simulation)
+add_test (ExplicitNeuronTests ${TestExecutableName})
+
+#Implicit Neuron
+set (TestExecutableName ${project_name}_ifs_test)
+add_executable (${TestExecutableName} ${CMAKE_CURRENT_SOURCE_DIR}/ImplicitNeuronTest.cpp)
+target_link_libraries (${TestExecutableName} ${GTEST_LIBRARIES} pthread simulation)
+add_test (ImplicitNeuronTests ${TestExecutableName})
+
+#Analytic Solution
+set (TestExecutableName ${project_name}_as_test)
+add_executable (${TestExecutableName} ${CMAKE_CURRENT_SOURCE_DIR}/AnalyticNeuronTest.cpp)
+target_link_libraries (${TestExecutableName} ${GTEST_LIBRARIES} pthread simulation)
+add_test (AnalyticNeuronTests ${TestExecutableName})
 

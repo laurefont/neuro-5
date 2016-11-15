@@ -1,5 +1,5 @@
 #include <tclap/CmdLine.h>
-#include "Neuron.hpp"
+#include "Simulation.hpp"
 
 int main (int argc, char** argv)
 {

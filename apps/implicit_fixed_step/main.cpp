@@ -1,5 +1,6 @@
 #include <tclap/CmdLine.h>
-#include <Physics.hpp>
+#include "Simulation.hpp"
+
 
 int main (int argc, char** argv)
 {

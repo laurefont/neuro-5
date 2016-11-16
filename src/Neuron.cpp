@@ -15,9 +15,15 @@ using namespace std;
 
 
 Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
+<<<<<<< HEAD
 				double const& ext_f, Physics::Resistance const& membrane_resistance, int const& number)
 				: type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
 				epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance), neuron_id_(number)
+=======
+				double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm)
+: type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
+ epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance)
+>>>>>>> upstream/master
 {
     synapses_ = std::vector<Neuron*>(1250);
     std::priority_queue <Event> ev;
@@ -149,10 +155,10 @@ void Neuron::reset_potential()
 
 void Neuron::update(Physics::Time const& dt)
 {
-    
+
     input(dt); //<met d'abord à jour les input (ce que le neurone reçoit)
     //<décrémenter refractory period jusqu'à 0 pas en dessous
-    //< output à toutes ses connexions dans le cas où le threshold est atteint 
+    //< output à toutes ses connexions dans le cas où le threshold est atteint
     //< et le courant est remis à 0
     //< output à toutes ses connexions dans le cas où le threshold est atteint
     //< et le courant est remis à 0
@@ -164,8 +170,9 @@ void Neuron::update(Physics::Time const& dt)
         reset_potential();
         I_ = 0;
         refractory_period_ = 2;
-        
+
     }
+<<<<<<< HEAD
     
     ofstream out;
     string fileName =  "../doc/neuron_" + to_string(neuron_id_) + ".csv";
@@ -180,6 +187,9 @@ void Neuron::update(Physics::Time const& dt)
     
     out.close();
     
+=======
+
+>>>>>>> upstream/master
 }
 
 

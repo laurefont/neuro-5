@@ -2,10 +2,25 @@
 #define NETWORK_HPP
 
 #include <vector>
+#include <memory>
+#include <fstream>      // std::ofstream
 
 #include <Neuron.hpp>
 #include <ExternalNeuron.hpp>
 #include <Physics.hpp>
+
+
+///
+/// @brief structure used to return the latest neuron in time and the time of almost last neuron in time in method get_back_neuron
+///
+struct Neuron_last 
+{
+	int very_last;
+	Physics::Time almost_last_time;
+		
+};
+	
+
 
 ///
 /// @brief Sparsely connected network of neurons
@@ -50,6 +65,11 @@ private:
 	/// Each neurons has epsilon_ chance to make a connection with each other neurons
 	///
 	void make_connections();
+	
+	///
+	/// Returns time of the almost last neuron and index of the last neuron
+	///
+	Neuron_last get_back_neuron();
 
 private:
 	unsigned int const N_; ///< total number of neurons
@@ -71,22 +91,14 @@ private:
 	double const epsilon_;
 
 	///
-	/// external frequency
+	/// @brief Neurons of the network
 	///
-	Physics::Frequency const ext_f_;
+	std::vector<std::unique_ptr<Neuron>> neurons_;
+	
+	std::ofstream flow; ///< output file for raster plot
 
-	///
-	/// membrane resistance
-	///
-	Physics::Resistance membrane_resistance_;
-
-	///
-	/// Type of solution
-	///
-	Type const type_;
-
-	std::vector<Neuron> neurons_;
-	std::vector<ExternalNeuron> connections_from_surroundings_;
+	
+	
 };
 
 #endif // NETWORK_HPP

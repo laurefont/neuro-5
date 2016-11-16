@@ -1,8 +1,8 @@
 #ifndef SIMULATION_HPP
 #define SIMULATION_HPP
 
+#include <Neuron.hpp>
 #include <Network.hpp>
-#include <Plot.hpp>
 #include <Physics.hpp>
 
 /**
@@ -27,7 +27,7 @@ class Simulation
 		///
         Simulation(Physics::Time const& time_of_simulation, Physics::Time const& time_step, Type const& type,
 					unsigned int const number_neurons, double const gamma, double const epsilon,
-					Physics::Resistance const& membrane_resistance, Physics::Freqency ext_f);
+					Physics::Resistance const& membrane_resistance, Physics::Frequency ext_f);
 
 		/// 
 		/// Create a simulation with an analytic solution
@@ -43,14 +43,13 @@ class Simulation
 		///
         Simulation(Physics::Time const& time_of_simulation, unsigned int const number_neurons,
 					double const gamma, double const epsilon, Physics::Resistance const& membrane_resistance, 
-					Physics::Freqency ext_f);
+					Physics::Frequency ext_f);
 
         virtual ~Simulation();
         void launch_simulation();
 
     private:
         Network network_;
-        Plot plot_;
 
         Physics::Time time_of_simulation_;
 		Physics::Time time_step_;

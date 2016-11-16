@@ -13,7 +13,7 @@ class Neuron {
     
     //constructeur et destructeur
     Neuron(Type const& a_type, bool const& exc, double const& eps,
-			double const& ext_f, Physics::Resistance const& membrane_resistance); ///< constructor takes arguments that will be modified during time 
+			double const& ext_f, Physics::Resistance const& membrane_resistance, int const& number); ///< constructor takes arguments that will be modified during time 
  
 
     ~Neuron();
@@ -29,8 +29,10 @@ class Neuron {
     void update_RI(Physics::Time const& dt);
     double get_Vm_(); 
     double get_I_(); 
+    Physics::Time get_t_();
     void set_Vm_(double vm); 
     void set_I_ (double current); 
+    Physics::Time get_t() const;	///<returns the time of the neuron
    
     private :
     
@@ -44,6 +46,7 @@ class Neuron {
     
     //attributs
     Type type_;
+    int const neuron_id_;
     bool  const excitatory_; ///<true if neuron excitatory OR false if neuron inhibatory
     int const inhib_connections_; ///<number of connections from other inhibitatory neurons
     int const excit_connections_; ///<number of connections from other excitatory neurons

@@ -1,4 +1,5 @@
 #include <tclap/CmdLine.h>
+#include <Physics.hpp>
 
 int main (int argc, char** argv)
 {
@@ -18,6 +19,17 @@ int main (int argc, char** argv)
 	
 	///pour mettre le temps de simulation à zéro, valeur par défaut false, si on veut mettre le temps à zéro : ajouter -z ou --zero dans les lignes de commande
 	TCLAP::SwitchArg simulation_time_zero_switch("z","zero","Simulation time to zero", cmd, false); 
+	
+	///choose time step 
+	TCLAP::ValueArg<Physics::Time> stepArg("d", "dt", "time step of the simulation", false, 2, "Time");
+	cmd.add(stepArg);
+	
+	///choose membrane resistance
+	TCLAP::ValueArg<Physics::Resistance> resistArg("r", "resistance", "resistance of the membrane", false, 1, "Resistance");
+	cmd.add(resistArg);
+	
+	
+	
 	
 	cmd.parse(argc, argv);
 	

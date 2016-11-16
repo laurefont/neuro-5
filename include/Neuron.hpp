@@ -13,11 +13,8 @@ class Neuron {
     
     //constructeur et destructeur
     Neuron(Type const& a_type, bool const& exc, double const& eps,
-<<<<<<< HEAD
-			double const& ext_f, Physics::Resistance const& membrane_resistance, int const& number); ///< constructor takes arguments that will be modified during time 
-=======
-			double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm = 0); ///< constructor takes arguments that will be modified during time 
->>>>>>> upstream/master
+			double const& ext_f, Physics::Resistance const& membrane_resistance, int const& number, double Vm = 0); ///< constructor takes arguments that will be modified during time 
+
  
 
     ~Neuron();

@@ -15,15 +15,10 @@ using namespace std;
 
 
 Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
-<<<<<<< HEAD
-				double const& ext_f, Physics::Resistance const& membrane_resistance, int const& number)
+				double const& ext_f, Physics::Resistance const& membrane_resistance, int const& number, double const& Vm)
 				: type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
 				epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance), neuron_id_(number)
-=======
-				double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm)
-: type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
- epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance)
->>>>>>> upstream/master
+
 {
     synapses_ = std::vector<Neuron*>(1250);
     std::priority_queue <Event> ev;

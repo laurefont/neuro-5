@@ -1,5 +1,8 @@
 #include "Neuron.hpp"
 #include <cmath>
+#include <string>
+#include <iostream>
+#include <fstream>
 
 Physics::Potential const Neuron::firing_threshold_= 20;
 Physics::Potential const Neuron::rest_potential_= 10;
@@ -8,21 +11,27 @@ Physics::Time const Neuron::tau_ = 20;
 Physics::Amplitude const Neuron::amplitude_= 0.1;
 
 
-
+using namespace std;
 
 
 Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
-				double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm)
-: type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
- epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance)
+				double const& ext_f, Physics::Resistance const& membrane_resistance, int const& number, double Vm)
+				: type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
+				epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance), neuron_id_(number)
+
 {
     synapses_ = std::vector<Neuron*>(1250);
     std::priority_queue <Event> ev;
     events_in_ = ev; // on initialise events_in_ à un tableau vide
+    
+    string fileName =  "../doc/neuron_" + to_string(neuron_id_) + ".csv";
+    ofstream out (fileName);
+
+    out << "t [ms]" << "," << "Vm [V]" << endl;
+    
+    out.close();
 
 }
-
-
 
 
 
@@ -159,6 +168,20 @@ void Neuron::update(Physics::Time const& dt)
 
     }
 
+    
+    ofstream out;
+    string fileName =  "../doc/neuron_" + to_string(neuron_id_) + ".csv";
+    out.open(fileName.c_str());
+
+    if (out.fail()) {
+        throw string("Error: The file doesn't exist !");
+
+    } else {
+            out << t_ << "," << Vm_ << endl;
+    }
+    
+    out.close();
+    
 }
 
 

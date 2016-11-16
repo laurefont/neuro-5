@@ -15,7 +15,7 @@ using namespace std;
 
 
 Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
-				double const& ext_f, Physics::Resistance const& membrane_resistance, int const& number, double const& Vm)
+				double const& ext_f, Physics::Resistance const& membrane_resistance, int const& number, double Vm)
 				: type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
 				epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance), neuron_id_(number)
 
@@ -167,7 +167,7 @@ void Neuron::update(Physics::Time const& dt)
         refractory_period_ = 2;
 
     }
-<<<<<<< HEAD
+
     
     ofstream out;
     string fileName =  "../doc/neuron_" + to_string(neuron_id_) + ".csv";
@@ -182,9 +182,6 @@ void Neuron::update(Physics::Time const& dt)
     
     out.close();
     
-=======
-
->>>>>>> upstream/master
 }
 
 

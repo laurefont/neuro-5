@@ -76,7 +76,8 @@ void Network::update(Physics::Time dt)
 		neurons_[i]->update(dt);
 		if (neurons_[i]->has_reached_threshold())
 		{
-		    *raster_plot_file <<i <<"," << neurons_[i]->get_t_() << std::endl;
+			*raster_plot_file <<i <<"," << neurons_[i]->get_t() << std::endl;
+
 		}
 	}
 	

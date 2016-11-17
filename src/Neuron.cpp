@@ -15,9 +15,9 @@ using namespace std;
 
 
 Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
-				double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm)
+				double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm, double I)
 				: type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
-				epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance)
+				epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance), Vm_(Vm), I_(I)
 
 {
     synapses_ = std::vector<Neuron*>(1250);
@@ -26,6 +26,7 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
     
     string fileName =  "neuron_" + to_string(neuron_id_) + ".csv";
     neuron_file = new ofstream(fileName);
+
     
     if (neuron_file->fail()) {
         throw string("Error: The file doesn't exist !");
@@ -49,38 +50,6 @@ Neuron::~Neuron()
     neuron_file->close();
     delete neuron_file;
 }
-
-
-double Neuron::get_Vm_()
-{
-	return Vm_;
-
-}
-
-double Neuron::get_I_()
-{
-	return I_;
-
-}
-
-Physics::Time Neuron::get_t_()
-{
-	return t_;
-}
-
-
-void Neuron::set_Vm_(double vm)
-{
-	Vm_ = vm;
-}
-
-
-void Neuron::set_I_ (double current)
-{
-	I_= current;
-
-}
-
 
 
 
@@ -263,4 +232,18 @@ Physics::Time Neuron::get_t() const
 {
 	return t_;
 	
+}
+
+
+
+double Neuron::get_Vm() const
+{
+	return Vm_;
+
+}
+
+double Neuron::get_I() const
+{
+	return I_;
+
 }

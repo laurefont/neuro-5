@@ -13,7 +13,7 @@ class Neuron {
     
     //constructeur et destructeur
     Neuron(Type const& a_type, bool const& exc, double const& eps,
-			double const& ext_f, Physics::Resistance const& membrane_resistance, int const& number, double Vm = 0); ///< constructor takes arguments that will be modified during time 
+			double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm = 0); ///< constructor takes arguments that will be modified during time 
 
  
 
@@ -48,7 +48,7 @@ class Neuron {
    
     //attributs
     Type type_;
-    int const neuron_id_;
+    static unsigned int neuron_id_;
     bool  const excitatory_; ///<true if neuron excitatory OR false if neuron inhibatory
     int const inhib_connections_; ///<number of connections from other inhibitatory neurons
     int const excit_connections_; ///<number of connections from other excitatory neurons
@@ -68,7 +68,7 @@ class Neuron {
     
     const Physics::Resistance membrane_resistance_; ///<R (resistance of the membrane)
     const Physics::Frequency ext_f_;
-    
+
 };
 
 

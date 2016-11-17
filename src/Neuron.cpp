@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 
+unsigned int Neuron::neuron_id_ = 0;
 Physics::Potential const Neuron::firing_threshold_= 20;
 Physics::Potential const Neuron::rest_potential_= 10;
 Physics::Time const Neuron::transmission_delay_= 2; // vraie valeur est 1.5
@@ -15,9 +16,9 @@ using namespace std;
 
 
 Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
-				double const& ext_f, Physics::Resistance const& membrane_resistance, int const& number, double Vm)
+				double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm)
 				: type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
-				epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance), neuron_id_(number)
+				epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance)
 
 {
     synapses_ = std::vector<Neuron*>(1250);
@@ -31,6 +32,7 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
     
     out.close();
 
+	++neuron_id_;
 }
 
 

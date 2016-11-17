@@ -73,7 +73,7 @@ void Network::update(Physics::Time dt)
 			}
 			else
 			{
-				flow <<i <<"," << neurons_[i]->get_t_() << std::endl;
+				flow <<i <<"," << neurons_[i]->get_t() << std::endl;
 			}
 			
 		}

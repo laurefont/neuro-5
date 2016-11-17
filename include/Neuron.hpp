@@ -14,7 +14,7 @@ class Neuron {
     
     //constructeur et destructeur
     Neuron(Type const& a_type, bool const& exc, double const& eps,
-			double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm = 0); ///< constructor takes arguments that will be modified during time 
+			double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm = 0, double I = 0); ///< constructor takes arguments that will be modified during time 
 
  
 
@@ -31,11 +31,8 @@ class Neuron {
     void step_implicit(Physics::Time const& dt);
     void update_RI(Physics::Time const& dt);
     void reset_potential(); ///< function reset the potential, it makes the potentiel return to the state potential
-    double get_Vm_(); 
-    double get_I_(); 
-    Physics::Time get_t_();
-    void set_Vm_(double vm); 
-    void set_I_ (double current); 
+    double get_Vm() const; 
+    double get_I() const; 
     Physics::Time get_t() const;	///<returns the time of the neuron
    
 

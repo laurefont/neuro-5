@@ -4,8 +4,7 @@
 
 TEST(ExplicitNeuronTests, TestThreshold)
 {
-    Neuron neurone(Type::Explicit, true, 1, 1, 3);
-    neurone.set_Vm_ (25);
+    Neuron neurone(Type::Explicit, true, 1, 1, 3, 25);
     neurone.Neuron::has_reached_threshold();
     int result = neurone.has_reached_threshold();
 
@@ -15,39 +14,34 @@ TEST(ExplicitNeuronTests, TestThreshold)
 
 TEST(ExplicitNeuronTests, TestStep)
 {
-    Neuron neurone(Type::Explicit, true, 1, 1, 3);
-    neurone.set_Vm_ (7); 
-    neurone.set_I_(5); 
+    Neuron neurone(Type::Explicit, true, 1, 1, 3, 7, 5);
     int dt = 1; 
     neurone.Neuron::step(1);
-    int result = neurone.get_Vm_();
+    int result = neurone.get_Vm();
     
-    EXPECT_NEAR (7.4, neurone.get_Vm_(),  0.000001);
-    EXPECT_TRUE(abs(neurone.get_Vm_() - 7.4) < 0.000001);
+    EXPECT_NEAR (7.4, neurone.get_Vm(),  0.000001);
+    EXPECT_TRUE(abs(neurone.get_Vm() - 7.4) < 0.000001);
 }
 
 TEST(ExplicitNeuronTests, TestStepExplicit)
 {
-    Neuron neurone(Type::Explicit, true, 1, 1, 3);
-    neurone.set_Vm_ (7); 
-    neurone.set_I_(5); 
+    Neuron neurone(Type::Explicit, true, 1, 1, 3, 7, 5);
     int dt = 1; 
     
     neurone.Neuron::step_explicit(1);
     
-    int result = neurone.get_Vm_();
+    int result = neurone.get_Vm();
        
-    EXPECT_NEAR (7.4, neurone.get_Vm_(),  0.000001);
-    EXPECT_TRUE(abs(neurone.get_Vm_() - 7.4) < 0.000001);
+    EXPECT_NEAR (7.4, neurone.get_Vm(),  0.000001);
+    EXPECT_TRUE(abs(neurone.get_Vm() - 7.4) < 0.000001);
 }
 
 TEST(ExplicitNeuronTests, TestResetPotential)
 {
-    Neuron neurone(Type::Explicit, true, 1, 1, 3);
-    neurone.set_Vm_ (25);
+    Neuron neurone(Type::Explicit, true, 1, 1, 3, 25);
     neurone.Neuron::reset_potential();
     
-    int result = neurone.get_Vm_();
+    int result = neurone.get_Vm();
 
     EXPECT_EQ (10, result);
     EXPECT_TRUE(result==10);

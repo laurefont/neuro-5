@@ -2,7 +2,6 @@
 #include <cmath>
 #include <string>
 #include <iostream>
-#include <fstream>
 
 unsigned int Neuron::neuron_id_ = 0;
 Physics::Potential const Neuron::firing_threshold_= 20;
@@ -26,11 +25,13 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
     events_in_ = ev; // on initialise events_in_ à un tableau vide
     
     string fileName =  "../doc/neuron_" + to_string(neuron_id_) + ".csv";
-    ofstream out (fileName);
-
-    out << "t [ms]" << "," << "Vm [V]" << endl;
+    out = ofstream(fileName);
     
-    out.close();
+    if (out.fail()) {
+        throw string("Error: The file doesn't exist !");
+    } else {
+		out << "t [ms]" << "," << "Vm [V]" << endl;
+	}
 
 	++neuron_id_;
 }
@@ -44,6 +45,8 @@ Neuron::~Neuron()
         element = nullptr;
     }
     synapses_.clear();
+    
+    out.close();
 }
 
 
@@ -169,20 +172,8 @@ void Neuron::update(Physics::Time const& dt)
         refractory_period_ = 2;
 
     }
-
-    
-    ofstream out;
-    string fileName =  "../doc/neuron_" + to_string(neuron_id_) + ".csv";
-    out.open(fileName.c_str());
-
-    if (out.fail()) {
-        throw string("Error: The file doesn't exist !");
-
-    } else {
-            out << t_ << "," << Vm_ << endl;
-    }
-    
-    out.close();
+   
+    out << t_ << "," << Vm_ << endl;
     
 }
 

@@ -24,7 +24,7 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
     std::priority_queue <Event> ev;
     events_in_ = ev; // on initialise events_in_ à un tableau vide
     
-    string fileName =  "../doc/neuron_" + to_string(neuron_id_) + ".csv";
+    string fileName =  "neuron_" + to_string(neuron_id_) + ".csv";
     out = ofstream(fileName);
     
     if (out.fail()) {

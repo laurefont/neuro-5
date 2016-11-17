@@ -15,6 +15,17 @@ TEST(ImplicitNeuronTests, TestFiring)
     EXPECT_TRUE(abs(neurone.get_Vm_() - 7.4) < 0.000001);
 }
 
+TEST(ImplicitNeuronTests, TestThreshold)
+{
+    Neuron neurone(Type::Implicit, true, 1, 1, 3);
+    neurone.set_Vm_ (25);
+    neurone.Neuron::has_reached_threshold();
+    int result = neurone.has_reached_threshold();
+
+    EXPECT_EQ (true, result);
+    EXPECT_TRUE(result==true);
+}
+
 int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);

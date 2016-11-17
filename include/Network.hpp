@@ -95,7 +95,7 @@ private:
 	///
 	std::vector<std::unique_ptr<Neuron>> neurons_;
 	
-	std::ofstream flow; ///< output file for raster plot
+	std::ofstream * raster_plot_file; ///< output file for raster plot
 
 	
 	

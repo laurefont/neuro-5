@@ -26,12 +26,21 @@ Network::Network(Type const type, unsigned int const number_neurons, double cons
 
 	make_connections();
 	
-	flow = std::ofstream ("raster-plot.csv");
+	raster_plot_file = new std::ofstream ("raster-plot.csv");
+	if (raster_plot_file->fail()) 
+	{
+	    throw std::runtime_error("file not found");
+	}
+        else
+        {
+            *raster_plot_file << "t [ms], neuron" << std::endl;
+        }
 }
 
 Network::~Network()
 {
-	flow.close();
+	raster_plot_file->close();
+        delete raster_plot_file;
 }
 
 void Network::make_connections()
@@ -67,15 +76,8 @@ void Network::update(Physics::Time dt)
 		neurons_[i]->update(dt);
 		if (neurons_[i]->has_reached_threshold())
 		{
-			if (flow.fail()) 
-			{
-				throw std::runtime_error("file not found");
-			}
-			else
-			{
-				flow <<i <<"," << neurons_[i]->get_t() << std::endl;
-			}
-			
+			*raster_plot_file <<i <<"," << neurons_[i]->get_t() << std::endl;
+
 		}
 	}
 	

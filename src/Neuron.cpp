@@ -25,7 +25,7 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
     events_in_ = ev; // on initialise events_in_ à un tableau vide
     
     string fileName =  "neuron_" + to_string(neuron_id_) + ".csv";
-    out = ofstream(fileName);
+    neuron_file = new ofstream(fileName);
     
     if (neuron_file->fail()) {
         throw string("Error: The file doesn't exist !");

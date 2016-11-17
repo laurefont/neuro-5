@@ -50,7 +50,7 @@ class Neuron {
     //attributs
     Type type_;
     static unsigned int neuron_id_;
-    std::ofstream out; ///< output file for raster plot
+    std::ofstream * neuron_file; ///< output file for raster plot
     bool  const excitatory_; ///<true if neuron excitatory OR false if neuron inhibatory
     int const inhib_connections_; ///<number of connections from other inhibitatory neurons
     int const excit_connections_; ///<number of connections from other excitatory neurons

@@ -25,15 +25,15 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
     events_in_ = ev; // on initialise events_in_ à un tableau vide
     
     string fileName =  "../doc/neuron_" + to_string(neuron_id_) + ".csv";
-    out = ofstream(fileName);
+    neuron_file = new ofstream(fileName);
     
-    if (out.fail()) {
+    if (neuron_file->fail()) {
         throw string("Error: The file doesn't exist !");
     } else {
-		out << "t [ms]" << "," << "Vm [V]" << endl;
-	}
+        *neuron_file << "t [ms]" << "," << "Vm [V]" << endl;
+    }
 
-	++neuron_id_;
+    ++neuron_id_;
 }
 
 
@@ -46,9 +46,9 @@ Neuron::~Neuron()
     }
     synapses_.clear();
     
-    out.close();
+    neuron_file->close();
+    delete neuron_file;
 }
-
 
 
 double Neuron::get_Vm_()
@@ -165,15 +165,13 @@ void Neuron::update(Physics::Time const& dt)
 
     if (has_reached_threshold())
     {
-
         output(I_);
         reset_potential();
         I_ = 0;
         refractory_period_ = 2;
-
     }
    
-    out << t_ << "," << Vm_ << endl;
+    *neuron_file << t_ << "," << Vm_ << endl;
     
 }
 

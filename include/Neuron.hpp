@@ -14,7 +14,8 @@ class Neuron {
     
     //constructeur et destructeur
     Neuron(Type const& a_type, bool const& exc, double const& eps,
-			double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm = 0, double I = 0); ///< constructor takes arguments that will be modified during time 
+			double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm = 0, double I = 0, 
+			Physics::Time refractory_period_ = 0, Physics::Time t_ = 0); ///< constructor takes arguments that will be modified during time 
 
  
 
@@ -34,16 +35,14 @@ class Neuron {
     double get_Vm() const; 
     double get_I() const; 
     Physics::Time get_t() const;	///<returns the time of the neuron
-   
-
-    
-    private :
-    //méthodes privées
     void input(Physics::Time const& dt); ///< uses function of dirac to know if the current has been added and updates Vm
     void output(double const& x); ///< updates the output
     void add_event_in(Event const& ev);
+    int get_synapses_size() const;
+    int get_event_in_size() const;
     
-   
+    private:
+    
     //attributs
     Type type_;
     static unsigned int neuron_id_;

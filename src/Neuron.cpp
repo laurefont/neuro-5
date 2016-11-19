@@ -15,9 +15,9 @@ using namespace std;
 
 
 Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
-				double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm, double I)
+				double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm, double I, Physics::Time refractory_period, Physics::Time t)
 				: type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
-				epsilon_(eps), ext_f_(ext_f), t_(0), membrane_resistance_(membrane_resistance), Vm_(Vm), I_(I)
+				epsilon_(eps), ext_f_(ext_f), membrane_resistance_(membrane_resistance), Vm_(Vm), I_(I), refractory_period_(refractory_period), t_(t)
 
 {
     synapses_ = std::vector<Neuron*>(1250);
@@ -40,13 +40,7 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
 
 
 Neuron::~Neuron()
-{
-    for (auto& element : synapses_) {
-        delete element;
-        element = nullptr;
-    }
-    synapses_.clear();
-    
+{  
     neuron_file->close();
     delete neuron_file;
 }
@@ -210,13 +204,15 @@ void Neuron::update_RI(Physics::Time const& dt)
 
 	else if ((type_ == Type::Explicit) or (type_ == Type::Implicit))
 	{
-
-		while((events_in_.top().get_t() < (t_ + dt)) && (refractory_period_ == 0))
+        
+		while((!events_in_.empty()) && (events_in_.top().get_t() < (t_ + dt)) && (refractory_period_ == 0))
 		{
+		   
 		// si la différence entre le temps courant et (transmission_delay_ + temps où le courant a été envoyé) = 0
 		// la fonction de dirac retourne 1 et dans ce cas on incrémente le courant
 			if (Physics::dirac_distribution(t_- transmission_delay_ - events_in_.top().get_t()) == 1)
 			{
+				
 				I_ += amplitude_ / membrane_resistance_;
 				events_in_.pop();
 
@@ -246,4 +242,14 @@ double Neuron::get_I() const
 {
 	return I_;
 
+}
+
+int Neuron::get_synapses_size() const
+{
+	return synapses_.size();
+}
+
+int Neuron::get_event_in_size() const
+{
+	return events_in_.size();
 }

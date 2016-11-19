@@ -40,18 +40,8 @@ int main (int argc, char** argv)
 	} catch (TCLAP::ArgException &e)  // catch any exceptions
 	{ std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl; }
     
-    //création d'un neuron "test"
-    Neuron neurone(Type::Explicit, true, 1, 1, 2);
     
-    neurone.step_explicit(1);
     
-    std::cout<<"Step_explicit fonctionne"<<std::endl; //fonctionne bien
-    
-    neurone.step(1);
-    
-    std::cout<<"Step fonctionne bien" <<std::endl; //fonctionne bien
-    
-    Neuron neurone2(Type::Explicit, true, 1, 1, 2);
 }
 /*
  * Si on ne spécifie rien en lançant le programme, voici la sortie :

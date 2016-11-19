@@ -41,6 +41,12 @@ Network::~Network()
 {
 	raster_plot_file->close();
         delete raster_plot_file;
+        
+    for (auto& neuron : neurons_)
+    {
+		neuron = nullptr;
+	}
+	neurons_.clear();
 }
 
 void Network::make_connections()

@@ -93,7 +93,7 @@ TEST(ExplicitNeuronTests, TestUpdate_RI)
     EXPECT_TRUE(abs(neuron1.get_I() - 10.1) < 0.000001);
 }
 
-/*TEST(ExplicitNeuronTests, TestOutput)
+TEST(ExplicitNeuronTests, TestOutput)
 {
     Neuron neuron1(Type::Explicit, true, 1, 1, 1, 25, 10, 0, 3);
     Neuron neuron2(Type::Explicit, true, 1, 1, 1, 25, 10, 0, 3);
@@ -108,9 +108,7 @@ TEST(ExplicitNeuronTests, TestUpdate_RI)
     EXPECT_TRUE(result==1);
     
 }
-*/
 
-  
 int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);

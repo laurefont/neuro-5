@@ -2,6 +2,7 @@
 #include <cmath>
 #include <string>
 #include <iostream>
+#include <assert.h>
 
 unsigned int Neuron::neuron_id_ = 0;
 Physics::Potential const Neuron::firing_threshold_= 20;
@@ -20,7 +21,6 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
 				epsilon_(eps), ext_f_(ext_f), membrane_resistance_(membrane_resistance), Vm_(Vm), I_(I), refractory_period_(refractory_period), t_(t)
 
 {
-    synapses_ = std::vector<Neuron*>(1250);
     std::priority_queue <Event> ev;
     events_in_ = ev; // on initialise events_in_ à un tableau vide
     
@@ -81,10 +81,11 @@ void Neuron::output(double const& x)
 
     Event ev(t_, x);
 
-    for (size_t i(0); i < synapses_.size(); ++i)
+    for (size_t i = 0; i < synapses_.size(); ++i)
     {
-		synapses_[i]->add_event_in(ev);
-	}
+        assert(synapses_[i]!=NULL);
+        synapses_[i]->add_event_in(ev);
+    }
 }
 
 
@@ -143,6 +144,7 @@ void Neuron::update(Physics::Time const& dt)
 
 void Neuron::set_connection(Neuron* neuron)
 {
+        assert(neuron!=NULL);
 	synapses_.push_back(neuron);
 }
 

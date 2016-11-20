@@ -56,8 +56,8 @@ TEST(ExplicitNeuronTests, TestSetConnections)
     
     int result = neurone1.get_synapses_size();
 
-    EXPECT_EQ (1251, result); //initial size is 1250
-    EXPECT_TRUE(result==1251);
+    EXPECT_EQ (1, result); 
+    EXPECT_TRUE(result==1);
 }
 
 TEST(ExplicitNeuronTests, TestAddEvent)

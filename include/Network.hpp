@@ -97,6 +97,7 @@ private:
 	
 	std::ofstream * raster_plot_file; ///< output file for raster plot
 
+	Type const type_; ///< type of simulation (analytical, explicit, implicit)
 	
 	
 };

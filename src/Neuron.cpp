@@ -52,19 +52,9 @@ void Neuron::input(Physics::Time const& dt)
 	//ANALYTIC
 	if(type_ == Type::Analytic)
 	{
-		//temps initial à partir duquel commence dt
-		Physics::Time init_time (t_);
-
-		//sélectionne chacun leur tour les évènements qui ont lieu avant la fin de dt
-		while((events_in_.top().get_t() + transmission_delay_ < (init_time + dt)) && (refractory_period_ == 0))
-		{
-			//détermine le petit dt entre t_ et le moment auquel le spike arrive
-			Physics::Time small_dt ( (events_in_.top().get_t() + transmission_delay_) - t_ );
-
-			update_RI(small_dt);
-			step(small_dt);
-		}
-
+		t_ += dt + transmission_delay_;
+		update_RI(dt+transmission_delay_);
+		step(dt+transmission_delay_);
 	}
 
 	else
@@ -155,7 +145,6 @@ void Neuron::step(Physics::Time const& dt) // faire en sorte que dans commandlin
 	{
 		case Type::Analytic :
 		step_analytic(dt);
-		t_ = events_in_.top().get_t();
 		break;
 
 		case Type::Explicit :
@@ -194,12 +183,13 @@ void Neuron::step_implicit(Physics::Time const& dt)
 
 void Neuron::update_RI(Physics::Time const& dt)
 {
-	//ANALYTIC
 	if(type_ == Type::Analytic)
 	{
-
-		I_ += events_in_.top().get_i();
-		events_in_.pop();
+		while( (!events_in_.empty()) && (refractory_period_ == 0) && (Physics::dirac_distribution(t_- transmission_delay_ - events_in_.top().get_t()) == 1) )
+		{
+			I_ += events_in_.top().get_i();
+			events_in_.pop();
+		}
 
 
 	}

@@ -42,7 +42,8 @@ int main (int argc, char** argv)
     double const gamma = 19;
     double const epsilon = 10;
     Physics::Resistance membrane_resistance = 10;
-    Physics::Frequency ext_f = 1000;
+    double ext_f = 1000;
+					
     Simulation sim(time, neurons, gamma, epsilon, membrane_resistance, ext_f);
     sim.launch_simulation();
 }

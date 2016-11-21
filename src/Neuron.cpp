@@ -1,8 +1,9 @@
 #include "Neuron.hpp"
 #include <cmath>
 #include <string>
-#include <iostream>
 #include <assert.h>
+#include <chrono>
+#include <random>
 
 unsigned int Neuron::neuron_id_ = 0;
 Physics::Potential const Neuron::firing_threshold_= 20;
@@ -16,11 +17,11 @@ using namespace std;
 
 
 Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
-				double const& ext_f, Physics::Resistance const& membrane_resistance, double Vm, double I, Physics::Time refractory_period, Physics::Time t)
+				double const& external_factor, Physics::Resistance const& membrane_resistance, double Vm, double I, Physics::Time refractory_period, Physics::Time t)
 				: type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
-				epsilon_(eps), ext_f_(ext_f), membrane_resistance_(membrane_resistance), Vm_(Vm), I_(I), refractory_period_(refractory_period), t_(t)
+				epsilon_(eps), external_factor_(external_factor), membrane_resistance_(membrane_resistance), Vm_(Vm), I_(I), refractory_period_(refractory_period), t_(t)
 
-{ 
+{
     string fileName =  "neuron_" + to_string(neuron_id_) + ".csv";
     neuron_file = new ofstream(fileName);
 
@@ -87,6 +88,21 @@ void Neuron::reset_potential()
 {
     Vm_ = rest_potential_;
 }
+
+
+double Neuron::external_spike_generator(Physics::Time const& dt)
+{
+	/// Construct a random generator engine from a time-based seed
+	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::default_random_engine generator(seed);
+
+	/// Use a Poisson distribution with a rate 
+	//std::poisson_distribution<double> distribution(external_factor_*dt);
+	//return distribution(generator);
+	return 0;		
+}
+
+
 
 
 void Neuron::update(Physics::Time const& dt)

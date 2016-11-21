@@ -17,31 +17,22 @@ Network::Network(Type const type, unsigned int const number_neurons, double cons
 	  epsilon_(epsilon),
 	  type_(type)
 {
-	for (unsigned int i(0); i < Ne_; ++i) {
-		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, true, epsilon_, ext_f, membrane_resistance)));
-	}
-
-	for (unsigned int i(0); i < Ni_; ++i) {
-		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, false, epsilon_, ext_f, membrane_resistance)));
-	}
+	for (unsigned int i(0); i < N_; ++i)
+		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, (i < Ne_), epsilon_, ext_f, membrane_resistance)));
 
 	make_connections();
 	
 	raster_plot_file = new std::ofstream ("raster-plot.csv");
 	if (raster_plot_file->fail()) 
-	{
 	    throw std::runtime_error("file not found");
-	}
-        else
-        {
-            *raster_plot_file << "t [ms], neuron" << std::endl;
-        }
-}
+    else
+        *raster_plot_file << "t [ms], neuron" << std::endl;
+ }
 
 Network::~Network()
 {
 	raster_plot_file->close();
-        delete raster_plot_file;
+    delete raster_plot_file;
         
     for (auto& neuron : neurons_)
     {
@@ -74,23 +65,30 @@ void Network::make_connections()
 	}
 }
 
-
-void Network::update(Physics::Time dt)
+double Network::update(Physics::Time dt)
 {
-	//for (auto& neuron : neurons_)
-	for (unsigned int i(0); i< neurons_.size(); ++i)
+	if (type_ != Type::Analytic) //Implicit / Explicit
 	{
+	  //for (auto& neuron : neurons_)
+	  for (unsigned int i(0); i< neurons_.size(); ++i)
+	  {
 		neurons_[i]->update(dt);
 		if (neurons_[i]->has_reached_threshold())
-		{
 			*raster_plot_file <<i <<"," << neurons_[i]->get_t() << std::endl;
-
-		}
+	  }
+	  return neurons_[0]->get_t();
+    }
+    else //Analytic solution
+    {
+		Neuron_last last_neuron(get_back_neuron());
+		int last_id = last_neuron.very_last;
+		dt = last_neuron.almost_last_time - neurons_[last_id]->get_t();
+		neurons_[last_id]->update(dt);
+		if (neurons_[last_id]->has_reached_threshold())
+			*raster_plot_file << last_id <<"," << neurons_[last_id]->get_t() << std::endl;
+		return last_neuron.almost_last_time; //The 2nd last is now the last, return its time
 	}
-	
 }
-
-
 
 Neuron_last Network::get_back_neuron()
 {
@@ -112,9 +110,7 @@ Neuron_last Network::get_back_neuron()
 			index_very_last = index;
 			
 		}
-		
 		++index;
-		
 	}
 	
 	Neuron_last x;
@@ -122,5 +118,4 @@ Neuron_last Network::get_back_neuron()
 	x.almost_last_time = time_almost_last;
 	
 	return x;
-	
 }

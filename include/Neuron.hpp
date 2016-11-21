@@ -45,7 +45,6 @@ class Neuron {
     
     //attributs
     Type type_;
-    static unsigned int neuron_id_;
     std::ofstream * neuron_file; ///< output file for raster plot
     bool  const excitatory_; ///<true if neuron excitatory OR false if neuron inhibatory
     int const inhib_connections_; ///<number of connections from other inhibitatory neurons
@@ -58,6 +57,7 @@ class Neuron {
     std::priority_queue <Event> events_in_; ///<queue of input events 
     std::vector <Neuron*> synapses_; ///<table with the neurons it's sending signals to
     
+    static unsigned int neuron_id_; 
     static const Physics::Potential firing_threshold_; ///<membrane potential level at which neuron fires
     static const Physics::Potential rest_potential_; ///<Vr (reset potential after the neuron has fired)
     static const Physics::Time transmission_delay_; ///<D (time taken by a signal after it's been produced to reach the receiving neuron)

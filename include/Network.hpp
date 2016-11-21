@@ -16,8 +16,7 @@
 struct Neuron_last 
 {
 	int very_last;
-	Physics::Time almost_last_time;
-		
+	Physics::Time almost_last_time;	
 };
 	
 
@@ -56,7 +55,7 @@ public:
 	/// Update each neurons of the network
 	///
 	/// @param dt time interval
-	void update(Physics::Time dt);
+	double update(Physics::Time dt);
 
 private:
 	///

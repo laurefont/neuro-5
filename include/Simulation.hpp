@@ -41,11 +41,11 @@ class Simulation
 		/// @param membrane_resistance membrane resistance
 		/// @param ext_f external frequency
 		///
-        Simulation(Physics::Time const& time_of_simulation, unsigned int const number_neurons,
-					double const gamma, double const epsilon, Physics::Resistance const& membrane_resistance, 
-					Physics::Frequency ext_f);
+        Simulation(Physics::Time const& time_of_simulation,
+                    unsigned int const number_neurons, double const gamma, double const epsilon,
+                    Physics::Resistance const& membrane_resistance, Physics::Frequency ext_f);
 
-        virtual ~Simulation();
+        ~Simulation();
         void launch_simulation();
 
     private:

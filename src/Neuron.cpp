@@ -2,6 +2,7 @@
 #include <cmath>
 #include <string>
 #include <assert.h>
+#include <chrono>
 #include <random>
 
 unsigned int Neuron::neuron_id_ = 0;
@@ -104,15 +105,15 @@ void Neuron::reset_potential()
 }
 
 
-void external_spike_generator()
+double Neuron::external_spike_generator(Physics::Time const& dt)
 {
 	/// Construct a random generator engine from a time-based seed
 	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
 
 	/// Use a Poisson distribution with a rate 
-	std::poisson_distribution distribution(external_factor_*Ce_*dt);
-	distribution(generator);
+	std::poisson_distribution<double> distribution(external_factor_*dt);
+	return distribution(generator);
 			
 	
 }

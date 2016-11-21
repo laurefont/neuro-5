@@ -40,6 +40,7 @@ class Neuron {
     void add_event_in(Event const& ev);
     int get_synapses_size() const;
     int get_event_in_size() const;
+    void external_spike_generator(); 
     
     private:
     
@@ -65,7 +66,9 @@ class Neuron {
     static Physics::Time const tau_; ///<time constant of the circuit
     
     const Physics::Resistance membrane_resistance_; ///<R (resistance of the membrane)
-    const Physics::Frequency ext_f_;
+    const double  external_factor_;
+    const int Ce_;///< number of external connections
+    
 
 };
 

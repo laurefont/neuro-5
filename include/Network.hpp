@@ -46,7 +46,7 @@ public:
 	/// @param ext_f external frequency
 	///
 	Network(Type const type, unsigned int const number_neurons, double const gamma, double const epsilon,
-			Physics::Frequency const ext_f, Physics::Resistance const membrane_resistance);
+			double const& external_factor, Physics::Resistance const membrane_resistance);
 	Network(Network const &) = delete;
 	Network& operator=(Network const &) = delete;
 

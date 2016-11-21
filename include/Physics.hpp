@@ -25,8 +25,6 @@ namespace Physics
     using Resistance = double;
     
     using Amplitude = double;
-    
-    using Frequency = double;
 
 	///
 	/// @brief Dirac delta function

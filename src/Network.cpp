@@ -9,7 +9,7 @@
 
 #include <Physics.hpp>
 
-Network::Network(Type const type, unsigned int const number_neurons, double const gamma, double const epsilon, Physics::Frequency const ext_f, Physics::Resistance const membrane_resistance)
+Network::Network(Type const& type, unsigned int const& number_neurons, double const& gamma, double const& epsilon, double const& external_factor, Physics::Resistance const& membrane_resistance)
 	: N_(number_neurons),
 	  Ne_(std::round(N_ / (1 + gamma))),
 	  Ni_(N_ - Ne_),
@@ -18,11 +18,11 @@ Network::Network(Type const type, unsigned int const number_neurons, double cons
 	  type_(type)
 {
 	for (unsigned int i(0); i < Ne_; ++i) {
-		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, true, epsilon_, ext_f, membrane_resistance)));
+		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, true, epsilon_, external_factor_, membrane_resistance)));
 	}
 
 	for (unsigned int i(0); i < Ni_; ++i) {
-		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, false, epsilon_, ext_f, membrane_resistance)));
+		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, false, epsilon_, external_factor_, membrane_resistance)));
 	}
 
 	make_connections();

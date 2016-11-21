@@ -23,11 +23,11 @@ class Simulation
 		/// @param gamma proportion of inhibitory neurons over excitatory neurons
 		/// @param epsilon connections density
 		/// @param membrane_resistance membrane resistance
-		/// @param ext_f external frequency
+		/// @param external_factor external factor
 		///
         Simulation(Physics::Time const& time_of_simulation, Physics::Time const& time_step, Type const& type,
 					unsigned int const number_neurons, double const gamma, double const epsilon,
-					Physics::Resistance const& membrane_resistance, Physics::Frequency ext_f);
+					Physics::Resistance const& membrane_resistance, double const& external_factor);
 
 		/// 
 		/// Create a simulation with an analytic solution
@@ -39,11 +39,11 @@ class Simulation
 		/// @param gamma proportion of inhibitory neurons over excitatory neurons
 		/// @param epsilon connections density
 		/// @param membrane_resistance membrane resistance
-		/// @param ext_f external frequency
+		/// @param external_factor external factor
 		///
         Simulation(Physics::Time const& time_of_simulation, unsigned int const number_neurons,
 					double const gamma, double const epsilon, Physics::Resistance const& membrane_resistance, 
-					Physics::Frequency ext_f);
+					double const& external_factor);
 
         virtual ~Simulation();
         void launch_simulation();

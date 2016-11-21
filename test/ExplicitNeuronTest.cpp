@@ -109,6 +109,85 @@ TEST(ExplicitNeuronTests, TestOutput)
     
 }
 
+TEST(ExplicitNeuronTests, TestInput)
+{
+    Neuron neuron1(Type::Explicit, true, 1, 1, 1, 25, 20, 0, 3);
+    
+    int dt(3);
+    
+    Event event1(1, 1.0);
+
+    neuron1.Neuron::add_event_in(event1); 
+      
+    neuron1.Neuron::input(dt); 
+                             
+    double result1 = neuron1.get_I();
+    double result2 = neuron1.get_Vm();
+    
+    
+    EXPECT_NEAR (20.1, result1,  0.000001);   
+    EXPECT_TRUE(abs(result1 - 20.1) < 0.000001);
+   
+    EXPECT_NEAR (24.25, result2,  0.02);   
+    EXPECT_TRUE(abs(result2 - 24.25) < 0.02);
+    
+   
+}
+
+TEST(ExplicitNeuronTests, TestUpdate)
+{
+    Neuron neuron1(Type::Explicit, true, 1, 1, 1, 25, 20, 0, 3);
+    Neuron neuron2(Type::Explicit, true, 1, 1, 1, 25, 20, 0, 3);
+    
+    int dt(3);
+    
+    double i(10.0);
+    
+    Event event1(1, 1.0);
+
+    neuron1.Neuron::add_event_in(event1); 
+    neuron1.Neuron::set_connection(&neuron2);
+    
+    neuron1.Neuron::update(dt);
+                             
+    double result1 = neuron1.get_I();
+    double result2 = neuron1.get_Vm();
+    int result3 = neuron1.get_event_in_size(); 
+    int result4 = neuron1.get_synapses_size();
+    int result5 = neuron2.get_event_in_size();
+    double result6 = neuron2.get_I();
+    double result7 = neuron2.get_Vm();
+   
+    //neuron1.get_refractory_period(); 
+    
+    EXPECT_NEAR (0.0, result1,  0.000001);   
+    EXPECT_TRUE(abs(result1 - 0.0) < 0.000001);
+   
+    EXPECT_NEAR (10.0, result2,  0.000001);   
+    EXPECT_TRUE(abs(result2 - 10.0) < 0.000001);
+    
+   
+    EXPECT_EQ (0, result3); 
+    EXPECT_TRUE(result3==0);
+    
+    EXPECT_EQ (1, result4); 
+    EXPECT_TRUE(result4==1);
+   
+    EXPECT_EQ (1, result5); 
+    EXPECT_TRUE(result5==1);
+    
+    
+    EXPECT_NEAR (20.0, result6,  0.000001);   
+    EXPECT_TRUE(abs(result6 - 20.0) < 0.000001);
+   
+    EXPECT_NEAR (25.0, result7,  0.000001);   
+    EXPECT_TRUE(abs(result7 - 25.0) < 0.000001);
+    
+   
+}
+
+
+
 int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);

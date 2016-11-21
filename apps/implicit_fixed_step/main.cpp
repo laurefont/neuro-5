@@ -13,7 +13,7 @@ int main (int argc, char** argv)
 		TCLAP::ValueArg<double> gamma_arg("g", "gamma", "proportion of inhibitory over excitatory neurons", false, 0.25, "double", cmd);
 		TCLAP::ValueArg<double> epsilon_arg("e", "epsilon", "connections density", false, 0.1, "double", cmd);
 		TCLAP::ValueArg<Physics::Resistance> membrane_resistance_arg("r", "resistance", "resistance of the membrane", false, 1, "Resistance", cmd);
-		TCLAP::ValueArg<Physics::Frequency> external_frequency_arg("f", "frequency", "external frequency", false, 1, "Frequency", cmd);
+		//TCLAP::ValueArg<Physics::Frequency> external_frequency_arg("f", "frequency", "external frequency", false, 1, "Frequency", cmd);
 
 		cmd.parse(argc, argv);
 
@@ -23,7 +23,7 @@ int main (int argc, char** argv)
 		const double gamma {gamma_arg.getValue()};
 		const double epsilon {epsilon_arg.getValue()};
 		const Physics::Resistance membrane_resistance {membrane_resistance_arg.getValue()};
-		const Physics::Frequency external_frequency {external_frequency_arg.getValue()};
+		//const Physics::Frequency external_frequency {external_frequency_arg.getValue()};
 
 		// TODO fix simulation
 		//Simulation simulation(time_of_simulation, time_step, Type::Implicit, number_neurons, gamma, epsilon, membrane_resistance, external_frequency);

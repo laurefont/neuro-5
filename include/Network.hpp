@@ -55,7 +55,7 @@ public:
 	/// Update each neurons of the network
 	///
 	/// @param dt time interval
-	void update(Physics::Time dt);
+	double update(Physics::Time dt);
 
 private:
 	///

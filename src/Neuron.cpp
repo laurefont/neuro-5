@@ -22,22 +22,16 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
 				epsilon_(eps), external_factor_(external_factor), membrane_resistance_(membrane_resistance), Vm_(Vm), I_(I), refractory_period_(refractory_period), t_(t)
 
 {
-    std::priority_queue <Event> ev;
-    events_in_ = ev; // on initialise events_in_ à un tableau vide
-    
     string fileName =  "neuron_" + to_string(neuron_id_) + ".csv";
     neuron_file = new ofstream(fileName);
 
-    
     if (neuron_file->fail()) {
         throw string("Error: The file doesn't exist !");
     } else {
         *neuron_file << "t [ms]" << "," << "Vm [V]" << endl;
     }
-
     ++neuron_id_;
 }
-
 
 
 Neuron::~Neuron()
@@ -47,24 +41,20 @@ Neuron::~Neuron()
 }
 
 
-
 void Neuron::input(Physics::Time const& dt)
 {
-	//ANALYTIC
 	if(type_ == Type::Analytic)
 	{
-		t_ += dt + transmission_delay_;
-		update_RI(dt+transmission_delay_);
-		step(dt+transmission_delay_);
+		double dt_as = dt+transmission_delay_;
+		update_RI(dt_as);
+		step(dt_as);
 	}
-
 	else
 	{
 		update_RI(dt);
 		step(dt);
     }
 }
-
 
 
 void Neuron::output(double const& x)
@@ -80,8 +70,6 @@ void Neuron::output(double const& x)
 }
 
 
-
-
 bool Neuron::has_reached_threshold() const
 {
     return Vm_ >= firing_threshold_;
@@ -92,9 +80,6 @@ void Neuron::add_event_in(Event const& ev)
 {
 	events_in_.push(ev);
 }
-
-
-
 
 
 // remet le potentiel de membrane au potentiel au repos, cette méthode sera appelée
@@ -112,11 +97,12 @@ double Neuron::external_spike_generator(Physics::Time const& dt)
 	std::default_random_engine generator(seed);
 
 	/// Use a Poisson distribution with a rate 
-	std::poisson_distribution<double> distribution(external_factor_*dt);
-	return distribution(generator);
-			
-	
+	//std::poisson_distribution<double> distribution(external_factor_*dt);
+	//return distribution(generator);
+	return 0;		
 }
+
+
 
 
 void Neuron::update(Physics::Time const& dt)
@@ -142,42 +128,36 @@ void Neuron::update(Physics::Time const& dt)
 }
 
 
-
-
 void Neuron::set_connection(Neuron* neuron)
 {
         assert(neuron!=NULL);
 	synapses_.push_back(neuron);
 }
 
-void Neuron::step(Physics::Time const& dt)
+void Neuron::step(Physics::Time const& dt) // faire en sorte que dans commandline on puisse entrer que 0,1,2
 {
-
 	switch(type_)
 	{
 		case Type::Analytic :
-		step_analytic(dt);
-		break;
+		     step_analytic(dt);
+		     break;
 
 		case Type::Explicit :
-		step_explicit(dt);
-		t_ += dt;
-		break;
+		     step_explicit(dt);
+		     break;
 
 		case Type::Implicit :
-		step_implicit(dt);
-		t_ += dt;
-		break;
+		     step_implicit(dt);
+		     break;
 	}
-
+	t_+=dt;
 }
 
 
 void Neuron::step_analytic(Physics::Time const& dt)
 {
-
-	Vm_ = membrane_resistance_ * I_*exp(-dt/tau_);
-
+	Vm_ *= exp(-dt/tau_); //new voltage from voltage decay from previous step
+	Vm_ += membrane_resistance_ * I_; //network current
 }
 
 
@@ -197,13 +177,11 @@ void Neuron::update_RI(Physics::Time const& dt)
 {
 	if(type_ == Type::Analytic)
 	{
-		while( (!events_in_.empty()) && (refractory_period_ == 0) && (Physics::dirac_distribution(t_- transmission_delay_ - events_in_.top().get_t()) == 1) )
+		while( !events_in_.empty() && refractory_period_ == 0 && Physics::dirac_distribution(t_- transmission_delay_ - events_in_.top().get_t()) == 1 )
 		{
 			I_ += events_in_.top().get_i();
 			events_in_.pop();
 		}
-
-
 	}
 
 	else if ((type_ == Type::Explicit) or (type_ == Type::Implicit))

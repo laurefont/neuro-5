@@ -17,14 +17,10 @@ Simulation::Simulation(Physics::Time const& time_of_simulation, unsigned int con
 {
 }
 
+Simulation::~Simulation(){}
+
 void Simulation::launch_simulation()
 {
-	do {
-		network_.update(time_step_);
-		time_of_simulation_ -= time_step_;
-		///> update plot
-
-	} while(time_of_simulation_ >= 0);
-	
+	while (network_.update(time_step_) < time_of_simulation_){};
 }
 

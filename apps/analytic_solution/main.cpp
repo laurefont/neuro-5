@@ -3,6 +3,9 @@
 
 int main (int argc, char** argv)
 {
+	double time = -1;
+	int  neurons = -1;
+	
 	try {
 		
 	TCLAP::CmdLine cmd("Simulation of neurons network", ' ', "0.9");
@@ -22,45 +25,28 @@ int main (int argc, char** argv)
 	
 	cmd.parse(argc, argv);
 	
-	double time = timeArg.getValue();
-	int  neurons = neuronArg.getValue();
+	time = timeArg.getValue();
+	neurons = neuronArg.getValue();
 	bool time_to_zero = simulation_time_zero_switch.getValue();
-
 	
 	std::cout<<"The total number of neurons in the simulation is : "<< neurons << std::endl;
 	
 	if (time_to_zero)
-		{
-			std::cout << "The simulation time is now zero" << std::endl;
-		}
-	
+		std::cout << "The simulation time is now zero" << std::endl;
 	else
 		std::cout << "The simulation time is : " << time << std::endl;
-
-
-	} catch (TCLAP::ArgException &e)  // catch any exceptions
+	}
+	catch (TCLAP::ArgException &e)  // catch any exceptions
 	{ std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl; }
-}
-/*
- * Si on ne spécifie rien en lançant le programme, voici la sortie :
- * 
- * The total number of neurons in the simulation is : 12500
-   The simulation time is : 1000
- 
- * Si on ajoute aux lignes de commande : -n 100000 -t 45 
- * 
- * The total number of neurons in the simulation is : 100000
-   The simulation time is : 45
- 
- * Si on précise -z :
- * 
- * The total number of neurons in the simulation is : 12500
-   The simulation time is now zero
- */
 
-///Remarques : les lettres n, t et z sont appelées "flags". Tous les flags ont un type bien défini. 
-///On peut aussi écrire --neurons --time --zero dans le terminal, cela revient au même que de mettre uniquement le "flag"
-///Pour vous renseigner sur les divers arguments, leur type et leur description, il existe la commande --help
+    double const gamma = 19;
+    double const epsilon = 10;
+    Physics::Resistance membrane_resistance = 10;
+    double ext_f = 1000;
+					
+    Simulation sim(time, neurons, gamma, epsilon, membrane_resistance, ext_f);
+    sim.launch_simulation();
+}
 
 
 

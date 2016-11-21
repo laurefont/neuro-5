@@ -66,7 +66,7 @@ class Neuron {
     static Physics::Time const tau_; ///<time constant of the circuit
     
     const Physics::Resistance membrane_resistance_; ///<R (resistance of the membrane)
-    const double  external_factor_;
+    const double external_factor_;
     
 
 };

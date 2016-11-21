@@ -18,11 +18,11 @@ Network::Network(Type const& type, unsigned int const& number_neurons, double co
 	  type_(type)
 {
 	for (unsigned int i(0); i < Ne_; ++i) {
-		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, true, epsilon_, external_factor_, membrane_resistance)));
+		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, true, epsilon_, external_factor, membrane_resistance)));
 	}
 
 	for (unsigned int i(0); i < Ni_; ++i) {
-		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, false, epsilon_, external_factor_, membrane_resistance)));
+		neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, false, epsilon_, external_factor, membrane_resistance)));
 	}
 
 	make_connections();

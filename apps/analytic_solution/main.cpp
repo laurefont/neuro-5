@@ -15,7 +15,7 @@ int main (int argc, char** argv)
 	///s'il ne saisit pas de valeur, la valeur par défaut (1000 ici) sera prise.
 	TCLAP::ValueArg<double> timeArg("t","time","total simulation time",false,1000,"double");
 	cmd.add(timeArg);
-	
+
 	///pas obligatoire de saisir une valeur, valeur par défaut = 12500
 	TCLAP::ValueArg<int> neuronArg("n","neurons","total number of neurons to consider for the simulation",false,12500,"int"); 
 	cmd.add(neuronArg);
@@ -43,8 +43,9 @@ int main (int argc, char** argv)
     double const epsilon = 10;
     Physics::Resistance membrane_resistance = 10;
     double ext_f = 1000;
+    Physics::Time refractory_period_ = 2; //ms
 					
-    Simulation sim(time, neurons, gamma, epsilon, membrane_resistance, ext_f);
+    Simulation sim(time, neurons, gamma, epsilon, membrane_resistance, ext_f, refractory_period_);
     sim.launch_simulation();
 }
 

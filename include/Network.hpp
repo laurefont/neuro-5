@@ -15,12 +15,10 @@
 ///
 struct Neuron_last 
 {
-	int very_last;
-	Physics::Time almost_last_time;
-		
+    int very_last_id;
+    Physics::Time second_last_time;
 };
 	
-
 
 ///
 /// @brief Sparsely connected network of neurons
@@ -44,8 +42,9 @@ public:
 	/// @param epsilon connections density
 	/// @param membrane_resistance membrane resistance
 	/// @param ext_f external frequency
-	///
-	Network(Type const& type, unsigned int const& number_neurons, double const& gamma, double const& epsilon, double const& external_factor, Physics::Resistance const& membrane_resistance);
+    /// @param refractory_period refractory period
+    ///
+    Network(Type const& type, unsigned int const& number_neurons, double const& gamma, double const& epsilon, double const& external_factor, Physics::Resistance const& membrane_resistance, Physics::Time refractory_period_);
 	Network(Network const &) = delete;
 	Network& operator=(Network const &) = delete;
 

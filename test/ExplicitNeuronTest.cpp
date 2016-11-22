@@ -4,7 +4,7 @@
 
 TEST(ExplicitNeuronTests, TestThreshold)
 {
-    Neuron neurone(Type::Explicit, true, 1, 1, 3, 25);
+    Neuron neurone(Type::Explicit, true);
     neurone.Neuron::has_reached_threshold();
     int result = neurone.has_reached_threshold();
 
@@ -14,7 +14,7 @@ TEST(ExplicitNeuronTests, TestThreshold)
 
 TEST(ExplicitNeuronTests, TestStep)
 {
-    Neuron neurone(Type::Explicit, true, 1, 1, 3, 7, 5);
+    Neuron neurone(Type::Explicit, true);
     int dt = 1; 
     neurone.Neuron::step(1);
     int result = neurone.get_Vm();
@@ -25,7 +25,7 @@ TEST(ExplicitNeuronTests, TestStep)
 
 TEST(ExplicitNeuronTests, TestStepExplicit)
 {
-    Neuron neurone(Type::Explicit, true, 1, 1, 3, 7, 5);
+    Neuron neurone(Type::Explicit, true, 0.5);
     int dt = 1; 
     
     neurone.Neuron::step_explicit(1);
@@ -38,7 +38,7 @@ TEST(ExplicitNeuronTests, TestStepExplicit)
 
 TEST(ExplicitNeuronTests, TestResetPotential)
 {
-    Neuron neurone(Type::Explicit, true, 1, 1, 3, 25);
+    Neuron neurone(Type::Explicit, true);
     neurone.Neuron::reset_potential();
     
     int result = neurone.get_Vm();
@@ -49,8 +49,8 @@ TEST(ExplicitNeuronTests, TestResetPotential)
 
 TEST(ExplicitNeuronTests, TestSetConnections)
 {
-    Neuron neurone1(Type::Explicit, true, 1, 1, 3, 25, 10);
-    Neuron neurone2(Type::Explicit, true, 1, 1, 3, 25, 10);
+    Neuron neurone1(Type::Explicit, true);
+    Neuron neurone2(Type::Explicit, true);
     int dt(1);
     neurone1.Neuron::set_connection(&neurone2);
     
@@ -62,7 +62,7 @@ TEST(ExplicitNeuronTests, TestSetConnections)
 
 TEST(ExplicitNeuronTests, TestAddEvent)
 {
-    Neuron neuron1(Type::Explicit, true, 1, 1, 1, 25, 10, 3);
+    Neuron neuron1(Type::Explicit, true);
    
     Event event1(1, 1.0);
     
@@ -77,7 +77,7 @@ TEST(ExplicitNeuronTests, TestAddEvent)
 
 TEST(ExplicitNeuronTests, TestUpdate_RI)
 {
-    Neuron neuron1(Type::Explicit, true, 1, 1, 1, 25, 10, 0, 3);
+    Neuron neuron1(Type::Explicit, true);
    
     Event event1(1, 1.0);
     
@@ -95,9 +95,8 @@ TEST(ExplicitNeuronTests, TestUpdate_RI)
 
 TEST(ExplicitNeuronTests, TestOutput)
 {
-    Neuron neuron1(Type::Explicit, true, 1, 1, 1, 25, 10, 0, 3);
-    Neuron neuron2(Type::Explicit, true, 1, 1, 1, 25, 10, 0, 3);
-   
+    Neuron neuron1(Type::Explicit, true);
+    Neuron neuron2(Type::Explicit, true);
     double i(10.0);
 
     neuron1.Neuron::set_connection(&neuron2);   //ajout de neuron2 au tableau de synapses de neuron1
@@ -111,7 +110,7 @@ TEST(ExplicitNeuronTests, TestOutput)
 
 TEST(ExplicitNeuronTests, TestInput)
 {
-    Neuron neuron1(Type::Explicit, true, 1, 1, 1, 25, 20, 0, 3);
+    Neuron neuron1(Type::Explicit, true);
     
     int dt(3);
     
@@ -136,8 +135,8 @@ TEST(ExplicitNeuronTests, TestInput)
 
 TEST(ExplicitNeuronTests, TestUpdate)
 {
-    Neuron neuron1(Type::Explicit, true, 1, 1, 1, 25, 20, 0, 3);
-    Neuron neuron2(Type::Explicit, true, 1, 1, 1, 25, 20, 0, 3);
+    Neuron neuron1(Type::Explicit, true);
+    Neuron neuron2(Type::Explicit, true);
     
     int dt(3);
     

@@ -4,26 +4,31 @@
 #include <assert.h>
 #include <chrono>
 #include <random>
+#include "Simulation.hpp"
 
 unsigned int Neuron::neuron_id_ = 0;
-Physics::Potential const Neuron::firing_threshold_= 20;
-Physics::Potential const Neuron::rest_potential_= 10;
-Physics::Time const Neuron::transmission_delay_= 2; // vraie valeur est 1.5
-Physics::Time const Neuron::tau_ = 20;
-Physics::Amplitude const Neuron::amplitude_= 0.1;
-
+Physics::Potential const Neuron::firing_threshold_= FIRING_THRESHOLD;
+Physics::Time const Neuron::refractory_period_ = REFRACTORY_PERIOD;
+Physics::Potential const Neuron::resting_potential_= RESTING_POTENTIAL;
+Physics::Potential const Neuron::reset_potential_= RESET_POTENTIAL;
+Physics::Time const Neuron::transmission_delay_= TRANSMISSION_DELAY;
+Physics::Resistance const Neuron::membrane_resistance_ = MEMBRANE_RESISTANCE;
+Physics::Time const Neuron::tau_ = TAU;
 
 using namespace std;
 
-
-Neuron::Neuron(Type const& a_type, bool const& exc, double const& eps,
-				double const& external_factor, Physics::Resistance const& membrane_resistance, double Vm, double I, Physics::Time refractory_period, Physics::Time t)
-				: type_(a_type), excitatory_(exc), inhib_connections_(250), excit_connections_(1000),
-				epsilon_(eps), external_factor_(external_factor), membrane_resistance_(membrane_resistance), Vm_(Vm), I_(I), refractory_period_(refractory_period), t_(t)
-
+Neuron::Neuron(Type const& a_type, bool const& exc, double const& external_factor)
+                : type_(a_type), excitatory_(exc), external_factor_(external_factor), t_(0)
 {
     string fileName =  "neuron_" + to_string(neuron_id_) + ".csv";
     neuron_file = new ofstream(fileName);
+    Vm_ = resting_potential_;
+    last_spike_time_ = -Neuron::refractory_period_;
+    //no spike is added between last_spike_time_ and last_spike_time_+refractory_period
+    //see add_event_in() function (discards spikes during refraction)
+
+    J_ = exc ? WEIGHT_EXC : WEIGHT_INH; //if (exc) J_=WEIGHT_EXC; else J_=WEIGHT_INH;
+
 
     if (neuron_file->fail()) {
         throw string("Error: The file doesn't exist !");
@@ -60,7 +65,7 @@ void Neuron::input(Physics::Time const& dt)
 void Neuron::output(double const& x)
 {
 
-    Event ev(t_, x);
+    Event ev(t_+transmission_delay_, x);
 
     for (size_t i = 0; i < synapses_.size(); ++i)
     {
@@ -78,7 +83,9 @@ bool Neuron::has_reached_threshold() const
 
 void Neuron::add_event_in(Event const& ev)
 {
-	events_in_.push(ev);
+    //only adds spikes that are delivered after refraction
+    if (ev.get_t() >= last_spike_time_ + refractory_period_)
+        events_in_.push(ev);
 }
 
 
@@ -86,7 +93,7 @@ void Neuron::add_event_in(Event const& ev)
 // dans update si le threshold est dépassé
 void Neuron::reset_potential()
 {
-    Vm_ = rest_potential_;
+    Vm_ = reset_potential_;
 }
 
 
@@ -103,11 +110,8 @@ double Neuron::external_spike_generator(Physics::Time const& dt)
 }
 
 
-
-
 void Neuron::update(Physics::Time const& dt)
 {
-
     input(dt); //<met d'abord à jour les input (ce que le neurone reçoit)
     //<décrémenter refractory period jusqu'à 0 pas en dessous
     //< output à toutes ses connexions dans le cas où le threshold est atteint
@@ -117,10 +121,16 @@ void Neuron::update(Physics::Time const& dt)
 
     if (has_reached_threshold())
     {
-        output(I_);
+        output(J_);
         *neuron_file << t_ << "," << Vm_ << endl;
+        last_spike_time_ = t_;
         reset_potential();
-        refractory_period_ = 2;
+
+        if (type_ == Type::Analytic)
+        {
+            t_ += refractory_period_;
+            *neuron_file << t_ << "," << Vm_ << endl;
+        }
     }
    
     *neuron_file << t_ << "," << Vm_ << endl;
@@ -162,52 +172,49 @@ void Neuron::step_analytic(Physics::Time const& dt)
      	*neuron_file << this->t_ + dt/4*i  << "," << temp_Vm << endl;
     }
 	Vm_ *= exp(-dt/tau_); //new voltage from voltage decay from previous step
-	Vm_ += membrane_resistance_ * I_; //network current
+    Vm_ += membrane_resistance_ * J_; //network current
 }
 
 
 void Neuron::step_explicit(Physics::Time const& dt)// Use of V(t-1)=Vm_ to calculate the new Vm_
 {
-	Vm_ += ((-Vm_ + membrane_resistance_ * I_) * dt) / tau_;
+    Vm_ += ((-Vm_ + membrane_resistance_ * J_) * dt) / tau_;
 }
 
 
 void Neuron::step_implicit(Physics::Time const& dt)
 {
-	Vm_ = ((dt * membrane_resistance_ * I_ ) + (tau_ * Vm_)) / ( dt + tau_);
+    Vm_ = ((dt * membrane_resistance_ * J_ ) + (tau_ * Vm_)) / ( dt + tau_);
 }
 
 
 void Neuron::update_RI(Physics::Time const& dt)
 {
-	I_ = 0;
+    J_ = 0;
 	if(type_ == Type::Analytic)
 	{
-		while( !events_in_.empty() && refractory_period_ == 0 && Physics::dirac_distribution(t_- transmission_delay_ - events_in_.top().get_t()) == 1 )
+        while( !events_in_.empty()
+            && Physics::dirac_distribution(t_- transmission_delay_ - events_in_.top().get_t()) == 1 )
 		{
-			I_ += events_in_.top().get_i();
+            J_ += tau_/membrane_resistance_* events_in_.top().get_J();
 			events_in_.pop();
 		}
 	}
 
 	else if ((type_ == Type::Explicit) or (type_ == Type::Implicit))
 	{
-        
-		while((!events_in_.empty()) && (events_in_.top().get_t() < (t_ + dt)) && (refractory_period_ == 0))
+        while((!events_in_.empty())
+           && (events_in_.top().get_t() < t_ + dt))
 		{
 		   
 		// si la différence entre le temps courant et (transmission_delay_ + temps où le courant a été envoyé) = 0
 		// la fonction de dirac retourne 1 et dans ce cas on incrémente le courant
 			if (Physics::dirac_distribution(t_- transmission_delay_ - events_in_.top().get_t()) == 1)
 			{
-				
-				I_ += amplitude_ / membrane_resistance_;
+                J_ += tau_/membrane_resistance_ * events_in_.top().get_J();
 				events_in_.pop();
-
 			}
-
 		}
-
 	}
 }
 
@@ -228,7 +235,7 @@ double Neuron::get_Vm() const
 
 double Neuron::get_I() const
 {
-	return I_;
+    return J_;
 
 }
 

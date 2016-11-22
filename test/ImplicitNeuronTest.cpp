@@ -4,7 +4,7 @@
 
 TEST(ImplicitNeuronTests, TestThreshold)
 {
-    Neuron neuron(Type::Implicit, true, 1, 1, 3, 25);
+    Neuron neuron(Type::Implicit, true, 0.5);
     neuron.Neuron::has_reached_threshold();
     int result = neuron.has_reached_threshold();
 
@@ -14,9 +14,9 @@ TEST(ImplicitNeuronTests, TestThreshold)
 
 TEST(ImplicitNeuronTests, TestStep)
 {
-    Neuron neuron1(Type::Implicit, true, 1, 1, 3, 7, 5);
-    Neuron neuron2(Type::Implicit, true, 1, 1, 0.1, 15, 0.5); 
-    Neuron neuron3(Type::Implicit, true, 1, 1, 1, 50, 18); 
+    Neuron neuron1(Type::Implicit, true, 0.5);
+    Neuron neuron2(Type::Implicit, true, 0.5);
+    Neuron neuron3(Type::Implicit, true, 0.5);
     
     int dt_1 = 1; 
     neuron1.Neuron::step(dt_1);

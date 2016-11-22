@@ -118,8 +118,8 @@ void Neuron::update(Physics::Time const& dt)
     if (has_reached_threshold())
     {
         output(I_);
+        *neuron_file << t_ << "," << Vm_ << endl;
         reset_potential();
-        I_ = 0;
         refractory_period_ = 2;
     }
    
@@ -130,7 +130,7 @@ void Neuron::update(Physics::Time const& dt)
 
 void Neuron::set_connection(Neuron* neuron)
 {
-        assert(neuron!=NULL);
+    assert(neuron!=NULL);
 	synapses_.push_back(neuron);
 }
 
@@ -156,6 +156,11 @@ void Neuron::step(Physics::Time const& dt) // faire en sorte que dans commandlin
 
 void Neuron::step_analytic(Physics::Time const& dt)
 {
+	for (int i=1; i<4; i++)
+    {
+		double temp_Vm = Vm_ * exp((-dt/4*i)/tau_);
+     	*neuron_file << this->t_ + dt/4*i  << "," << temp_Vm << endl;
+    }
 	Vm_ *= exp(-dt/tau_); //new voltage from voltage decay from previous step
 	Vm_ += membrane_resistance_ * I_; //network current
 }
@@ -175,6 +180,7 @@ void Neuron::step_implicit(Physics::Time const& dt)
 
 void Neuron::update_RI(Physics::Time const& dt)
 {
+	I_ = 0;
 	if(type_ == Type::Analytic)
 	{
 		while( !events_in_.empty() && refractory_period_ == 0 && Physics::dirac_distribution(t_- transmission_delay_ - events_in_.top().get_t()) == 1 )

@@ -1,7 +1,6 @@
 #ifndef PHYSICS_HPP
 #define PHYSICS_HPP
 
-
 enum class Type : short
 {
 	Analytic, Explicit, Implicit
@@ -25,13 +24,6 @@ namespace Physics
     using Resistance = double;
     
     using Amplitude = double;
-
-	///
-	/// @brief Dirac delta function
-	///
-	/// It is zero everywhere except at zero
-	///
-	int dirac_distribution(Physics::Time argument);
 }
 
 #endif // PHYSICS_HPP

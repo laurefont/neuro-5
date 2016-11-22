@@ -33,7 +33,7 @@ class Neuron {
     double get_I() const; 
     Physics::Time get_t() const;	///<returns the time of the neuron
     void input(Physics::Time const& dt); ///< uses function of dirac to know if the current has been added and updates Vm
-    void output(double const& x); ///< updates the output
+    void output(double const& x); ///< fires a spike to all post-synaptic neurons
     void add_event_in(Event const& ev);
     int get_synapses_size() const;
     int get_event_in_size() const;

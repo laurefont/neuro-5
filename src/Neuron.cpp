@@ -64,7 +64,6 @@ void Neuron::input(Physics::Time const& dt)
 
 void Neuron::output(double const& x)
 {
-
     Event ev(t_+transmission_delay_, x);
 
     for (size_t i = 0; i < synapses_.size(); ++i)
@@ -134,7 +133,6 @@ void Neuron::update(Physics::Time const& dt)
     }
    
     *neuron_file << t_ << "," << Vm_ << endl;
-    
 }
 
 
@@ -192,28 +190,22 @@ void Neuron::update_RI(Physics::Time const& dt)
 {
     J_ = 0;
 	if(type_ == Type::Analytic)
-	{
-        while( !events_in_.empty()
-            && Physics::dirac_distribution(t_- transmission_delay_ - events_in_.top().get_t()) == 1 )
+    {
+        //sum all contributions of spikes arriving at time t (already includes delay)
+        while( !events_in_.empty() && events_in_.top().get_t() == t_)
 		{
             J_ += tau_/membrane_resistance_* events_in_.top().get_J();
 			events_in_.pop();
 		}
 	}
 
-	else if ((type_ == Type::Explicit) or (type_ == Type::Implicit))
+    else if ((type_ == Type::Explicit) or (type_ == Type::Implicit))
 	{
-        while((!events_in_.empty())
-           && (events_in_.top().get_t() < t_ + dt))
+        //sum all contributions of spikes arriving between t and t+dt
+        while(!events_in_.empty() && events_in_.top().get_t() < t_ + dt)
 		{
-		   
-		// si la différence entre le temps courant et (transmission_delay_ + temps où le courant a été envoyé) = 0
-		// la fonction de dirac retourne 1 et dans ce cas on incrémente le courant
-			if (Physics::dirac_distribution(t_- transmission_delay_ - events_in_.top().get_t()) == 1)
-			{
-                J_ += tau_/membrane_resistance_ * events_in_.top().get_J();
-				events_in_.pop();
-			}
+            J_ += tau_/membrane_resistance_ * events_in_.top().get_J();
+            events_in_.pop();
 		}
 	}
 }
@@ -222,21 +214,16 @@ void Neuron::update_RI(Physics::Time const& dt)
 Physics::Time Neuron::get_t() const
 {
 	return t_;
-	
 }
-
-
 
 double Neuron::get_Vm() const
 {
 	return Vm_;
-
 }
 
 double Neuron::get_I() const
 {
     return J_;
-
 }
 
 int Neuron::get_synapses_size() const

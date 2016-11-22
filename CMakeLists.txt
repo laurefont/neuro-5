@@ -18,7 +18,7 @@ message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 set (CMAKE_CXX_STANDARD "14")
 set (CMAKE_CXX_STANDARD_REQUIRED 1)
 
-# Tell CMake to automatically include all files inside include folder 
+# Tell CMake to automatically include all files inside include folder
 include_directories (${PROJECT_SOURCE_DIR}/include)
 
 # Simulation library (libsimulation)

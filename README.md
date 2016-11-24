@@ -1,6 +1,6 @@
 # Simulator neuro-5
 
-![alt text](doc/diagramme_cmake.png "Diagramme cmake")
+![alt text](https://d30y9cdsu7xlg0.cloudfront.net/png/79860-200.png "Our logo")
 
 ## About
 
@@ -21,6 +21,8 @@ To execute the application, run
 For help and parameters, type
 
     ./simulation --help
+    
+![alt text](doc/diagramme_cmake.png "Diagramme cmake")
 
 
 ## Misc
@@ -45,4 +47,4 @@ For help and parameters, type
 - SCRUM board: https://github.com/EPFL-SV-cpp-projects/neuro-5/#boards
 - Development Milestones: https://github.com/EPFL-SV-cpp-projects/neuro-5/milestones
 
-![alt text](https://d30y9cdsu7xlg0.cloudfront.net/png/79860-200.png "Our logo")
+

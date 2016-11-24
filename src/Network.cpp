@@ -10,7 +10,7 @@
 #include <Physics.hpp>
 
 
-Network::Network(Type const& type, unsigned int const& number_neurons, double const& gamma, double const& epsilon, double const& external_factor, Physics::Resistance const& membrane_resistance, Physics::Time refractory_period_)
+Network::Network(SimulationType const& type, unsigned int const& number_neurons, double const& gamma, double const& epsilon, double const& external_factor)
 	: N_(number_neurons),
 	  Ne_(std::round(N_ / (1 + gamma))),
 	  Ni_(N_ - Ne_),
@@ -60,63 +60,67 @@ void Network::make_connections()
 			if (neuron != potential_neuron_connected && distribution(generator))
 			{
 				// Do not release ownership of the pointer
-				neuron->set_connection(potential_neuron_connected.get());
+                neuron->add_connection(potential_neuron_connected.get());
 			}
 		}
 	}
 }
 
-double Network::update(Physics::Time dt)
+Physics::Time Network::update(Physics::Time dt)
 {
-	if (type_ != Type::Analytic) //Implicit / Explicit
-	{
-	  //for (auto& neuron : neurons_)
+    if (type_ != SimulationType::Analytic) //Implicit or Explicit Solution
+    {
 	  for (unsigned int i(0); i< neurons_.size(); ++i)
 	  {
 		neurons_[i]->update(dt);
 		if (neurons_[i]->has_reached_threshold())
 			*raster_plot_file <<i <<"," << neurons_[i]->get_t() << std::endl;
 	  }
-	  return neurons_[0]->get_t();
+      return neurons_[0]->get_t(); //time of the last neuron (send 0, all neurons have same time)
     }
     else //Analytic solution
     {
-		Neuron_last last_neuron(get_back_neuron());
-        int last_id = last_neuron.very_last_id;
-        dt = last_neuron.second_last_time - neurons_[last_id]->get_t();
-		neurons_[last_id]->update(dt);
+        Neuron_last last_neurons = get_last_neurons();
+        int & last_id = last_neurons.last_id;
+        int & second_last_id = last_neurons.second_last_id;
+
+        //Step size for analytic solution is incremented until next step where the
+        //voltage may change (only after transmission_delay_)
+        dt = neurons_[second_last_id]->get_t()
+           + neurons_[second_last_id]->get_transmission_delay();
+
+        neurons_[last_id]->update(dt);
 		if (neurons_[last_id]->has_reached_threshold())
 			*raster_plot_file << last_id <<"," << neurons_[last_id]->get_t() << std::endl;
-        return last_neuron.second_last_time; //The 2nd last is now the last, return its time
+        return neurons_[second_last_id]->get_t(); //The 2nd last is now the last, return its time
 	}
 }
 
-Neuron_last Network::get_back_neuron()
+
+struct compare_neuron_time //used by get_back_neurons()
 {
-	int index(0);
-	int index_very_last(0);
-	
-	//renvoie le neuron qui est le plus en arrière dans le temps
-	Physics::Time time_very_last(neurons_[0]->get_t());
-	
-	//renvoie le neuron qui est l'avant dernier dans le temps
-	Physics::Time time_almost_last(neurons_[1]->get_t());
-	
-	for(auto& neuron : neurons_)
-	{
-		if(neuron->get_t() < time_very_last)
-		{
-			time_almost_last = time_very_last;
-			time_very_last = neuron->get_t();
-			index_very_last = index;
-			
-		}
-		++index;
-	}
-	
-	Neuron_last x;
-    x.very_last_id = index_very_last;
-    x.second_last_time = time_almost_last;
-	
-	return x;
+    inline bool operator() (const Neuron& n1, const Neuron& n2)
+    {
+        return (n1.get_t() < n2.get_t());
+    }
+};
+
+Neuron_last Network::get_last_neurons()
+{
+    Neuron_last nl;
+    nl.last_id=0;
+    nl.second_last_id=0;
+    for (int n=1; n<neurons_.size(); n++)
+    {
+        if (neurons_[n]->get_t() <= neurons_[nl.last_id]->get_t() )
+        {
+            nl.second_last_id = nl.last_id;
+            nl.last_id = n;
+        }
+        else if (neurons_[n]->get_t() <= neurons_[nl.second_last_id]->get_t() )
+        {
+            nl.second_last_id = n;
+        }
+    }
+    return nl;
 }

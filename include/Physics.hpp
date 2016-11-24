@@ -1,7 +1,7 @@
 #ifndef PHYSICS_HPP
 #define PHYSICS_HPP
 
-enum class Type : short
+enum class SimulationType : short
 {
 	Analytic, Explicit, Implicit
 };
@@ -11,19 +11,10 @@ enum class Type : short
  */
 namespace Physics
 {
-    // Electric potential
-    using Potential = double;
-
-    ///
-    /// @brief Time unit
-    ///
-    /// considering units in ms
-    ///
-    using Time = unsigned int; 
-    
-    using Resistance = double;
-    
-    using Amplitude = double;
+    using Potential  = double;       ///< Voltage unit (mV)
+    using Time       = unsigned int; ///< Time unit (ms)
+    using Resistance = double;       ///< Resistance unit (ohm)
+    using Amplitude  = double;       ///< Amplitude unit
 }
 
 #endif // PHYSICS_HPP

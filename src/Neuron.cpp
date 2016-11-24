@@ -12,13 +12,12 @@ Physics::Time const Neuron::refractory_period_ = REFRACTORY_PERIOD;
 Physics::Potential const Neuron::resting_potential_= RESTING_POTENTIAL;
 Physics::Potential const Neuron::reset_potential_= RESET_POTENTIAL;
 Physics::Time const Neuron::transmission_delay_= TRANSMISSION_DELAY;
-Physics::Resistance const Neuron::membrane_resistance_ = MEMBRANE_RESISTANCE;
 Physics::Time const Neuron::tau_ = TAU;
 
 using namespace std;
 
-Neuron::Neuron(Type const& a_type, bool const& exc, double const& external_factor)
-                : type_(a_type), excitatory_(exc), external_factor_(external_factor), t_(0)
+Neuron::Neuron(SimulationType const& a_type, bool const& exc, double const& external_factor)
+                : type_(a_type), external_factor_(external_factor), t_(0)
 {
     string fileName =  "neuron_" + to_string(neuron_id_) + ".csv";
     neuron_file = new ofstream(fileName);
@@ -29,8 +28,7 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& external_facto
 
     J_ = exc ? WEIGHT_EXC : WEIGHT_INH; //if (exc) J_=WEIGHT_EXC; else J_=WEIGHT_INH;
 
-
-    if (neuron_file->fail()) {
+    if (neuron_file && neuron_file->fail()) {
         throw string("Error: The file doesn't exist !");
     } else {
         *neuron_file << "t [ms]" << "," << "Vm [V]" << endl;
@@ -41,23 +39,10 @@ Neuron::Neuron(Type const& a_type, bool const& exc, double const& external_facto
 
 Neuron::~Neuron()
 {  
-    neuron_file->close();
-    delete neuron_file;
-}
-
-
-void Neuron::input(Physics::Time const& dt)
-{
-	if(type_ == Type::Analytic)
-	{
-		double dt_as = dt+transmission_delay_;
-		update_RI(dt_as);
-		step(dt_as);
-	}
-	else
-	{
-		update_RI(dt);
-		step(dt);
+    if (neuron_file)
+    {
+      neuron_file->close();
+      delete neuron_file;
     }
 }
 
@@ -66,11 +51,8 @@ void Neuron::output(double const& x)
 {
     Event ev(t_+transmission_delay_, x);
 
-    for (size_t i = 0; i < synapses_.size(); ++i)
-    {
-        assert(synapses_[i]!=NULL);
-        synapses_[i]->add_event_in(ev);
-    }
+    for (auto& s : synapses_)
+        s->add_event_in(ev);
 }
 
 
@@ -111,32 +93,29 @@ double Neuron::external_spike_generator(Physics::Time const& dt)
 
 void Neuron::update(Physics::Time const& dt)
 {
-    input(dt); //<met d'abord à jour les input (ce que le neurone reçoit)
-    //<décrémenter refractory period jusqu'à 0 pas en dessous
-    //< output à toutes ses connexions dans le cas où le threshold est atteint
-    //< et le courant est remis à 0
-    //< output à toutes ses connexions dans le cas où le threshold est atteint
-    //< et le courant est remis à 0
+    step(dt); //updates Voltage based on current step size
 
     if (has_reached_threshold())
     {
         output(J_);
-        *neuron_file << t_ << "," << Vm_ << endl;
+        if (neuron_file)
+            *neuron_file << t_ << "," << Vm_ << endl;
         last_spike_time_ = t_;
         reset_potential();
 
-        if (type_ == Type::Analytic)
+        if (type_ == SimulationType::Analytic)
         {
             t_ += refractory_period_;
-            *neuron_file << t_ << "," << Vm_ << endl;
+            if (neuron_file)
+                *neuron_file << t_ << "," << Vm_ << endl;
         }
     }
    
-    *neuron_file << t_ << "," << Vm_ << endl;
+    if (neuron_file)
+        *neuron_file << t_ << "," << Vm_ << endl;
 }
 
-
-void Neuron::set_connection(Neuron* neuron)
+void Neuron::add_connection(Neuron* neuron)
 {
     assert(neuron!=NULL);
 	synapses_.push_back(neuron);
@@ -146,15 +125,15 @@ void Neuron::step(Physics::Time const& dt) // faire en sorte que dans commandlin
 {
 	switch(type_)
 	{
-		case Type::Analytic :
+        case SimulationType::Analytic :
 		     step_analytic(dt);
 		     break;
 
-		case Type::Explicit :
+        case SimulationType::Explicit :
 		     step_explicit(dt);
 		     break;
 
-		case Type::Implicit :
+        case SimulationType::Implicit :
 		     step_implicit(dt);
 		     break;
 	}
@@ -167,47 +146,49 @@ void Neuron::step_analytic(Physics::Time const& dt)
 	for (int i=1; i<4; i++)
     {
 		double temp_Vm = Vm_ * exp((-dt/4*i)/tau_);
-     	*neuron_file << this->t_ + dt/4*i  << "," << temp_Vm << endl;
+        if (neuron_file)
+          *neuron_file << this->t_ + dt/4*i  << "," << temp_Vm << endl;
     }
-	Vm_ *= exp(-dt/tau_); //new voltage from voltage decay from previous step
-    Vm_ += membrane_resistance_ * J_; //network current
+
+    //Vm is voltage from voltage decay from previous step + network current
+    Vm_ *= exp(-dt/tau_) + RI(dt); //new voltage from voltage decay from previous step
 }
 
 
 void Neuron::step_explicit(Physics::Time const& dt)// Use of V(t-1)=Vm_ to calculate the new Vm_
 {
-    Vm_ += ((-Vm_ + membrane_resistance_ * J_) * dt) / tau_;
+    Vm_ += ((-Vm_ + RI(dt)) * dt) / tau_;
 }
 
 
 void Neuron::step_implicit(Physics::Time const& dt)
 {
-    Vm_ = ((dt * membrane_resistance_ * J_ ) + (tau_ * Vm_)) / ( dt + tau_);
+    Vm_ = ((dt * RI(dt) ) + (tau_ * Vm_)) / ( dt + tau_);
 }
 
-
-void Neuron::update_RI(Physics::Time const& dt)
+Physics::Amplitude Neuron::RI(Physics::Time const& dt)
 {
-    J_ = 0;
-	if(type_ == Type::Analytic)
+    Physics::Amplitude sum_incoming_J = 0;
+    if(type_ == SimulationType::Analytic)
     {
         //sum all contributions of spikes arriving at time t (already includes delay)
         while( !events_in_.empty() && events_in_.top().get_t() == t_)
 		{
-            J_ += tau_/membrane_resistance_* events_in_.top().get_J();
+            sum_incoming_J += tau_* events_in_.top().get_J();
 			events_in_.pop();
 		}
 	}
-
-    else if ((type_ == Type::Explicit) or (type_ == Type::Implicit))
+    else if ((type_ == SimulationType::Explicit) or (type_ == SimulationType::Implicit))
 	{
         //sum all contributions of spikes arriving between t and t+dt
         while(!events_in_.empty() && events_in_.top().get_t() < t_ + dt)
 		{
-            J_ += tau_/membrane_resistance_ * events_in_.top().get_J();
+            sum_incoming_J += tau_ * events_in_.top().get_J();
             events_in_.pop();
 		}
 	}
+
+    return sum_incoming_J;
 }
 
 
@@ -221,11 +202,6 @@ double Neuron::get_Vm() const
 	return Vm_;
 }
 
-double Neuron::get_I() const
-{
-    return J_;
-}
-
 int Neuron::get_synapses_size() const
 {
 	return synapses_.size();
@@ -234,4 +210,15 @@ int Neuron::get_synapses_size() const
 int Neuron::get_event_in_size() const
 {
 	return events_in_.size();
+}
+
+Physics::Time Neuron::get_transmission_delay() const
+{
+    return transmission_delay_;
+}
+
+bool Neuron::is_excitatory()
+{
+    assert(J_!=0);
+    return J_ > 0;
 }

@@ -15,8 +15,8 @@
 ///
 struct Neuron_last 
 {
-    int very_last_id;
-    Physics::Time second_last_time;
+    int last_id;
+    int second_last_id;
 };
 	
 
@@ -44,7 +44,7 @@ public:
 	/// @param ext_f external frequency
     /// @param refractory_period refractory period
     ///
-    Network(Type const& type, unsigned int const& number_neurons, double const& gamma, double const& epsilon, double const& external_factor, Physics::Resistance const& membrane_resistance, Physics::Time refractory_period_);
+    Network(SimulationType const& type, unsigned int const& number_neurons, double const& gamma, double const& epsilon, double const& external_factor);
 	Network(Network const &) = delete;
 	Network& operator=(Network const &) = delete;
 
@@ -54,7 +54,7 @@ public:
 	/// Update each neurons of the network
 	///
 	/// @param dt time interval
-	double update(Physics::Time dt);
+    Physics::Time update(Physics::Time dt);
 
 private:
 	///
@@ -67,7 +67,7 @@ private:
 	///
 	/// Returns time of the almost last neuron and index of the last neuron
 	///
-	Neuron_last get_back_neuron();
+    Neuron_last get_last_neurons();
 
 private:
 	unsigned int const N_; ///< total number of neurons
@@ -95,7 +95,7 @@ private:
 	
 	std::ofstream * raster_plot_file; ///< output file for raster plot
 
-	Type const type_; ///< type of simulation (analytical, explicit, implicit)
+    SimulationType const type_; ///< type of simulation (analytical, explicit, implicit)
 	
 	
 };

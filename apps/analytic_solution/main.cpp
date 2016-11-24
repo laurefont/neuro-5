@@ -39,13 +39,7 @@ int main (int argc, char** argv)
 	catch (TCLAP::ArgException &e)  // catch any exceptions
 	{ std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl; }
 
-    double const gamma = 19;
-    double const epsilon = 10;
-    Physics::Resistance membrane_resistance = 10;
-    double ext_f = 1000;
-    Physics::Time refractory_period_ = 2; //ms
-					
-    Simulation sim(time, neurons, gamma, epsilon, membrane_resistance, ext_f, refractory_period_);
+    Simulation sim(time, neurons);
     sim.launch_simulation();
 }
 

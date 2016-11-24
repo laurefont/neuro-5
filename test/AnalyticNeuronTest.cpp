@@ -5,9 +5,9 @@
 
 TEST(AnalyticNeuronTests, TestStep)
 {
-    Neuron neurone(Type::Analytic, true);
+    Neuron neurone(SimulationType::Analytic, true);
     int dt = 1;
-    neurone.Neuron::step_analytic(1);
+    neurone.Neuron::step(1);
     int result = neurone.get_Vm();
     
     std::cout << result << std::endl;
@@ -20,13 +20,7 @@ TEST(AnalyticNeuronTests, TestStep)
 TEST(AnalyticNeuronTests, TestSingleNeuronSimulation)
 {
     Physics::Time time = 1000; //ms
-    double gamma = 0.25; //from the paper
-    double epsilon = 0.1;
-    double membrane_resistance = 1/5; //from paper g=5
-    double ext_f = 0;
-    Physics::Time refractory_period_ = 2; //ms
-
-    Simulation sim(time, 1, gamma, epsilon, membrane_resistance, ext_f, refractory_period_);
+    Simulation sim(time, 1);
     sim.launch_simulation();
     EXPECT_TRUE(true);
 }

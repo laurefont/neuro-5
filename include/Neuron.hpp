@@ -21,9 +21,9 @@ class Neuron {
     
     //méthode publique
     bool has_reached_threshold() const;  ///< verify if Vm is >= thresold 
-    void update(Physics::Time const& dt); ///< in a first step, the function updates inputs, then if the thresold is reached, the function update ouputs
+    void update(Physics::Time dt); ///< in a first step, the function updates inputs, then if the thresold is reached, the function update ouputs
     void add_connection(Neuron* neuron); ////< add outgoing synapse
-    void step(Physics::Time const& dt); ///< performs a computation step
+    void step(Physics::Time dt); ///< performs a computation step
     void reset_potential(); ///< function reset the potential, it makes the potentiel return to the reset potential
     Physics::Potential get_Vm() const; ///< returns potential of neuron
     void set_Vm(Physics::Potential vm);

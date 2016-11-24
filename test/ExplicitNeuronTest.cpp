@@ -2,9 +2,12 @@
 #include <gtest/gtest.h>
 #include "Simulation.hpp"
 
-TEST(ExplicitNeuronTests, TestThreshold)
+#define TestsCategoryName ExplicitNeuronTests
+#define NeuronType SimulationType::Explicit
+
+TEST(TestsCategoryName, TestThreshold)
 {
-    Neuron neurone(SimulationType::Explicit, true);
+    Neuron neurone(NeuronType, true);
     Physics::Time dt = 1;
     Event event1(0.9, 1.0);
     neurone.add_event_in(event1); //make neuron spike
@@ -13,89 +16,87 @@ TEST(ExplicitNeuronTests, TestThreshold)
     EXPECT_TRUE( neurone.has_reached_threshold());
 }
 
-TEST(ExplicitNeuronTests, TestStep)
+TEST(TestsCategoryName, TestStep)
 {
-    Neuron neurone(SimulationType::Explicit, true);
+    Neuron neurone(NeuronType, true);
     Physics::Time dt = 1;
     neurone.set_Vm(7);
     neurone.step(dt);
     Physics::Potential result = neurone.get_Vm();
-    
-    EXPECT_NEAR (6.65, result,  0.01);
+
+    EXPECT_NEAR (6.6, result,  0.1);
 }
 
-TEST(ExplicitNeuronTests, TestResetPotential)
+TEST(TestsCategoryName, TestResetPotential)
 {
-    Neuron neurone(SimulationType::Explicit, true);
+    Neuron neurone(NeuronType, true);
     neurone.Neuron::reset_potential();
-    
+
     int result = neurone.get_Vm();
 
-    EXPECT_EQ (10, result);
-    EXPECT_TRUE(result==10);
+    EXPECT_EQ (RESET_POTENTIAL, result);
 }
 
-TEST(ExplicitNeuronTests, TestSetConnections)
+TEST(TestsCategoryName, TestSetConnections)
 {
-    Neuron neurone1(SimulationType::Explicit, true);
-    Neuron neurone2(SimulationType::Explicit, true);
+    Neuron neurone1(NeuronType, true);
+    Neuron neurone2(NeuronType, true);
     int dt(1);
     neurone1.Neuron::add_connection(&neurone2);
-    
+
     int result = neurone1.get_synapses_size();
 
-    EXPECT_EQ (1, result); 
+    EXPECT_EQ (1, result);
     EXPECT_TRUE(result==1);
 }
 
-TEST(ExplicitNeuronTests, TestAddEvent)
+TEST(TestsCategoryName, TestAddEvent)
 {
-    Neuron neuron1(SimulationType::Explicit, true);
-   
+    Neuron neuron1(NeuronType, true);
+
     Event event1(1, 1.0);
-    
+
     neuron1.add_event_in(event1);
     int result = neuron1.get_event_in_size();
-    
+
     EXPECT_EQ (1, result); //initial size is 0
     EXPECT_TRUE(result==1);
 }
 
 
 
-TEST(ExplicitNeuronTests, TestInputRI)
+TEST(TestsCategoryName, TestInputRI)
 {
-    Neuron neuron1(SimulationType::Explicit, true);
+    Neuron neuron1(NeuronType, true);
     Event event1(1, 1);
-    
+
     neuron1.add_event_in(event1);
-    
+
     int dt(3);
     Physics::Amplitude RI = neuron1.RI(dt);
-    
+
     EXPECT_NEAR ( 20, RI,  0.000001);   //initial current = 10 and membrane_resistance = 1
     EXPECT_TRUE(abs(RI - 20) < 0.000001);
 }
 
-TEST(ExplicitNeuronTests, TestOutput)
+TEST(TestsCategoryName, TestOutput)
 {
-    Neuron neuron1(SimulationType::Explicit, true);
-    Neuron neuron2(SimulationType::Explicit, true);
+    Neuron neuron1(NeuronType, true);
+    Neuron neuron2(NeuronType, true);
     double i(10.0);
 
     neuron1.Neuron::add_connection(&neuron2);   //ajout de neuron2 au tableau de synapses de neuron1
     neuron1.output(i);                          //ajoute un event à neuron2
     int result = neuron2.get_event_in_size();
-    
+
     EXPECT_EQ (1, result); //initial size is 0
     EXPECT_TRUE(result==1);
-    
 }
 
-TEST(ExplicitNeuronTests, TestUpdate)
+TEST(TestsCategoryName, TestSynapticConnetivity)
 {
-    Neuron neuron1(SimulationType::Explicit, true);
-    Neuron neuron2(SimulationType::Explicit, true);
+    Neuron neuron1(NeuronType, true);
+    Neuron neuron2(NeuronType, true);
     neuron1.add_connection(&neuron2);
 
     //We set dt to transmission delay to be sure that:
@@ -119,7 +120,7 @@ TEST(ExplicitNeuronTests, TestUpdate)
         neuron2.update(dt); //step neuron 2
 
     Physics::Potential vm2 = neuron2.get_Vm();
-   
+
     //Test Neuron initialized at resting potential
     EXPECT_NEAR (RESTING_POTENTIAL, vm1_rest,  0.000001);
 
@@ -136,9 +137,8 @@ TEST(ExplicitNeuronTests, TestUpdate)
     EXPECT_EQ (1, events_size2);
 
     //test new voltage of neuron that received network current
-    EXPECT_NEAR (1, vm2,  0.000001);
+    EXPECT_NEAR (1, vm2,  0.1);
 }
-
 
 
 int main(int argc, char* argv[])
@@ -146,5 +146,3 @@ int main(int argc, char* argv[])
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
-
-

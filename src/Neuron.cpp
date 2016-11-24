@@ -95,10 +95,14 @@ double Neuron::external_spike_generator(Physics::Time const& dt)
 	return 0;		
 }
 
-
-void Neuron::update(Physics::Time const& dt)
+void Neuron::update(Physics::Time dt)
 {
-    step(dt); //updates Voltage based on current step size
+    //real step size is the minimum of max step or until arrival of next event
+    if (type_ == SimulationType::Analytic)
+        if (!events_in_.empty())
+            dt = std::min(dt, events_in_.top().get_t() - t_);
+
+    step(dt); //updates Voltage based on step size
 
     if (has_reached_threshold())
     {
@@ -126,12 +130,12 @@ void Neuron::add_connection(Neuron* neuron)
 	synapses_.push_back(neuron);
 }
 
-void Neuron::step(Physics::Time const& dt) // faire en sorte que dans commandline on puisse entrer que 0,1,2
+void Neuron::step(Physics::Time dt) // faire en sorte que dans commandline on puisse entrer que 0,1,2
 {
 	switch(type_)
 	{
         case SimulationType::Analytic :
-		     step_analytic(dt);
+             step_analytic(dt);
 		     break;
 
         case SimulationType::Explicit :
@@ -156,7 +160,7 @@ void Neuron::step_analytic(Physics::Time const& dt)
     }
 
     //Vm is voltage from voltage decay from previous step + network current
-    Vm_ *= exp(-dt/tau_) + RI(dt); //new voltage from voltage decay from previous step
+    Vm_ = Vm_*exp(-dt/tau_) + RI(dt); //new voltage from voltage decay from previous step
 }
 
 
@@ -174,23 +178,14 @@ void Neuron::step_implicit(Physics::Time const& dt)
 Physics::Amplitude Neuron::RI(Physics::Time const& dt)
 {
     Physics::Amplitude sum_incoming_J = 0;
-    if(type_ == SimulationType::Analytic)
+    //sum all contributions of spikes arriving between t and t+dt
+    //(in analytic solytion the t+dt will only have 1 event)
+    //(+0.000000001 is to fix rounding errors in time)
+    while(!events_in_.empty() && events_in_.top().get_t() <= t_ + dt + 0.000000001)
     {
-        //sum all contributions of spikes arriving at time t (already includes delay)
-        while( !events_in_.empty() && events_in_.top().get_t() == t_)
-		{
-            sum_incoming_J += events_in_.top().get_J();
-			events_in_.pop();
-		}
-	}
-    else if ((type_ == SimulationType::Explicit) or (type_ == SimulationType::Implicit))
-	{
-        //sum all contributions of spikes arriving between t and t+dt
-        while(!events_in_.empty() && events_in_.top().get_t() <= t_ + dt)
-		{
-            sum_incoming_J += events_in_.top().get_J();
-            events_in_.pop();
-		}
+        assert(events_in_.top().get_t()>=t_);
+        sum_incoming_J += events_in_.top().get_J();
+        events_in_.pop();
 	}
     return tau_ * sum_incoming_J;
 }

@@ -84,8 +84,8 @@ Physics::Time Network::update(Physics::Time dt)
         int & last_id = last_neurons.last_id;
         int & second_last_id = last_neurons.second_last_id;
 
-        //Step size for analytic solution is incremented until next step where the
-        //voltage may change (only after transmission_delay_)
+        //MAX step size for analytic solution is the next time where the
+        //voltage may change. max step size that can be taken (if no event ahead):
         dt = neurons_[second_last_id]->get_t()
            + neurons_[second_last_id]->get_transmission_delay();
 

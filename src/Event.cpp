@@ -2,13 +2,10 @@
 #include <iostream>
 
 
-Event::Event(Physics::Time const& time, double const& current) : t_(time), J_(current)
-{
-}
+Event::Event(Physics::Time const& time, Physics::Potential const& weight_J)
+    : t_(time), J_(weight_J) {}
 
-Event::~Event()
-{
-}
+Event::~Event() {}
 	
 bool Event::operator<(Event const& ev1) const
 {

@@ -13,8 +13,8 @@
 #define REFRACTORY_PERIOD 2
 #define TRANSMISSION_DELAY 1.5
 #define TAU 20
-#define WEIGHT_EXC 1
-#define WEIGHT_INH -0.5
+#define WEIGHT_J_EXC 1
+#define WEIGHT_J_INH -0.5
 #define GAMMA 0.25 //1 to 4 ratio between Inh and Exc neurons count
 #define EPSILON 0.1 //10% connectivity
 

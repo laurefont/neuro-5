@@ -13,7 +13,8 @@ class Neuron {
   public :
     
     ///constructeur et destructeur
-    Neuron(SimulationType const& a_type, bool const& exc, double const& external_factor=0.5);
+    Neuron(SimulationType const& a_type, bool const& exc,
+           bool outputCsvFile = false, double const& external_factor=0.5);
             ///< constructor takes arguments that will be modified during time
 
     ~Neuron();
@@ -24,7 +25,8 @@ class Neuron {
     void add_connection(Neuron* neuron); ////< add outgoing synapse
     void step(Physics::Time const& dt); ///< performs a computation step
     void reset_potential(); ///< function reset the potential, it makes the potentiel return to the reset potential
-    double get_Vm() const; ///< returns potential of neuron
+    Physics::Potential get_Vm() const; ///< returns potential of neuron
+    void set_Vm(Physics::Potential vm);
     Physics::Time get_t() const;  ///<returns the time of the neuron
     void output(double const& x); ///< fires a spike to all post-synaptic neurons
     void add_event_in(Event const& ev); ///< add spike event to the queue of incoming spikes
@@ -32,13 +34,13 @@ class Neuron {
     int get_synapses_size() const; ///< number of outgoing synapses
     int get_event_in_size() const; ///< number of incoming spikes in queue
     Physics::Time get_transmission_delay() const; ///< returns transmission delay
+    Physics::Time get_tau() const; ///< returns tau (time constant)
 
     ///Clears queue of events between t and t+dt and returns the summed
     ///contribution of incoming currents
     Physics::Amplitude RI(Physics::Time const& dt);
 
     double external_spike_generator(Physics::Time const& dt);
-
     
   private:
     

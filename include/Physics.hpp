@@ -11,10 +11,10 @@ enum class SimulationType : short
  */
 namespace Physics
 {
-    using Potential  = double;       ///< Voltage unit (mV)
-    using Time       = unsigned int; ///< Time unit (ms)
-    using Resistance = double;       ///< Resistance unit (ohm)
-    using Amplitude  = double;       ///< Amplitude unit
+    using Potential  = double; ///< Voltage unit (mV)
+    using Time       = double; ///< Time unit (ms)
+    using Resistance = double; ///< Resistance unit (ohm)
+    using Amplitude  = double; ///< Amplitude unit
 }
 
 #endif // PHYSICS_HPP

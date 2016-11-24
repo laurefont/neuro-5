@@ -14,7 +14,7 @@ class Event {
 	/// @param time the time at which the signal reaches the receiving neuron
 	/// @param current the intensity of the signal
 	///
-    Event(Physics::Time const& time, double const& weight_J);
+    Event(Physics::Time const& time, Physics::Potential const& weight_J);
 	
 
 	~Event(); ///<Destructor

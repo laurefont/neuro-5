@@ -16,23 +16,28 @@ Physics::Time const Neuron::tau_ = TAU;
 
 using namespace std;
 
-Neuron::Neuron(SimulationType const& a_type, bool const& exc, double const& external_factor)
-                : type_(a_type), external_factor_(external_factor), t_(0)
+Neuron::Neuron(SimulationType const& a_type, bool const& exc,
+               bool outputCsvFile, double const& external_factor)
+                : type_(a_type), external_factor_(external_factor), t_(0), neuron_file(NULL)
 {
-    string fileName =  "neuron_" + to_string(neuron_id_) + ".csv";
-    neuron_file = new ofstream(fileName);
     Vm_ = resting_potential_;
     last_spike_time_ = -Neuron::refractory_period_;
     //no spike is added between last_spike_time_ and last_spike_time_+refractory_period
     //see add_event_in() function (discards spikes during refraction)
 
-    J_ = exc ? WEIGHT_EXC : WEIGHT_INH; //if (exc) J_=WEIGHT_EXC; else J_=WEIGHT_INH;
+    J_ = exc ? WEIGHT_J_EXC : WEIGHT_J_INH; //if (exc) J_=WEIGHT_EXC; else J_=WEIGHT_INH;
 
-    if (neuron_file && neuron_file->fail()) {
-        throw string("Error: The file doesn't exist !");
-    } else {
-        *neuron_file << "t [ms]" << "," << "Vm [V]" << endl;
+    if (outputCsvFile)
+    {
+        string fileName =  "neuron_" + to_string(neuron_id_) + ".csv";
+        neuron_file = new ofstream(fileName);
+        if (neuron_file && neuron_file->fail()) {
+            throw string("Error: The file doesn't exist !");
+        } else {
+            *neuron_file << "t [ms]" << "," << "Vm [V]" << endl;
+        }
     }
+
     ++neuron_id_;
 }
 
@@ -137,7 +142,7 @@ void Neuron::step(Physics::Time const& dt) // faire en sorte que dans commandlin
 		     step_implicit(dt);
 		     break;
 	}
-	t_+=dt;
+    t_+=dt;
 }
 
 
@@ -174,21 +179,20 @@ Physics::Amplitude Neuron::RI(Physics::Time const& dt)
         //sum all contributions of spikes arriving at time t (already includes delay)
         while( !events_in_.empty() && events_in_.top().get_t() == t_)
 		{
-            sum_incoming_J += tau_* events_in_.top().get_J();
+            sum_incoming_J += events_in_.top().get_J();
 			events_in_.pop();
 		}
 	}
     else if ((type_ == SimulationType::Explicit) or (type_ == SimulationType::Implicit))
 	{
         //sum all contributions of spikes arriving between t and t+dt
-        while(!events_in_.empty() && events_in_.top().get_t() < t_ + dt)
+        while(!events_in_.empty() && events_in_.top().get_t() <= t_ + dt)
 		{
-            sum_incoming_J += tau_ * events_in_.top().get_J();
+            sum_incoming_J += events_in_.top().get_J();
             events_in_.pop();
 		}
 	}
-
-    return sum_incoming_J;
+    return tau_ * sum_incoming_J;
 }
 
 
@@ -200,6 +204,11 @@ Physics::Time Neuron::get_t() const
 double Neuron::get_Vm() const
 {
 	return Vm_;
+}
+
+void Neuron::set_Vm(Physics::Potential vm)
+{
+    Vm_=vm;
 }
 
 int Neuron::get_synapses_size() const
@@ -215,6 +224,11 @@ int Neuron::get_event_in_size() const
 Physics::Time Neuron::get_transmission_delay() const
 {
     return transmission_delay_;
+}
+
+Physics::Time Neuron::get_tau() const
+{
+    return tau_;
 }
 
 bool Neuron::is_excitatory()

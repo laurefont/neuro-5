@@ -1,11 +1,12 @@
 # Simulator neuro-5
 
-![alt text](https://d30y9cdsu7xlg0.cloudfront.net/png/79860-200.png "Our logo")
-
 ## About
 
 A Simulation of Leaky Integrate-and-Fire Neuron models with the Brunel Network activity defined by intra-network or extra-network currents (Event);
 
+## Code Structure 
+
+![alt text](doc/diagramme_cmake.png "Diagramme cmake")
 
 ## External Documentation
 
@@ -22,8 +23,6 @@ For help and parameters, type
 
     ./simulation --help
     
-![alt text](doc/diagramme_cmake.png "Diagramme cmake")
-
 
 ## Misc
 

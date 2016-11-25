@@ -4,6 +4,7 @@
 #include <Physics.hpp>
 #include <Neuron.hpp>
 #include <Network.hpp>
+#include <UserArguments.hpp>
 
 //see page 9 here for parameters:
 //http://arken.nmbu.no//~plesser/publications/Gewa_2012_533_preprint.pdf

@@ -1,15 +1,20 @@
 #include "Simulation.hpp"
-#include "efsUserArguments.hpp"
-
-#include <iostream>
 
 int main (int argc, char** argv)
 {
-	efsUserArguments user_arguments(argc, argv);
+    UserArguments user_arguments(argc, argv);
 
-	std::cout << "The number of neurons is : " << user_arguments.number_neurons() << std::endl;
-	std::cout << "The simulation time is : " << user_arguments.time_of_simulation() << std::endl;
-	std::cout << "The time step is : " << user_arguments.time_step() << std::endl;
+    Simulation simulation(
+                          user_arguments.get_number_neurons(),
+                          user_arguments.get_time_of_simulation(),
+                          user_arguments.get_time_step(),
+                          SimulationType::Explicit,
+                          user_arguments.get_gamma(),
+                          user_arguments.get_epsilon(),
+                          user_arguments.get_external_factor()
+                          );
 
-	return 0;
+    simulation.launch_simulation();
+
+    return 0;
 }

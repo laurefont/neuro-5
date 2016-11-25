@@ -43,7 +43,7 @@ Network::~Network()
 	neurons_.clear();
 }
 
-Neuron* Network::get_neuron(int n)
+Neuron* Network::get_neuron(unsigned int n)
 {
     assert(n<=neurons_.size());
     return neurons_.at(n).get();
@@ -123,7 +123,7 @@ Neuron_last Network::get_last_neurons()
     Neuron_last nl;
     nl.last_id=0;
     nl.second_last_id=0;
-    for (int n=1; n<neurons_.size(); n++)
+    for (unsigned int n=1; n<neurons_.size(); n++)
     {
         if (neurons_[n]->get_t() <= neurons_[nl.last_id]->get_t() )
         {

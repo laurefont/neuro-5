@@ -6,6 +6,7 @@
 #include <cmath>
 #include <random>
 #include <chrono>
+#include <assert.h>
 
 #include <Physics.hpp>
 
@@ -40,6 +41,17 @@ Network::~Network()
 		neuron = nullptr;
 	}
 	neurons_.clear();
+}
+
+Neuron* Network::get_neuron(int n)
+{
+    assert(n<=neurons_.size());
+    return neurons_.at(n).get();
+}
+
+size_t Network::get_neurons_size()
+{
+    return neurons_.size();
 }
 
 void Network::make_connections()
@@ -87,7 +99,8 @@ Physics::Time Network::update(Physics::Time dt)
         //MAX step size for analytic solution is the next time where the
         //voltage may change. max step size that can be taken (if no event ahead):
         dt = neurons_[second_last_id]->get_t()
-           + neurons_[second_last_id]->get_transmission_delay();
+           + neurons_[second_last_id]->get_transmission_delay()
+           - neurons_[last_id]->get_t();
 
         neurons_[last_id]->update(dt);
 		if (neurons_[last_id]->has_reached_threshold())

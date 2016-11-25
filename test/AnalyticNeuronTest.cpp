@@ -13,10 +13,11 @@ TEST(TestsCategoryName, TestThreshold)
     neurone.add_event_in(event1); //make neuron spike
     neurone.set_Vm(FIRING_THRESHOLD);
     neurone.step(dt);
+
     EXPECT_TRUE( neurone.has_reached_threshold());
 }
 
-TEST(TestsCategoryName, TestStep)
+TEST(TestsCategoryName, TestDecay)
 {
     Neuron neurone(NeuronType, true);
     Physics::Time dt = 1;
@@ -31,7 +32,6 @@ TEST(TestsCategoryName, TestResetPotential)
 {
     Neuron neurone(NeuronType, true);
     neurone.Neuron::reset_potential();
-
     int result = neurone.get_Vm();
 
     EXPECT_EQ (RESET_POTENTIAL, result);
@@ -43,7 +43,6 @@ TEST(TestsCategoryName, TestSetConnections)
     Neuron neurone2(NeuronType, true);
     int dt(1);
     neurone1.Neuron::add_connection(&neurone2);
-
     int result = neurone1.get_synapses_size();
 
     EXPECT_EQ (1, result);
@@ -53,9 +52,7 @@ TEST(TestsCategoryName, TestSetConnections)
 TEST(TestsCategoryName, TestAddEvent)
 {
     Neuron neuron1(NeuronType, true);
-
     Event event1(1, 1.0);
-
     neuron1.add_event_in(event1);
     int result = neuron1.get_event_in_size();
 
@@ -63,15 +60,11 @@ TEST(TestsCategoryName, TestAddEvent)
     EXPECT_TRUE(result==1);
 }
 
-
-
 TEST(TestsCategoryName, TestInputRI)
 {
     Neuron neuron1(NeuronType, true);
     Event event1(1, 1);
-
     neuron1.add_event_in(event1);
-
     int dt(3);
     Physics::Amplitude RI = neuron1.RI(dt);
 
@@ -115,7 +108,6 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
     size_t synapses_size1 = neuron1.get_synapses_size();
     size_t events_size2 = neuron2.get_event_in_size();
 
-    //step neuron 2 until receival of spike of neuron 1
     neuron2.update(dt); //step neuron 2
 
     Physics::Potential vm2 = neuron2.get_Vm();
@@ -136,7 +128,23 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
     EXPECT_EQ (1, events_size2);
 
     //test new voltage of neuron that received network current
-    EXPECT_NEAR (1, vm2,  0.1);
+    EXPECT_NEAR (2.4, vm2,  0.1);
+}
+
+TEST(TestsCategoryName, TestSingleNeuronSimulation)
+{
+    Simulation sim(1,100);
+    Network * network = sim.get_network();
+    Neuron * neuron1 = network->get_neuron(0);
+
+    for (Physics::Time t=1; t<sim.get_simulation_time(); t++)
+    {
+        Physics::Amplitude J = WEIGHT_J_EXC;
+        neuron1->add_event_in(Event(t,J));
+    }
+
+    sim.launch_simulation();
+    EXPECT_TRUE(true); //if it runs successfully, return true
 }
 
 

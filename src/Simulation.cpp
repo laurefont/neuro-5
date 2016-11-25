@@ -20,6 +20,17 @@ Simulation::Simulation( unsigned int const number_neurons, Physics::Time const& 
 
 Simulation::~Simulation(){}
 
+Network* Simulation::get_network()
+{
+    return &network_;
+}
+
+Physics::Time Simulation::get_simulation_time()
+{
+    return time_of_simulation_;
+}
+
+
 void Simulation::launch_simulation()
 {
 	while (network_.update(time_step_) < time_of_simulation_){};

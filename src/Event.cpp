@@ -9,7 +9,7 @@ Event::~Event() {}
 	
 bool Event::operator<(Event const& ev1) const
 {
-	return t_< ev1.t_;
+    return ev1.t_ < t_;
 }
 
 double Event::get_J() const

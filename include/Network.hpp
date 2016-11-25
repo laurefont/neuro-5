@@ -56,6 +56,10 @@ public:
 	/// @param dt time interval
     Physics::Time update(Physics::Time dt);
 
+    Neuron* get_neuron(int n);
+
+    size_t get_neurons_size();
+
 private:
 	///
 	/// Create connections between neurons
@@ -91,7 +95,7 @@ private:
 	///
 	/// @brief Neurons of the network
 	///
-	std::vector<std::unique_ptr<Neuron>> neurons_;
+    std::vector<std::unique_ptr<Neuron>> neurons_;
 	
 	std::ofstream * raster_plot_file; ///< output file for raster plot
 

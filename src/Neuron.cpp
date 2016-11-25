@@ -51,7 +51,6 @@ Neuron::~Neuron()
     }
 }
 
-
 void Neuron::output(double const& x)
 {
     Event ev(t_+transmission_delay_, x);
@@ -114,9 +113,9 @@ void Neuron::update(Physics::Time dt)
 
         if (type_ == SimulationType::Analytic)
         {
-            t_ += refractory_period_;
             if (neuron_file)
                 *neuron_file << t_ << "," << Vm_ << endl;
+            t_ += refractory_period_;
         }
     }
    
@@ -159,8 +158,9 @@ void Neuron::step_analytic(Physics::Time const& dt)
           *neuron_file << this->t_ + dt/4*i  << "," << temp_Vm << endl;
     }
 
-    //Vm is voltage from voltage decay from previous step + network current
-    Vm_ = Vm_*exp(-dt/tau_) + RI(dt); //new voltage from voltage decay from previous step
+    Vm_ *= exp(-dt/tau_);  //calculate decay from previous timestep
+    Vm_ += RI(dt)*dt/tau_; //sum voltage from network contributions at next timestep
+                   //eq 1.8 in http://neuronaldynamics.epfl.ch/online/Ch1.S3.html
 }
 
 

@@ -57,10 +57,11 @@ class Simulation
 
         virtual ~Simulation();
         void launch_simulation();
+        Network * get_network();
+        Physics::Time get_simulation_time();
 
     private:
         Network network_;
-
         Physics::Time time_of_simulation_;
 		Physics::Time time_step_;
 };

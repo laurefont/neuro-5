@@ -41,7 +41,6 @@ TEST(TestsCategoryName, TestSetConnections)
 {
     Neuron neurone1(NeuronType, true);
     Neuron neurone2(NeuronType, true);
-    int dt(1);
     neurone1.Neuron::add_connection(&neurone2);
     int result = neurone1.get_synapses_size();
 

@@ -43,18 +43,19 @@ class Neuron {
     double external_spike_generator(Physics::Time const& dt);
     
   private:
-    
+    const SimulationType type_;
+
     static unsigned int neuron_id_;
+
+    const double external_factor_;
+    Physics::Time t_; ///<time
     std::ofstream * neuron_file; ///< output file for raster plot
     Physics::Amplitude J_; ///< synaptic weight of OUTGOING synapses
     Physics::Potential Vm_; ///< membrane potential
-    Physics::Time t_; ///<time
     Physics::Time last_spike_time_; ///< Time of last firing
     std::priority_queue <Event> events_in_; ///<queue of input events 
     std::vector <Neuron*> synapses_; ///<table with the neurons it's sending signals to
-    const double external_factor_;
 
-    const SimulationType type_;
     static const Physics::Time refractory_period_; ///<tau_rp (period after an output, during which neuron can't receive inputs and can't fire)
     static const Physics::Potential firing_threshold_; ///<membrane potential level at which neuron fires
     static const Physics::Potential resting_potential_; ///<resting potential (voltage in equilibrium)

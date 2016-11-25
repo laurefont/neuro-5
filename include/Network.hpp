@@ -56,7 +56,7 @@ public:
 	/// @param dt time interval
     Physics::Time update(Physics::Time dt);
 
-    Neuron* get_neuron(int n);
+    Neuron* get_neuron(unsigned int n);
 
     size_t get_neurons_size();
 

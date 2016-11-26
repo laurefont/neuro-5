@@ -18,11 +18,14 @@ public:
     Physics::Time get_time_step();
 
 private:
+	void print_info();
 
+private:
     Physics::Time time_of_simulation;
     Physics::Time time_step;
     unsigned int number_neurons;
     double gamma;
     double epsilon;
     double external_factor;
+	bool verbose;
 };

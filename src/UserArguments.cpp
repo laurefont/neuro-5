@@ -26,9 +26,9 @@ void UserArguments::parse(int argc, char** argv)
         epsilon = epsilon_arg.getValue();
         external_factor = external_factor_arg.getValue();
         time_step = time_step_arg.getValue();
-		verbose = verbose_arg.getValue();
 
-		if (verbose) print_info();
+        if ( verbose_arg.getValue() )
+            print_info();
     }
     catch (TCLAP::ArgException& e)
     {

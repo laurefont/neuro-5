@@ -27,5 +27,4 @@ private:
     double gamma;
     double epsilon;
     double external_factor;
-	bool verbose;
 };

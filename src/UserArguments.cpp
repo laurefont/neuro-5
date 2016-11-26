@@ -1,3 +1,4 @@
+#include <iostream>
 #include <tclap/CmdLine.h>
 #include "UserArguments.hpp"
 
@@ -16,6 +17,7 @@ void UserArguments::parse(int argc, char** argv)
         TCLAP::ValueArg<double> epsilon_arg("e", "epsilon", "connections density", false, 0.1, "double", cmd);
         TCLAP::ValueArg<double> external_factor_arg("f", "factor", "external factor", false, 1, "double", cmd);
         TCLAP::ValueArg<Physics::Time> time_step_arg("d", "dt", "time step of the simulation", false, 2, "Time", cmd);
+		TCLAP::SwitchArg verbose_arg("v", "verbose", "explain what is being done", cmd, false);
         cmd.parse(argc, argv);
 
         time_of_simulation = time_of_simulation_arg.getValue();
@@ -24,6 +26,9 @@ void UserArguments::parse(int argc, char** argv)
         epsilon = epsilon_arg.getValue();
         external_factor = external_factor_arg.getValue();
         time_step = time_step_arg.getValue();
+		verbose = verbose_arg.getValue();
+
+		if (verbose) print_info();
     }
     catch (TCLAP::ArgException& e)
     {
@@ -61,4 +66,14 @@ unsigned int UserArguments::get_number_neurons()
 Physics::Time UserArguments::get_time_step()
 {
     return time_step;
+}
+
+void UserArguments::print_info()
+{
+	std::cout << "The simulation time is : " << time_of_simulation << " ms" << std::endl;
+	std::cout << "The time step is : " << time_step << " ms" << std::endl;
+	std::cout << "The number of neurons is : " << number_neurons << std::endl;
+	std::cout << "The proportion of inhibitory over excitatory neurons is : " << gamma << std::endl;
+	std::cout << "The connections density is : " << epsilon << std::endl;
+	std::cout << "The external factor is : " << external_factor << std::endl;
 }

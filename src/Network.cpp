@@ -20,7 +20,7 @@ Network::Network(SimulationType const& type, unsigned int const& number_neurons,
       type_(type)
 {
 	for (unsigned int i(0); i < N_; ++i)
-        neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, (i < Ne_), external_factor)));
+        neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, (i < Ne_), false, external_factor)));
 
 	make_connections();
 	

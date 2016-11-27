@@ -17,6 +17,7 @@ void UserArguments::parse(int argc, char** argv)
         TCLAP::ValueArg<double> epsilon_arg("e", "epsilon", "connections density", false, 0.1, "double", cmd);
         TCLAP::ValueArg<double> external_factor_arg("f", "factor", "external factor", false, 1, "double", cmd);
         TCLAP::ValueArg<Physics::Time> time_step_arg("d", "dt", "time step of the simulation", false, 2, "Time", cmd);
+        TCLAP::MultiArg<unsigned int> file_arg("o", "output", "specific files opening", false, "int", cmd, 0);
 		TCLAP::SwitchArg verbose_arg("v", "verbose", "explain what is being done", cmd, false);
         cmd.parse(argc, argv);
 
@@ -26,9 +27,13 @@ void UserArguments::parse(int argc, char** argv)
         epsilon = epsilon_arg.getValue();
         external_factor = external_factor_arg.getValue();
         time_step = time_step_arg.getValue();
+        file = file_arg.getValue();
 
         if ( verbose_arg.getValue() )
             print_info();
+            
+        if ( file.empty() )
+            print_warning();
     }
     catch (TCLAP::ArgException& e)
     {
@@ -68,6 +73,11 @@ Physics::Time UserArguments::get_time_step()
     return time_step;
 }
 
+std::vector<unsigned int> UserArguments::get_file()
+{
+    return file;
+}
+
 void UserArguments::print_info()
 {
 	std::cout << "The simulation time is : " << time_of_simulation << " ms" << std::endl;
@@ -76,4 +86,10 @@ void UserArguments::print_info()
 	std::cout << "The proportion of inhibitory over excitatory neurons is : " << gamma << std::endl;
 	std::cout << "The connections density is : " << epsilon << std::endl;
 	std::cout << "The external factor is : " << external_factor << std::endl;
+}
+
+void UserArguments::print_warning()
+{
+	std::cout << "No argument entered for the number of files." << std::endl;
+	std::cout << "Default file generated for neuron 0." <<  std::endl;
 }

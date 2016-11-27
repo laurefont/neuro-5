@@ -16,9 +16,11 @@ public:
     double get_epsilon();
     double get_external_factor();
     Physics::Time get_time_step();
+    std::vector<unsigned int> get_file();
 
 private:
 	void print_info();
+	void print_warning();
 
 private:
     Physics::Time time_of_simulation;
@@ -27,4 +29,5 @@ private:
     double gamma;
     double epsilon;
     double external_factor;
+    std::vector<unsigned int> file;
 };

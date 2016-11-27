@@ -27,13 +27,13 @@ void UserArguments::parse(int argc, char** argv)
         epsilon = epsilon_arg.getValue();
         external_factor = external_factor_arg.getValue();
         time_step = time_step_arg.getValue();
-        file = file_arg.getValue();
+        output_neuron_ids = file_arg.getValue();
 
         if ( verbose_arg.getValue() )
             print_info();
             
-        if ( file.empty() )
-            print_warning();
+        if ( output_neuron_ids.empty() )
+            print_warning_no_output_neuron_ids();
     }
     catch (TCLAP::ArgException& e)
     {
@@ -73,9 +73,9 @@ Physics::Time UserArguments::get_time_step()
     return time_step;
 }
 
-std::vector<unsigned int> UserArguments::get_file()
+std::vector<unsigned int> UserArguments::get_output_neuron_ids()
 {
-    return file;
+    return output_neuron_ids;
 }
 
 void UserArguments::print_info()
@@ -88,8 +88,7 @@ void UserArguments::print_info()
 	std::cout << "The external factor is : " << external_factor << std::endl;
 }
 
-void UserArguments::print_warning()
+void UserArguments::print_warning_no_output_neuron_ids()
 {
-	std::cout << "No argument entered for the number of files." << std::endl;
-	std::cout << "Default file generated for neuron 0." <<  std::endl;
+    std::cout << "No output of neurons specified. File will be generated for neuron 0 only [default]." <<  std::endl;
 }

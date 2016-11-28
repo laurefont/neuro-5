@@ -19,6 +19,7 @@
 #define GAMMA 0.25 //1 to 4 ratio between Inh and Exc neurons count
 #define EPSILON 0.1 //10% connectivity
 
+
 /**
  * @brief The main class of the simulation
  *
@@ -40,8 +41,10 @@ class Simulation
         ///
         Simulation( unsigned int const number_neurons, Physics::Time const& time_of_simulation,
                     Physics::Time const& time_step, SimulationType const& type, //fixed step only arguments
-                    double const gamma = GAMMA, double const epsilon = EPSILON,
-                    double const& external_factor = 0);
+                    Physics::Potential firing_threshold,
+					Physics::Time refractory_period, Physics::Potential resting_potential,
+					Physics::Potential reset_potential, Physics::Time transmission_delay, Physics::Time tau,
+					double const gamma = GAMMA, double const epsilon = EPSILON, double const& external_factor = 0);
 
 		/// 
 		/// Create a simulation with an analytic solution
@@ -53,8 +56,9 @@ class Simulation
         /// @param external_factor external factor
 		///
         Simulation( unsigned int const number_neurons, Physics::Time const& time_of_simulation,
-                    double const gamma = GAMMA, double const epsilon = EPSILON,
-                    double const& external_factor = 0);
+                    Physics::Potential firing_threshold = 20,
+					Physics::Time refractory_period = 2, Physics::Potential resting_potential = 0,Physics::Potential reset_potential = 10, 
+					Physics::Time transmission_delay = 1.5, Physics::Time tau = 20, double const gamma = GAMMA, double const epsilon = EPSILON, double const& external_factor = 0.5);
 
         virtual ~Simulation();
         void launch_simulation();

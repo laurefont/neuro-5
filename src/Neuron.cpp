@@ -7,18 +7,22 @@
 #include "Simulation.hpp"
 
 unsigned int Neuron::neuron_id_ = 0;
-Physics::Potential const Neuron::firing_threshold_= FIRING_THRESHOLD;
+/*Physics::Potential const Neuron::firing_threshold_= FIRING_THRESHOLD;
 Physics::Time const Neuron::refractory_period_ = REFRACTORY_PERIOD;
 Physics::Potential const Neuron::resting_potential_= RESTING_POTENTIAL;
 Physics::Potential const Neuron::reset_potential_= RESET_POTENTIAL;
 Physics::Time const Neuron::transmission_delay_= TRANSMISSION_DELAY;
-Physics::Time const Neuron::tau_ = TAU;
+Physics::Time const Neuron::tau_ = TAU;*/
 
 using namespace std;
 
-Neuron::Neuron(SimulationType const& a_type, bool const& exc,
-               bool outputCsvFile, double const& external_factor)
-                : type_(a_type), external_factor_(external_factor), t_(0), neuron_file(NULL)
+Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential firing_threshold,
+			   Physics::Time refractory_period, Physics::Potential resting_potential,Physics::Potential reset_potential, 
+			   Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, bool outputCsvFile)
+                : type_(a_type), external_factor_(external_factor), t_(0), neuron_file(NULL),
+                  firing_threshold_(firing_threshold), refractory_period_(refractory_period), resting_potential_(resting_potential),
+                  reset_potential_(reset_potential), transmission_delay_(transmission_delay), tau_(tau)
+                  
 {
     Vm_ = resting_potential_;
     last_spike_time_ = -Neuron::refractory_period_;

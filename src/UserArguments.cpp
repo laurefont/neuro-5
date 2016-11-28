@@ -18,6 +18,13 @@ void UserArguments::parse(int argc, char** argv)
         TCLAP::ValueArg<double> external_factor_arg("f", "factor", "external factor", false, 1, "double", cmd);
         TCLAP::ValueArg<Physics::Time> time_step_arg("d", "dt", "time step of the simulation", false, 2, "Time", cmd);
 		TCLAP::SwitchArg verbose_arg("v", "verbose", "explain what is being done", cmd, false);
+        TCLAP::ValueArg<Physics::Potential> firing_threshold_arg("F", "firing_threshold", "potential that must be reached to generate a spike", false, 20, "Potential", cmd);
+        TCLAP::ValueArg<Physics::Time> refractory_period_arg("r", "refractory", "period during which the neuron is insensitive to arriving spikes", false, 2, "Time", cmd);
+        TCLAP::ValueArg<Physics::Potential> resting_potential_arg("p", "resting_potential", "resting potential", false, 0, "Potential", cmd);
+        TCLAP::ValueArg<Physics::Potential> reset_potential_arg("P", "reset_potential", "", false, 10, "Time", cmd);
+        TCLAP::ValueArg<Physics::Time> transmission_delay_arg("D", "transmission_delay", "duration of the transmission of a spike", false, 1.5, "Time", cmd);
+		TCLAP::ValueArg<Physics::Time> tau_arg("T", "tau", "membrane time constant", false, 20, "Time", cmd);
+		
         cmd.parse(argc, argv);
 
         time_of_simulation = time_of_simulation_arg.getValue();
@@ -26,6 +33,13 @@ void UserArguments::parse(int argc, char** argv)
         epsilon = epsilon_arg.getValue();
         external_factor = external_factor_arg.getValue();
         time_step = time_step_arg.getValue();
+        firing_threshold = firing_threshold_arg.getValue();
+        refractory_period = refractory_period_arg.getValue();
+        resting_potential = resting_potential_arg.getValue();
+        reset_potential = reset_potential_arg.getValue();
+        transmission_delay = transmission_delay_arg.getValue();
+        tau = tau_arg.getValue();
+        
 
         if ( verbose_arg.getValue() )
             print_info();
@@ -68,6 +82,36 @@ Physics::Time UserArguments::get_time_step()
     return time_step;
 }
 
+Physics::Potential UserArguments::get_firing_threshold()
+{
+    return firing_threshold;
+}
+
+Physics::Time UserArguments::get_refractory_period()
+{
+    return refractory_period;
+}
+
+Physics::Potential UserArguments::get_resting_potential()
+{
+    return resting_potential;
+}
+
+Physics::Potential UserArguments::get_reset_potential()
+{
+    return reset_potential;
+}
+
+Physics::Time UserArguments::get_transmission_delay()
+{
+    return transmission_delay;
+}
+
+Physics::Potential UserArguments::get_tau()
+{
+    return tau;
+}
+
 void UserArguments::print_info()
 {
 	std::cout << "The simulation time is : " << time_of_simulation << " ms" << std::endl;
@@ -76,4 +120,10 @@ void UserArguments::print_info()
 	std::cout << "The proportion of inhibitory over excitatory neurons is : " << gamma << std::endl;
 	std::cout << "The connections density is : " << epsilon << std::endl;
 	std::cout << "The external factor is : " << external_factor << std::endl;
+	std::cout << "The firing threshold is : " << firing_threshold << std::endl;
+	std::cout << "The refractory period is : " << refractory_period << std::endl;
+	std::cout << "The resting potential is : " << resting_potential << std::endl;
+	std::cout << "The reset potential is : " << reset_potential << std::endl;
+	std::cout << "The transmission delay is : " << transmission_delay << std::endl;
+	std::cout << "The value of tau is : " << tau << std::endl;
 }

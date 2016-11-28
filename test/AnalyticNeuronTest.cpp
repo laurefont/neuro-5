@@ -132,7 +132,8 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
 
 TEST(TestsCategoryName, TestSingleNeuronSimulation)
 {
-    Simulation sim(1,100);
+	std::vector<unsigned int> output_files = {0};
+    Simulation sim(1,100,output_files);
     Network * network = sim.get_network();
     Neuron * neuron1 = network->get_neuron(0);
 

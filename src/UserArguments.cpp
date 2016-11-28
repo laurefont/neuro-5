@@ -46,7 +46,7 @@ void UserArguments::parse(int argc, char** argv)
         if ( verbose_arg.getValue() )
             print_info();
             
-        if ( output_neuron_ids.empty() )
+        if ( output_neuron_ids[0] == 0 and output_neuron_ids.size() == 1 )
             print_warning_no_output_neuron_ids();
     }
     catch (TCLAP::ArgException& e)
@@ -87,7 +87,7 @@ Physics::Time UserArguments::get_time_step()
     return time_step;
 }
 
-std::vector<unsigned int> UserArguments::get_output_neuron_ids()
+std::vector<unsigned int>& UserArguments::get_output_neuron_ids()
 
 {
     return output_neuron_ids;
@@ -121,6 +121,7 @@ Physics::Potential UserArguments::get_tau()
 {
     return tau;
 }
+
 
 void UserArguments::print_info()
 {

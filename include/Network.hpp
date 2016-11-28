@@ -44,10 +44,18 @@ public:
 	/// @param ext_f external frequency
     /// @param refractory_period refractory period
     ///
-    Network(SimulationType const& type, unsigned int const& number_neurons, double const& gamma, double const& epsilon, 
-			double const& external_factor, Physics::Potential firing_threshold,
-			Physics::Time refractory_period, Physics::Potential resting_potential,Physics::Potential reset_potential, 
-			Physics::Time transmission_delay, Physics::Time tau);
+    Network(SimulationType const& type, 
+			unsigned int const& number_neurons, 
+			double const& gamma, 
+			double const& epsilon, 
+			double const& external_factor, 
+			Physics::Potential firing_threshold,
+			Physics::Time refractory_period, 
+			Physics::Potential resting_potential,
+			Physics::Potential reset_potential, 
+			Physics::Time transmission_delay, 
+			Physics::Time tau, 
+			std::vector<unsigned int> &neuron_csv_files);
 	Network(Network const &) = delete;
 	Network& operator=(Network const &) = delete;
 

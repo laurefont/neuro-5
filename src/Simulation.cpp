@@ -1,8 +1,11 @@
 #include "Simulation.hpp"
 #include <Physics.hpp>
 
-Simulation::Simulation( unsigned int const number_neurons, Physics::Time const& time_of_simulation,
-                        Physics::Time const& time_step, SimulationType const& type, //fixed step only arguments
+Simulation::Simulation( unsigned int const number_neurons, 
+						Physics::Time const& time_of_simulation,
+						std::vector<unsigned int> &neuron_csv_files,
+                        Physics::Time const& time_step, 
+                        SimulationType const& type, //fixed step only arguments
                         Physics::Potential firing_threshold,
 						Physics::Time refractory_period,
 						Physics::Potential resting_potential,
@@ -11,13 +14,15 @@ Simulation::Simulation( unsigned int const number_neurons, Physics::Time const& 
 						Physics::Time tau,
 						double const gamma, double const epsilon,
 						double const& external_factor)
-    : network_(type, number_neurons, gamma, epsilon, external_factor,firing_threshold, refractory_period, resting_potential, reset_potential, transmission_delay, tau ),
+    : network_(type, number_neurons, gamma, epsilon, external_factor,firing_threshold, refractory_period, resting_potential, reset_potential, transmission_delay, tau, neuron_csv_files),
 	time_of_simulation_(time_of_simulation),
 	time_step_(time_step)
 {
 }
 
-Simulation::Simulation( unsigned int const number_neurons, Physics::Time const& time_of_simulation,
+Simulation::Simulation( unsigned int const number_neurons, 
+						Physics::Time const& time_of_simulation,
+						std::vector<unsigned int> &neuron_csv_files,
                         Physics::Potential firing_threshold,
 						Physics::Time refractory_period,
 						Physics::Potential resting_potential,
@@ -26,7 +31,7 @@ Simulation::Simulation( unsigned int const number_neurons, Physics::Time const& 
 						Physics::Time tau,
 						double const gamma, double const epsilon,
                         double const& external_factor)
-    : Simulation(number_neurons,time_of_simulation,-1,SimulationType::Analytic, gamma, epsilon, external_factor, firing_threshold, refractory_period, resting_potential, reset_potential, transmission_delay, tau)
+    : Simulation(number_neurons,time_of_simulation, neuron_csv_files, -1, SimulationType::Analytic, gamma, epsilon, external_factor, firing_threshold, refractory_period, resting_potential, reset_potential, transmission_delay, tau)
 {
 }
 

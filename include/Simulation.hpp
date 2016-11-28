@@ -5,6 +5,7 @@
 #include <Neuron.hpp>
 #include <Network.hpp>
 #include <UserArguments.hpp>
+#include <vector>
 
 //see page 9 here for parameters:
 //http://arken.nmbu.no//~plesser/publications/Gewa_2012_533_preprint.pdf
@@ -39,12 +40,20 @@ class Simulation
 		/// @param epsilon connections density
 		/// @param external_factor external factor
         ///
-        Simulation( unsigned int const number_neurons, Physics::Time const& time_of_simulation,
-                    Physics::Time const& time_step, SimulationType const& type, //fixed step only arguments
+        Simulation( unsigned int const number_neurons, 
+					Physics::Time const& time_of_simulation,
+					std::vector<unsigned int> &neuron_csv_files,
+                    Physics::Time const& time_step, 
+                    SimulationType const& type, //fixed step only arguments
                     Physics::Potential firing_threshold,
-					Physics::Time refractory_period, Physics::Potential resting_potential,
-					Physics::Potential reset_potential, Physics::Time transmission_delay, Physics::Time tau,
-					double const gamma = GAMMA, double const epsilon = EPSILON, double const& external_factor = 0);
+					Physics::Time refractory_period, 
+					Physics::Potential resting_potential,
+					Physics::Potential reset_potential, 
+					Physics::Time transmission_delay, 
+					Physics::Time tau,
+					double const gamma = GAMMA, 
+					double const epsilon = EPSILON, 
+					double const& external_factor = 0);
 
 		/// 
 		/// Create a simulation with an analytic solution
@@ -55,10 +64,18 @@ class Simulation
         /// @param epsilon connections density
         /// @param external_factor external factor
 		///
-        Simulation( unsigned int const number_neurons, Physics::Time const& time_of_simulation,
+        Simulation( unsigned int const number_neurons, 
+					Physics::Time const& time_of_simulation,
+					std::vector<unsigned int> &neuron_csv_files,
                     Physics::Potential firing_threshold = 20,
-					Physics::Time refractory_period = 2, Physics::Potential resting_potential = 0,Physics::Potential reset_potential = 10, 
-					Physics::Time transmission_delay = 1.5, Physics::Time tau = 20, double const gamma = GAMMA, double const epsilon = EPSILON, double const& external_factor = 0.5);
+					Physics::Time refractory_period = 2, 
+					Physics::Potential resting_potential = 0,
+					Physics::Potential reset_potential = 10, 
+					Physics::Time transmission_delay = 1.5, 
+					Physics::Time tau = 20, 
+					double const gamma = GAMMA, 
+					double const epsilon = EPSILON, 
+					double const& external_factor = 0.5);
 
         virtual ~Simulation();
         void launch_simulation();

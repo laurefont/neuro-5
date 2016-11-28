@@ -21,7 +21,8 @@
 #define EXTERNAL_FACTOR 0.5
 #define NUMBER_NEURONS 12500
 #define TIME_OF_SIMULATION 1000
-
+#define TIME_STEP 2
+ 
 
 /**
  * @brief The main class of the simulation

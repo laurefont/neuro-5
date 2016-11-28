@@ -7,6 +7,8 @@ Event::Event(Physics::Time const& time, Physics::Potential const& weight_J)
 
 Event::~Event() {}
 	
+//NOTE: the < operator is defined the other way around, so that events with
+//smaller times get first in the priority_queue (higher priority).
 bool Event::operator<(Event const& ev1) const
 {
     return ev1.t_ < t_;

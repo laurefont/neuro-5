@@ -1,5 +1,6 @@
 #include <iostream>
 #include <tclap/CmdLine.h>
+#include "Simulation.hpp"
 #include "UserArguments.hpp"
 
 UserArguments::UserArguments(int argc, char** argv) {
@@ -24,7 +25,7 @@ void UserArguments::parse(int argc, char** argv)
         TCLAP::ValueArg<Physics::Potential> resting_potential_arg("p", "resting_potential", "resting potential", false, 0, "Potential", cmd);
         TCLAP::ValueArg<Physics::Potential> reset_potential_arg("P", "reset_potential", "", false, 10, "Time", cmd);
         TCLAP::ValueArg<Physics::Time> transmission_delay_arg("D", "transmission_delay", "duration of the transmission of a spike", false, 1.5, "Time", cmd);
-		TCLAP::ValueArg<Physics::Time> tau_arg("T", "tau", "membrane time constant", false, 20, "Time", cmd);
+        TCLAP::ValueArg<Physics::Time> tau_arg("T", "tau", "membrane time constant", false, TAU, "Time", cmd);
 		
         cmd.parse(argc, argv);
 

@@ -18,6 +18,9 @@
 #define WEIGHT_J_INH -0.5
 #define GAMMA 0.25 //1 to 4 ratio between Inh and Exc neurons count
 #define EPSILON 0.1 //10% connectivity
+#define EXTERNAL_FACTOR 0.5
+#define NUMBER_NEURONS 12500
+#define TIME_OF_SIMULATION 1000
 
 
 /**

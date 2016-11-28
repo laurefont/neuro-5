@@ -3,7 +3,6 @@
 
 #include "Physics.hpp"
 
-
 class Event {
 
 	public:

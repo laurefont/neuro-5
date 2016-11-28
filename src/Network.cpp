@@ -8,9 +8,6 @@
 #include <chrono>
 #include <assert.h>
 
-#include <Physics.hpp>
-
-
 Network::Network(SimulationType const& type, unsigned int const& number_neurons, double const& gamma, double const& epsilon, 
 				 double const& external_factor, Physics::Potential firing_threshold,
 				 Physics::Time refractory_period, Physics::Potential resting_potential,Physics::Potential reset_potential, 
@@ -23,7 +20,7 @@ Network::Network(SimulationType const& type, unsigned int const& number_neurons,
       type_(type)
 {
 	for (unsigned int i(0); i < N_; ++i)
-        neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, (i < Ne_), firing_threshold, refractory_period, resting_potential, reset_potential, transmission_delay, tau,  external_factor, false)));
+        neurons_.push_back(std::unique_ptr<Neuron>(new Neuron(type, (i < Ne_), firing_threshold, refractory_period, resting_potential, reset_potential, transmission_delay, tau,  external_factor, true)));
 
 	make_connections();
 	
@@ -31,7 +28,7 @@ Network::Network(SimulationType const& type, unsigned int const& number_neurons,
 	if (raster_plot_file->fail()) 
 	    throw std::runtime_error("file not found");
     else
-        *raster_plot_file << "t [ms], neuron" << std::endl;
+        *raster_plot_file << "t,neuron" << std::endl;
  }
 
 Network::~Network()

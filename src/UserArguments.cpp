@@ -1,6 +1,5 @@
 #include <iostream>
 #include <tclap/CmdLine.h>
-#include "Simulation.hpp"
 #include "UserArguments.hpp"
 
 UserArguments::UserArguments(int argc, char** argv) {
@@ -88,10 +87,10 @@ Physics::Time UserArguments::get_time_step()
     return time_step;
 }
 
-std::vector<unsigned int> UserArguments::get_output_neuron_ids()
+std::vector<unsigned int> * UserArguments::get_output_neuron_ids()
 
 {
-    return output_neuron_ids;
+    return &output_neuron_ids;
 }
 
 Physics::Potential UserArguments::get_firing_threshold()

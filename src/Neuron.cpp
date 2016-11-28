@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <chrono>
 #include <random>
-#include "Simulation.hpp"
+#include <Neuron.hpp>
 
 unsigned int Neuron::neuron_id_ = 0;
 /*Physics::Potential const Neuron::firing_threshold_= FIRING_THRESHOLD;
@@ -38,7 +38,7 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential
         if (neuron_file && neuron_file->fail()) {
             throw string("Error: The file doesn't exist !");
         } else {
-            *neuron_file << "t [ms]" << "," << "Vm [V]" << endl;
+            *neuron_file << "t,vm" << endl;
         }
     }
 

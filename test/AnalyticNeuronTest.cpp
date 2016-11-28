@@ -143,7 +143,7 @@ TEST(TestsCategoryName, TestSingleNeuronSimulation)
                     TAU,
                     GAMMA,
                     EPSILON,
-                    0.5 ); //external_factor;
+                    EXTERNAL_FACTOR ); //external_factor;
 
     Network * network = sim.get_network();
     Neuron * neuron1 = network->get_neuron(0);

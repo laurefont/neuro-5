@@ -15,8 +15,8 @@ class Neuron {
     ///constructeur et destructeur
     Neuron(SimulationType const& a_type, bool const& exc,
 			Physics::Potential firing_threshold = 20,
-		   Physics::Time refractory_period = 2, Physics::Potential resting_potential = 0,Physics::Potential reset_potential = 10, 
-		   Physics::Time transmission_delay = 1.5, Physics::Time tau = 20, double const& external_factor=0.5, bool outputCsvFile = false);
+		   Physics::Time refractory_period = 2, Physics::Potential resting_potential = 0 , Physics::Potential reset_potential = 10, 
+		   Physics::Time transmission_delay = 1.5, Physics::Time tau = 20, double const& external_factor=0.5, bool outputCsvFile = false, double initial_Vm = 0.0);
             ///< constructor takes arguments that will be modified during time
 
     ~Neuron();

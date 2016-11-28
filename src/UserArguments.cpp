@@ -17,6 +17,7 @@ void UserArguments::parse(int argc, char** argv)
         TCLAP::ValueArg<double> epsilon_arg("e", "epsilon", "connections density", false, 0.1, "double", cmd);
         TCLAP::ValueArg<double> external_factor_arg("f", "factor", "external factor", false, 1, "double", cmd);
         TCLAP::ValueArg<Physics::Time> time_step_arg("d", "dt", "time step of the simulation", false, 2, "Time", cmd);
+        TCLAP::MultiArg<unsigned int> file_arg("o", "output", "specific files opening", false, "int", cmd, 0);
 		TCLAP::SwitchArg verbose_arg("v", "verbose", "explain what is being done", cmd, false);
         TCLAP::ValueArg<Physics::Potential> firing_threshold_arg("F", "firing_threshold", "potential that must be reached to generate a spike", false, 20, "Potential", cmd);
         TCLAP::ValueArg<Physics::Time> refractory_period_arg("r", "refractory", "period during which the neuron is insensitive to arriving spikes", false, 2, "Time", cmd);
@@ -40,9 +41,13 @@ void UserArguments::parse(int argc, char** argv)
         transmission_delay = transmission_delay_arg.getValue();
         tau = tau_arg.getValue();
         
+        output_neuron_ids = file_arg.getValue();
 
         if ( verbose_arg.getValue() )
             print_info();
+            
+        if ( output_neuron_ids.empty() )
+            print_warning_no_output_neuron_ids();
     }
     catch (TCLAP::ArgException& e)
     {
@@ -82,11 +87,16 @@ Physics::Time UserArguments::get_time_step()
     return time_step;
 }
 
+std::vector<unsigned int> UserArguments::get_output_neuron_ids()
+
+{
+    return output_neuron_ids;
+}
+
 Physics::Potential UserArguments::get_firing_threshold()
 {
     return firing_threshold;
 }
-
 Physics::Time UserArguments::get_refractory_period()
 {
     return refractory_period;
@@ -126,4 +136,9 @@ void UserArguments::print_info()
 	std::cout << "The reset potential is : " << reset_potential << std::endl;
 	std::cout << "The transmission delay is : " << transmission_delay << std::endl;
 	std::cout << "The value of tau is : " << tau << std::endl;
+}
+
+void UserArguments::print_warning_no_output_neuron_ids()
+{
+    std::cout << "No output of neurons specified. File will be generated for neuron 0 only [default]." <<  std::endl;
 }

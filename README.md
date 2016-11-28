@@ -12,6 +12,7 @@ A Simulation of Leaky Integrate-and-Fire Neuron models with the Brunel Network a
 
 - The Brunel Model ( [github](doc/Brunel_2000.pdf) or [doxygen](Brunel_2000.pdf) version )
 - Project Description( [github](doc/Project_Description.pdf) or [doxygen](Project_Description.pdf) version )
+- An example of Brunel Network in Python ( [here](http://arken.nmbu.no//~plesser/publications/Gewa_2012_533_preprint.pdf) )
 
 ## Manual
 

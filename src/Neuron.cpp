@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <chrono>
 #include <random>
-#include "Simulation.hpp"
+#include <Neuron.hpp>
 
 unsigned int Neuron::neuron_id_ = 0;
 /*Physics::Potential const Neuron::firing_threshold_= FIRING_THRESHOLD;
@@ -18,7 +18,7 @@ using namespace std;
 
 Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential firing_threshold,
 			   Physics::Time refractory_period, Physics::Potential resting_potential,Physics::Potential reset_potential, 
-			   Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, bool outputCsvFile)
+			   Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, double initial_Vm, bool outputCsvFile)
                 : type_(a_type), 
 				  external_factor_(external_factor), 
 				  t_(0), 
@@ -29,10 +29,10 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential
                   reset_potential_(reset_potential), 
                   transmission_delay_(transmission_delay), 
                   tau_(tau), 
+                  Vm_(initial_Vm),
                   outputCsvFile_(outputCsvFile)
                   
 {
-    Vm_ = resting_potential_;
     last_spike_time_ = -Neuron::refractory_period_;
     //no spike is added between last_spike_time_ and last_spike_time_+refractory_period
     //see add_event_in() function (discards spikes during refraction)
@@ -46,7 +46,7 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential
         if (neuron_file && neuron_file->fail()) {
             throw string("Error: The file doesn't exist !");
         } else {
-            *neuron_file << "t [ms]" << "," << "Vm [V]" << endl;
+            *neuron_file << "t,vm" << endl;
         }
     }
 

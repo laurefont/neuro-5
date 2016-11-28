@@ -11,20 +11,20 @@ void UserArguments::parse(int argc, char** argv)
     try
     {
         TCLAP::CmdLine cmd("Simulation of neurons network");
-        TCLAP::ValueArg<Physics::Time> time_of_simulation_arg("t", "time","total simulation time", false, 1000, "double", cmd);
-        TCLAP::ValueArg<unsigned int> number_neurons_arg("n", "neurons", "total number of neurons to consider for the simulation", false, 12500, "int", cmd);
-        TCLAP::ValueArg<double> gamma_arg("g", "gamma", "proportion of inhibitory over excitatory neurons", false, 0.25, "double", cmd);
-        TCLAP::ValueArg<double> epsilon_arg("e", "epsilon", "connections density", false, 0.1, "double", cmd);
-        TCLAP::ValueArg<double> external_factor_arg("f", "factor", "external factor", false, 1, "double", cmd);
-        TCLAP::ValueArg<Physics::Time> time_step_arg("d", "dt", "time step of the simulation", false, 2, "Time", cmd);
+        TCLAP::ValueArg<Physics::Time> time_of_simulation_arg("t", "time","total simulation time", false, SIMULATION_TIME, "double", cmd);
+        TCLAP::ValueArg<unsigned int> number_neurons_arg("n", "neurons", "total number of neurons to consider for the simulation", false, NUMBER_OF_NEURONS, "int", cmd);
+        TCLAP::ValueArg<double> gamma_arg("g", "gamma", "proportion of inhibitory over excitatory neurons", false, GAMMA, "double", cmd);
+        TCLAP::ValueArg<double> epsilon_arg("e", "epsilon", "connections density", false, EPSILON, "double", cmd);
+        TCLAP::ValueArg<double> external_factor_arg("f", "factor", "external factor", false, EXTERNAL_FACTOR, "double", cmd);
+        TCLAP::ValueArg<Physics::Time> time_step_arg("d", "dt", "time step of the simulation", false, TIME_STEP, "Physics::Time", cmd);
         TCLAP::MultiArg<unsigned int> file_arg("o", "output", "specific files opening", false, "int", cmd, 0);
 		TCLAP::SwitchArg verbose_arg("v", "verbose", "explain what is being done", cmd, false);
-        TCLAP::ValueArg<Physics::Potential> firing_threshold_arg("F", "firing_threshold", "potential that must be reached to generate a spike", false, 20, "Potential", cmd);
-        TCLAP::ValueArg<Physics::Time> refractory_period_arg("r", "refractory", "period during which the neuron is insensitive to arriving spikes", false, 2, "Time", cmd);
-        TCLAP::ValueArg<Physics::Potential> resting_potential_arg("p", "resting_potential", "resting potential", false, 0, "Potential", cmd);
-        TCLAP::ValueArg<Physics::Potential> reset_potential_arg("P", "reset_potential", "", false, 10, "Time", cmd);
-        TCLAP::ValueArg<Physics::Time> transmission_delay_arg("D", "transmission_delay", "duration of the transmission of a spike", false, 1.5, "Time", cmd);
-		TCLAP::ValueArg<Physics::Time> tau_arg("T", "tau", "membrane time constant", false, 20, "Time", cmd);
+        TCLAP::ValueArg<Physics::Potential> firing_threshold_arg("F", "firing_threshold", "potential that must be reached to generate a spike", false, FIRING_THRESHOLD, "Potential", cmd);
+        TCLAP::ValueArg<Physics::Time> refractory_period_arg("r", "refractory", "period during which the neuron is insensitive to arriving spikes", false, REFRACTORY_PERIOD, "Time", cmd);
+        TCLAP::ValueArg<Physics::Potential> resting_potential_arg("p", "resting_potential", "resting potential", false, RESTING_POTENTIAL, "Potential", cmd);
+        TCLAP::ValueArg<Physics::Potential> reset_potential_arg("P", "reset_potential", "", false, RESET_POTENTIAL, "Time", cmd);
+        TCLAP::ValueArg<Physics::Time> transmission_delay_arg("D", "transmission_delay", "duration of the transmission of a spike", false, TRANSMISSION_DELAY, "Time", cmd);
+        TCLAP::ValueArg<Physics::Time> tau_arg("T", "tau", "membrane time constant", false, TAU, "Time", cmd);
 		
         cmd.parse(argc, argv);
 
@@ -87,10 +87,10 @@ Physics::Time UserArguments::get_time_step()
     return time_step;
 }
 
-std::vector<unsigned int>& UserArguments::get_output_neuron_ids()
 
+std::vector<unsigned int> * UserArguments::get_output_neuron_ids()
 {
-    return output_neuron_ids;
+    return &output_neuron_ids;
 }
 
 Physics::Potential UserArguments::get_firing_threshold()

@@ -5,10 +5,9 @@
 #include <memory>
 #include <fstream>      // std::ofstream
 
+#include <Physics.hpp>
 #include <Neuron.hpp>
 #include <ExternalNeuron.hpp>
-#include <Physics.hpp>
-
 
 ///
 /// @brief structure used to return the latest neuron in time and the time of almost last neuron in time in method get_back_neuron
@@ -44,18 +43,18 @@ public:
 	/// @param ext_f external frequency
     /// @param refractory_period refractory period
     ///
-    Network(SimulationType const& type, 
-			unsigned int const& number_neurons, 
-			double const& gamma, 
-			double const& epsilon, 
-			double const& external_factor, 
-			Physics::Potential firing_threshold,
-			Physics::Time refractory_period, 
-			Physics::Potential resting_potential,
-			Physics::Potential reset_potential, 
-			Physics::Time transmission_delay, 
-			Physics::Time tau, 
-			std::vector<unsigned int> &neuron_csv_files);
+    Network(SimulationType const& type,
+            unsigned int const& number_neurons,
+            std::vector<unsigned int>* neuron_csv_files,
+            double const& gamma = GAMMA,
+            double const& epsilon = EPSILON,
+            double const& external_factor = EXTERNAL_FACTOR,
+            Physics::Potential firing_threshold = FIRING_THRESHOLD,
+            Physics::Time refractory_period = REFRACTORY_PERIOD,
+            Physics::Potential resting_potential = RESTING_POTENTIAL,
+            Physics::Potential reset_potential = RESET_POTENTIAL,
+            Physics::Time transmission_delay = TRANSMISSION_DELAY,
+            Physics::Time tau = TAU);
 	Network(Network const &) = delete;
 	Network& operator=(Network const &) = delete;
 

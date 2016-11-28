@@ -3,20 +3,27 @@
 
 #include <iostream>
 #include <fstream>
-#include "Physics.hpp"
-#include "Event.hpp"
+#include <Neuron.hpp>
+#include <Physics.hpp>
+#include <Event.hpp>
 #include <queue>
-
 
 class Neuron {
     
   public :
     
     ///constructeur et destructeur
-    Neuron(SimulationType const& a_type, bool const& exc,
-			Physics::Potential firing_threshold = 20,
-		   Physics::Time refractory_period = 2, Physics::Potential resting_potential = 0,Physics::Potential reset_potential = 10, 
-		   Physics::Time transmission_delay = 1.5, Physics::Time tau = 20, double const& external_factor=0.5, bool outputCsvFile_ = false);
+    Neuron(SimulationType const& a_type, 
+		   bool const& exc,
+           Physics::Potential firing_threshold = FIRING_THRESHOLD,
+           Physics::Time refractory_period = REFRACTORY_PERIOD,
+           Physics::Potential resting_potential = RESTING_POTENTIAL,
+           Physics::Potential reset_potential = RESET_POTENTIAL,
+           Physics::Time transmission_delay = TRANSMISSION_DELAY,
+           Physics::Time tau = TAU,
+           double const& external_factor = EXTERNAL_FACTOR,
+           double initial_Vm = RESTING_POTENTIAL,
+           bool outputCsvFile_ = false);
             ///< constructor takes arguments that will be modified during time
 
     ~Neuron();

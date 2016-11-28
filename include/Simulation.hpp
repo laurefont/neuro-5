@@ -1,10 +1,8 @@
 #ifndef SIMULATION_HPP
 #define SIMULATION_HPP
-
 #include <Physics.hpp>
-#include <Neuron.hpp>
 #include <Network.hpp>
-#include <UserArguments.hpp>
+#include <UserArguments.hpp>  //why?
 #include <vector>
 
 //see page 9 here for parameters:
@@ -20,7 +18,6 @@
 #define GAMMA 0.25 //1 to 4 ratio between Inh and Exc neurons count
 #define EPSILON 0.1 //10% connectivity
 
-
 /**
  * @brief The main class of the simulation
  *
@@ -29,53 +26,54 @@
 class Simulation
 {
     public:
-		/// 
+        ///
         /// Create a fix step method simulation
-		///
+        ///
         /// @param number_neurons number of neurons in the network
         /// @param time_of_simulation duration of the simulation
         /// @param time_step time step duration
-		/// @param type type of solution
-		/// @param gamma proportion of inhibitory neurons over excitatory neurons
-		/// @param epsilon connections density
-		/// @param external_factor external factor
+        /// @param type type of solution
+        /// @param gamma proportion of inhibitory neurons over excitatory neurons
+        /// @param epsilon connections density
+        /// @param external_factor external factor
         ///
-        Simulation( unsigned int const number_neurons, 
-					Physics::Time const& time_of_simulation,
-					std::vector<unsigned int> &neuron_csv_files,
-                    Physics::Time const& time_step, 
-                    SimulationType const& type, //fixed step only arguments
-                    Physics::Potential firing_threshold,
-					Physics::Time refractory_period, 
-					Physics::Potential resting_potential,
-					Physics::Potential reset_potential, 
-					Physics::Time transmission_delay, 
-					Physics::Time tau,
-					double const gamma = GAMMA, 
-					double const epsilon = EPSILON, 
-					double const& external_factor = 0);
+        Simulation( unsigned int const number_neurons,
+                    Physics::Time const& time_of_simulation,
+                    Physics::Time const& time_step,
+                    SimulationType const& type,
+                    std::vector<unsigned int>* neuron_csv_files = NULL,
+                    Physics::Potential firing_threshold = FIRING_THRESHOLD,
+                    Physics::Time refractory_period = REFRACTORY_PERIOD,
+                    Physics::Potential resting_potential = RESTING_POTENTIAL,
+                    Physics::Potential reset_potential = RESET_POTENTIAL,
+                    Physics::Time transmission_delay = TRANSMISSION_DELAY,
+                    Physics::Time tau = TAU,
+                    double const gamma = GAMMA,
+                    double const epsilon = EPSILON,
+                    double const& external_factor = EXTERNAL_FACTOR);
 
-		/// 
-		/// Create a simulation with an analytic solution
-		///
+
+        ///
+        /// Create a simulation with an analytic solution
+        ///
         /// @param number_neurons number of neurons in the network
         /// @param time_of_simulation duration of the simulation
         /// @param gamma proportion of inhibitory neurons over excitatory neurons
         /// @param epsilon connections density
         /// @param external_factor external factor
 		///
-        Simulation( unsigned int const number_neurons, 
-					Physics::Time const& time_of_simulation,
-					std::vector<unsigned int> &neuron_csv_files,
-                    Physics::Potential firing_threshold = 20,
-					Physics::Time refractory_period = 2, 
-					Physics::Potential resting_potential = 0,
-					Physics::Potential reset_potential = 10, 
-					Physics::Time transmission_delay = 1.5, 
-					Physics::Time tau = 20, 
-					double const gamma = GAMMA, 
-					double const epsilon = EPSILON, 
-					double const& external_factor = 0.5);
+        Simulation( unsigned int const number_neurons,
+                    Physics::Time const& time_of_simulation,
+                    std::vector<unsigned int>* neuron_csv_files = NULL,
+                    Physics::Potential firing_threshold = FIRING_THRESHOLD,
+                    Physics::Time refractory_period = REFRACTORY_PERIOD,
+                    Physics::Potential resting_potential = RESTING_POTENTIAL,\
+                    Physics::Potential reset_potential = RESET_POTENTIAL,
+                    Physics::Time transmission_delay = TRANSMISSION_DELAY,
+                    Physics::Time tau = TAU,
+                    double const gamma = GAMMA,
+                    double const epsilon = EPSILON,
+                    double const& external_factor = EXTERNAL_FACTOR);
 
         virtual ~Simulation();
         void launch_simulation();
@@ -85,7 +83,7 @@ class Simulation
     private:
         Network network_;
         Physics::Time time_of_simulation_;
-		Physics::Time time_step_;
+        Physics::Time time_step_;
 };
 
 #endif // SIMULATION_HPP

@@ -47,7 +47,7 @@ public:
             unsigned int const& number_neurons,
             double const& gamma = GAMMA,
             double const& epsilon = EPSILON,
-            double const& external_factor = 0.5,
+            double const& external_factor = EXTERNAL_FACTOR,
             Physics::Potential firing_threshold = FIRING_THRESHOLD,
             Physics::Time refractory_period = REFRACTORY_PERIOD,
             Physics::Potential resting_potential = RESTING_POTENTIAL,

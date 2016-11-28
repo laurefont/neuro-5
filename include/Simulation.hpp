@@ -35,7 +35,7 @@ class Simulation
                     Physics::Time tau = TAU,
                     double const gamma = GAMMA,
                     double const epsilon = EPSILON,
-                    double const& external_factor = 0);
+                    double const& external_factor = EXTERNAL_FACTOR);
 
         ///
         /// Create a simulation with an analytic solution
@@ -57,7 +57,7 @@ class Simulation
                     Physics::Time tau = TAU,
                     double const gamma = GAMMA,
                     double const epsilon = EPSILON,
-                    double const& external_factor = 0.5);
+                    double const& external_factor = EXTERNAL_FACTOR);
 
         virtual ~Simulation();
         void launch_simulation();

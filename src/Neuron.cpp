@@ -17,14 +17,14 @@ Physics::Time const Neuron::tau_ = TAU;*/
 using namespace std;
 
 Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential firing_threshold,
-			   Physics::Time refractory_period, Physics::Potential resting_potential,Physics::Potential reset_potential, 
-			   Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, bool outputCsvFile)
+			   Physics::Time refractory_period, Physics::Potential resting_potential ,Physics::Potential reset_potential, 
+			   Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, bool outputCsvFile, double initial_Vm)
                 : type_(a_type), external_factor_(external_factor), t_(0), neuron_file(NULL),
                   firing_threshold_(firing_threshold), refractory_period_(refractory_period), resting_potential_(resting_potential),
                   reset_potential_(reset_potential), transmission_delay_(transmission_delay), tau_(tau)
                   
 {
-    Vm_ = resting_potential_;
+    Vm_ = initial_Vm;
     last_spike_time_ = -Neuron::refractory_period_;
     //no spike is added between last_spike_time_ and last_spike_time_+refractory_period
     //see add_event_in() function (discards spikes during refraction)

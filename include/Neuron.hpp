@@ -14,7 +14,9 @@ class Neuron {
     
     ///constructeur et destructeur
     Neuron(SimulationType const& a_type, bool const& exc,
-           bool outputCsvFile = false, double const& external_factor=0.5);
+			Physics::Potential firing_threshold = 20,
+		   Physics::Time refractory_period = 2, Physics::Potential resting_potential = 0,Physics::Potential reset_potential = 10, 
+		   Physics::Time transmission_delay = 1.5, Physics::Time tau = 20, double const& external_factor=0.5, bool outputCsvFile = false);
             ///< constructor takes arguments that will be modified during time
 
     ~Neuron();
@@ -56,12 +58,12 @@ class Neuron {
     std::priority_queue <Event> events_in_; ///<queue of input events 
     std::vector <Neuron*> synapses_; ///<table with the neurons it's sending signals to
 
-    static const Physics::Time refractory_period_; ///<tau_rp (period after an output, during which neuron can't receive inputs and can't fire)
-    static const Physics::Potential firing_threshold_; ///<membrane potential level at which neuron fires
-    static const Physics::Potential resting_potential_; ///<resting potential (voltage in equilibrium)
-    static const Physics::Potential reset_potential_; ///< reset potential after the neuron has fired)
-    static const Physics::Time transmission_delay_; ///<D (time taken by a signal after it's been produced to reach the receiving neuron)
-    static const Physics::Time tau_; ///<Time constaint (tau)
+    /*static*/ const Physics::Time refractory_period_; ///<tau_rp (period after an output, during which neuron can't receive inputs and can't fire)
+    /*static*/ const Physics::Potential firing_threshold_; ///<membrane potential level at which neuron fires
+    /*static*/ const Physics::Potential resting_potential_; ///<resting potential (voltage in equilibrium)
+    /*static*/ const Physics::Potential reset_potential_; ///< reset potential after the neuron has fired)
+    /*static*/ const Physics::Time transmission_delay_; ///<D (time taken by a signal after it's been produced to reach the receiving neuron)
+    /*static*/ const Physics::Time tau_; ///<Time constaint (tau)
 
     void step_analytic(Physics::Time const& dt); ///< analytic time-stepping solution
     void step_explicit(Physics::Time const& dt); ///< explicit time-stepping solution

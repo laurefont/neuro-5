@@ -178,7 +178,10 @@ void Neuron::step_analytic(Physics::Time const& dt)
 
 void Neuron::step_explicit(Physics::Time const& dt)// Use of V(t-1)=Vm_ to calculate the new Vm_
 {
-    Vm_ += ((-Vm_ + RI(dt)) * dt) / tau_;
+    if(!(last_spike_time_ < t_ < dt + last_spike_time_))
+    {
+       Vm_ += ((-Vm_ + RI(dt)) * dt) / tau_;
+	}
 }
 
 

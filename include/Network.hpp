@@ -54,7 +54,9 @@ public:
             Physics::Potential resting_potential = RESTING_POTENTIAL,
             Physics::Potential reset_potential = RESET_POTENTIAL,
             Physics::Time transmission_delay = TRANSMISSION_DELAY,
-            Physics::Time tau = TAU);
+            Physics::Time tau = TAU, 
+            double initial_Vm = RESTING_POTENTIAL );
+            
 	Network(Network const &) = delete;
 	Network& operator=(Network const &) = delete;
 

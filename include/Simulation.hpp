@@ -50,7 +50,8 @@ class Simulation
                     Physics::Time tau = TAU,
                     double const gamma = GAMMA,
                     double const epsilon = EPSILON,
-                    double const& external_factor = EXTERNAL_FACTOR);
+                    double const& external_factor = EXTERNAL_FACTOR,
+                    double initial_Vm = RESTING_POTENTIAL );
 
 
         ///

@@ -131,20 +131,18 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
     //test new voltage of neuron that received network current
     EXPECT_NEAR (1, vm2,  0.1);
 }
-/*
+
+
 TEST(TestsCategoryName, TestDecayNeuronVoltage)
 {
-	Simulation simulation( 1, 10, 5, SimulationType::Explicit);
-	Neuron neurone(NeuronType, true);
-	neurone.set_Vm(10);
-	
-	simulation.network_.neurons_.push_back(&neurone);
-	double result=neurone.get_Vm();
-	
-    EXPECT_NEAR ( 5.625,result, 0.000001);   
-    EXPECT_TRUE(abs(result - 5.625) < 0.000001);
+	Simulation simulation( 1, 10, 5, SimulationType::Explicit, NULL, FIRING_THRESHOLD, REFRACTORY_PERIOD, RESTING_POTENTIAL,
+							RESET_POTENTIAL, TRANSMISSION_DELAY, TAU, GAMMA, EPSILON, EXTERNAL_FACTOR, 10);
+							
+	simulation.launch_simulation();
+    EXPECT_TRUE(true);
+
 } 
-*/
+
 int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);

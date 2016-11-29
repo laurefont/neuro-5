@@ -19,7 +19,9 @@ Network::Network(   SimulationType const& type,
 					Physics::Potential resting_potential,
 					Physics::Potential reset_potential, 
 					Physics::Time transmission_delay, 
-					Physics::Time tau)
+					Physics::Time tau,
+					double initial_Vm ) 
+					
 	: N_(number_neurons),
 	  Ne_(std::round(N_ / (1 + gamma))),
 	  Ni_(N_ - Ne_),
@@ -37,7 +39,7 @@ Network::Network(   SimulationType const& type,
 								refractory_period, resting_potential, 
 								reset_potential, transmission_delay, 
 								tau,  external_factor, 
-								((*neuron_csv_files)[j] == i))));
+								((*neuron_csv_files)[j] == i),initial_Vm )));
 		}
     }
 

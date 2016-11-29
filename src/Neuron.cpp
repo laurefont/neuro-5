@@ -187,7 +187,10 @@ void Neuron::step_explicit(Physics::Time const& dt)// Use of V(t-1)=Vm_ to calcu
 
 void Neuron::step_implicit(Physics::Time const& dt)
 {
-    Vm_ = ((dt * RI(dt) ) + (tau_ * Vm_)) / ( dt + tau_);
+	if(!(last_spike_time_ < t_ < dt + last_spike_time_))
+	{
+		Vm_ = ((dt * RI(dt) ) + (tau_ * Vm_)) / ( dt + tau_);
+	}
 }
 
 Physics::Amplitude Neuron::RI(Physics::Time const& dt)

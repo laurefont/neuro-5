@@ -45,6 +45,7 @@ public:
     ///
     Network(SimulationType const& type,
             unsigned int const& number_neurons,
+            std::vector<unsigned int>* neuron_csv_files,
             double const& gamma = GAMMA,
             double const& epsilon = EPSILON,
             double const& external_factor = EXTERNAL_FACTOR,

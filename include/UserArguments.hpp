@@ -25,6 +25,7 @@ public:
     Physics::Potential get_tau();
     Physics::Potential get_firing_threshold();
     Physics::Time get_refractory_period();
+
     std::vector<unsigned int> * get_output_neuron_ids();
 
 private:

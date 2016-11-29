@@ -10,6 +10,7 @@ int main (int argc, char** argv)
                           user_arguments.get_time_of_simulation(),
                           user_arguments.get_time_step(),
                           SimulationType::Explicit,
+                          user_arguments.get_output_neuron_ids(),
                           user_arguments.get_gamma(),
                           user_arguments.get_epsilon(),
                           user_arguments.get_external_factor(),

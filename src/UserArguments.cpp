@@ -17,7 +17,7 @@ void UserArguments::parse(int argc, char** argv)
         TCLAP::ValueArg<double> epsilon_arg("e", "epsilon", "connections density", false, EPSILON, "double", cmd);
         TCLAP::ValueArg<double> external_factor_arg("f", "factor", "external factor", false, EXTERNAL_FACTOR, "double", cmd);
         TCLAP::ValueArg<Physics::Time> time_step_arg("d", "dt", "time step of the simulation", false, TIME_STEP, "Physics::Time", cmd);
-        TCLAP::MultiArg<unsigned int> file_arg("o", "output", "specific files opening", false, "int", cmd, 0);
+        TCLAP::MultiArg<unsigned int> output_neuron_ids_arg("o", "output", "specific files opening", false, "int", cmd, 0);
 		TCLAP::SwitchArg verbose_arg("v", "verbose", "explain what is being done", cmd, false);
         TCLAP::ValueArg<Physics::Potential> firing_threshold_arg("F", "firing_threshold", "potential that must be reached to generate a spike", false, FIRING_THRESHOLD, "Potential", cmd);
         TCLAP::ValueArg<Physics::Time> refractory_period_arg("r", "refractory", "period during which the neuron is insensitive to arriving spikes", false, REFRACTORY_PERIOD, "Time", cmd);
@@ -41,13 +41,16 @@ void UserArguments::parse(int argc, char** argv)
         transmission_delay = transmission_delay_arg.getValue();
         tau = tau_arg.getValue();
         
-        output_neuron_ids = file_arg.getValue();
+        output_neuron_ids = output_neuron_ids_arg.getValue();
 
         if ( verbose_arg.getValue() )
             print_info();
             
-        if ( output_neuron_ids[0] == 0 and output_neuron_ids.size() == 1 )
+        if ( output_neuron_ids.empty() )
+        {
             print_warning_no_output_neuron_ids();
+            output_neuron_ids.push_back(0);
+        }
     }
     catch (TCLAP::ArgException& e)
     {

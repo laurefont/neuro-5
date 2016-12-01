@@ -16,7 +16,7 @@
 
 #define EXTERNAL_FACTOR 0.5
 #define NUMBER_OF_NEURONS 10000
-#define SIMULATION_TIME 1000 //ms
+#define SIMULATION_TIME 100 //ms
 #define TIME_STEP 1 //ms
 
 enum class SimulationType : short

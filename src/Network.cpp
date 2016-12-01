@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <set>
 
 #include <cmath>
 #include <random>
@@ -31,21 +32,22 @@ Network::Network(   SimulationType const& type,
       type_(type)
 {
 	
+    std::set<unsigned> output_neurons_id(neuron_csv_files->begin(), neuron_csv_files->end());
+
+    std::cout << "Creating Neurons ..." << std::endl;
+    neurons_ = new Neuron*[number_neurons];
 	for (unsigned int i(0); i < N_; ++i)
 	{
-		
-		for (size_t j(0); j < neuron_csv_files->size(); ++j)
-		{
-			neurons_.push_back(	std::unique_ptr<Neuron>(new Neuron(type, 
-								(i < Ne_), firing_threshold, time_of_simulation,
-								refractory_period, resting_potential, 
-								reset_potential, transmission_delay, 
-								tau,  external_factor, 
-								((*neuron_csv_files)[j] == i),initial_Vm )));
-		}
+        bool output = output_neurons_id.find(i)!=output_neurons_id.end();
+        neurons_[i] = new Neuron(type,
+                                (i < Ne_), firing_threshold, time_of_simulation,
+                                refractory_period, resting_potential,
+                                reset_potential, transmission_delay,
+                                tau,  external_factor, initial_Vm, output, i);
     }
 
-	make_connections();
+    std::cout << "Creating Network Connections..." << std::endl;
+    make_connections();
 	
 	raster_plot_file = new std::ofstream ("raster-plot.csv");
 	if (raster_plot_file->fail()) 
@@ -58,23 +60,21 @@ Network::~Network()
 {
 	raster_plot_file->close();
     delete raster_plot_file;
-        
-    for (auto& neuron : neurons_)
-    {
-		neuron = nullptr;
-	}
-	neurons_.clear();
+
+    for (int i=0; i<N_; i++)
+        delete neurons_[i];
+    delete [] neurons_;
 }
 
 Neuron* Network::get_neuron(unsigned int n)
 {
-    assert(n<=neurons_.size());
-    return neurons_.at(n).get();
+    assert(n<=N_);
+    return neurons_[n];
 }
 
 size_t Network::get_neurons_size()
 {
-    return neurons_.size();
+    return N_;
 }
 
 void Network::make_connections()
@@ -86,16 +86,19 @@ void Network::make_connections()
 	// Use a bernoulli distribution with a epsilon_ chance of success
 	std::bernoulli_distribution distribution(epsilon_);
 
-	for (auto& neuron : neurons_)
-	{
-		for (auto& potential_neuron_connected : neurons_)
-		{
+    for (int n1 = 0; n1<get_neurons_size(); n1++)
+    {
+        Neuron * neuron = get_neuron(n1);
+        for (int n2 = 0; n2<get_neurons_size(); n2++)
+        {
+            Neuron * potential_neuron_connected = get_neuron(n2);
+
 			// Checks that it's not connecting to itself and
 			// if it has the chance to connect to potential_neuron_connected
-			if (neuron != potential_neuron_connected && distribution(generator))
+            if (n1 != n2 && distribution(generator))
 			{
 				// Do not release ownership of the pointer
-                neuron->add_connection(potential_neuron_connected.get());
+                neuron->add_connection(potential_neuron_connected);
 			}
 		}
 	}
@@ -105,7 +108,7 @@ Physics::Time Network::update(Physics::Time dt)
 {
     if (type_ != SimulationType::Analytic) //Implicit or Explicit Solution
     {
-	  for (unsigned int i(0); i< neurons_.size(); ++i)
+      for (unsigned int i=0; i< get_neurons_size(); ++i)
 	  {
 		neurons_[i]->update(dt);
 		if (neurons_[i]->has_reached_threshold())
@@ -146,8 +149,9 @@ Neuron_last Network::get_last_neurons()
     Neuron_last nl;
     nl.last_id=0;
     nl.second_last_id=0;
-    for (unsigned int n=1; n<neurons_.size(); n++)
+    for (unsigned int n=1; n<get_neurons_size(); n++)
     {
+        std::cout << "neuron "<<n <<": " << neurons_[n]->get_t() << std::endl;
         if (neurons_[n]->get_t() <= neurons_[nl.last_id]->get_t() )
         {
             nl.second_last_id = nl.last_id;
@@ -158,5 +162,6 @@ Neuron_last Network::get_last_neurons()
             nl.second_last_id = n;
         }
     }
+    std::cout << "==== last "<<nl.last_id <<" second " << nl.second_last_id << std::endl;
     return nl;
 }

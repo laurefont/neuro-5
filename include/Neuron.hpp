@@ -24,7 +24,8 @@ class Neuron {
            Physics::Time tau = TAU,
            double const& external_factor = EXTERNAL_FACTOR,
            double initial_Vm = RESTING_POTENTIAL,
-           bool outputCsvFile_ = false);
+           bool outputCsvFile_ = false,
+           int neuron_id_ = -1);
             ///< constructor takes arguments that will be modified during time
 
     ~Neuron();
@@ -45,6 +46,7 @@ class Neuron {
     int get_event_in_size() const; ///< number of incoming spikes in queue
     Physics::Time get_transmission_delay() const; ///< returns transmission delay
     Physics::Time get_tau() const; ///< returns tau (time constant)
+    int get_neuron_id();
 
     ///Clears queue of events between t and t+dt and returns the summed
     ///contribution of incoming currents
@@ -53,9 +55,8 @@ class Neuron {
     double external_spike_generator(Physics::Time const& dt);
     
   private:
+    int neuron_id_;
     const SimulationType type_;
-
-    static unsigned int neuron_id_;
     const bool outputCsvFile_;
 
     const double external_factor_;

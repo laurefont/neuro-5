@@ -6,20 +6,12 @@
 #include <random>
 #include <Neuron.hpp>
 
-
-unsigned int Neuron::neuron_id_ = 0;
-/*Physics::Potential const Neuron::firing_threshold_= FIRING_THRESHOLD;
-Physics::Time const Neuron::refractory_period_ = REFRACTORY_PERIOD;
-Physics::Potential const Neuron::resting_potential_= RESTING_POTENTIAL;
-Physics::Potential const Neuron::reset_potential_= RESET_POTENTIAL;
-Physics::Time const Neuron::transmission_delay_= TRANSMISSION_DELAY;
-Physics::Time const Neuron::tau_ = TAU;*/
-
 using namespace std;
 
 Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential firing_threshold, Physics::Time time_of_simulation,
 			   Physics::Time refractory_period, Physics::Potential resting_potential,Physics::Potential reset_potential, 
-			   Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, double initial_Vm, bool outputCsvFile)
+               Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, double initial_Vm,
+               bool outputCsvFile, int neuron_id)
                 : type_(a_type), 
 				  external_factor_(external_factor), 
 				  t_(0), 
@@ -31,8 +23,8 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential
                   transmission_delay_(transmission_delay), 
                   tau_(tau), 
                   Vm_(initial_Vm),
-                  outputCsvFile_(outputCsvFile)
-                  
+                  outputCsvFile_(outputCsvFile),
+                  neuron_id_(neuron_id)
 {
 	
 	//insert all the external spikes in the queue
@@ -40,32 +32,21 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential
 	std::mt19937 gen(rd());
 	
 	//calculates lambda = parameter of the exponential process for the external spikes generator (Analytical)
-	double lambda;
-	lambda = (external_factor_ * firing_threshold_) / (WEIGHT_J_EXC * tau_);
+    double lambda = (external_factor_ * firing_threshold_) / (WEIGHT_J_EXC * tau_);
+    assert(lambda>0);
 	
 	std::exponential_distribution<> d(lambda);
-	
-	Physics::Time last_spike_sent(0);
-	
-	Physics::Time t(time_of_simulation);
-	
-	while(last_spike_sent < t)
-	{
-		last_spike_sent += d(gen);
-		if(last_spike_sent < t)
-		{
-			Event Ev(last_spike_sent + transmission_delay_, WEIGHT_J_EXC);
-			add_event_in(Ev);			
-		}		
-	}
-	
-	
+    for (Physics::Time last_external_spike_sent =  d(gen);
+         last_external_spike_sent < time_of_simulation;
+         last_external_spike_sent += d(gen))
+        add_event_in(Event(last_external_spike_sent + transmission_delay_, WEIGHT_J_EXC));
 	
     last_spike_time_ = -Neuron::refractory_period_;
     //no spike is added between last_spike_time_ and last_spike_time_+refractory_period
     //see add_event_in() function (discards spikes during refraction)
 
-    J_ = exc ? WEIGHT_J_EXC : WEIGHT_J_INH; //if (exc) J_=WEIGHT_EXC; else J_=WEIGHT_INH;	
+     //if (exc) J_=WEIGHT_EXC; else J_=WEIGHT_INH;
+    J_ = exc ? WEIGHT_J_EXC : WEIGHT_J_INH;
 		
     if (outputCsvFile)
     {
@@ -77,8 +58,6 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential
             *neuron_file << "t,vm" << endl;
         }
     }
-
-    ++neuron_id_;
 }
 
 
@@ -89,6 +68,11 @@ Neuron::~Neuron()
       neuron_file->close();
       delete neuron_file;
     }
+}
+
+int Neuron::get_neuron_id()
+{
+    return neuron_id_;
 }
 
 void Neuron::output(double const& x)
@@ -108,6 +92,8 @@ bool Neuron::has_reached_threshold() const
 
 void Neuron::add_event_in(Event const& ev)
 {
+    assert(ev.get_t()>t_);
+
     //only adds spikes that are delivered after refraction
     if (ev.get_t() >= last_spike_time_ + refractory_period_)
         events_in_.push(ev);
@@ -141,6 +127,7 @@ void Neuron::update(Physics::Time dt)
         if (!events_in_.empty())
             dt = std::min(dt, events_in_.top().get_t() - t_);
 
+    assert(dt>0);
     step(dt); //updates Voltage based on step size
 
     if (has_reached_threshold())
@@ -227,7 +214,7 @@ Physics::Amplitude Neuron::RI(Physics::Time const& dt)
     //sum all contributions of spikes arriving between t and t+dt
     //(in analytic solytion the t+dt will only have 1 event)
     //(+0.000000001 is to fix rounding errors in time)
-    while(!events_in_.empty() && events_in_.top().get_t() <= t_ + dt + 0.000000001)
+    while(!events_in_.empty() && events_in_.top().get_t() <= t_ + dt + 0.0001)
     {
         assert(events_in_.top().get_t()>=t_);
         sum_incoming_J += events_in_.top().get_J();

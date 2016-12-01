@@ -108,7 +108,7 @@ private:
 	///
 	/// @brief Neurons of the network
 	///
-    std::vector<std::unique_ptr<Neuron>> neurons_;
+    Neuron** neurons_;
 	
 	std::ofstream * raster_plot_file; ///< output file for raster plot
 

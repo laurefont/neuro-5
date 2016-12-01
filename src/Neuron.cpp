@@ -92,7 +92,8 @@ bool Neuron::has_reached_threshold() const
 
 void Neuron::add_event_in(Event const& ev)
 {
-    assert(ev.get_t()>t_);
+    //TODO this should work
+    //assert(ev.get_t() >= last_spike_time_);
 
     //only adds spikes that are delivered after refraction
     if (ev.get_t() >= last_spike_time_ + refractory_period_)
@@ -120,7 +121,7 @@ double Neuron::external_spike_generator(Physics::Time const& dt)
 	return 0;		
 }
 
-void Neuron::update(Physics::Time dt)
+bool Neuron::update(Physics::Time dt)
 {
     //real step size is the minimum of max step or until arrival of next event
     if (type_ == SimulationType::Analytic)
@@ -129,23 +130,34 @@ void Neuron::update(Physics::Time dt)
 
     assert(dt>0);
     step(dt); //updates Voltage based on step size
+    write_voltage_to_file();
 
     if (has_reached_threshold())
     {
         output(J_);
-        if (neuron_file)
-            *neuron_file << t_ << "," << Vm_ << endl;
         last_spike_time_ = t_;
         reset_potential();
+        write_voltage_to_file(); //vertical line for drop of voltage
 
+        //remove all Poisson (only events between my time and the
+        //end of refractory period
+        //TODO Implicit Explicit double -check!
+        while(!events_in_.empty() && events_in_.top().get_t() <= t_ + refractory_period_ + 0.0001)
+            events_in_.pop();
+
+        //fixed absolute refractory period
         if (type_ == SimulationType::Analytic)
         {
-            if (neuron_file)
-                *neuron_file << t_ << "," << Vm_ << endl;
             t_ += refractory_period_;
+            write_voltage_to_file(); //horizontal line for fixed refractory period
         }
+        return true;
     }
-   
+    return false;
+}
+
+void Neuron::write_voltage_to_file()
+{
     if (neuron_file)
         *neuron_file << t_ << "," << Vm_ << endl;
 }

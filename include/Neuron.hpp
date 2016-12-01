@@ -32,7 +32,7 @@ class Neuron {
     
     //méthode publique
     bool has_reached_threshold() const;  ///< verify if Vm is >= thresold 
-    void update(Physics::Time dt); ///< in a first step, the function updates inputs, then if the thresold is reached, the function update ouputs
+    bool update(Physics::Time dt); ///< in a first step, the function updates inputs, then if the thresold is reached, the function update ouputs
     void add_connection(Neuron* neuron); ////< add outgoing synapse
     void step(Physics::Time dt); ///< performs a computation step
     void reset_potential(); ///< function reset the potential, it makes the potentiel return to the reset potential
@@ -54,6 +54,7 @@ class Neuron {
 
     double external_spike_generator(Physics::Time const& dt);
     
+    void write_voltage_to_file();
   private:
     int neuron_id_;
     const SimulationType type_;

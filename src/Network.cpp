@@ -128,9 +128,10 @@ Physics::Time Network::update(Physics::Time dt)
            + neurons_[second_last_id]->get_transmission_delay()
            - neurons_[last_id]->get_t();
 
-        neurons_[last_id]->update(dt);
-		if (neurons_[last_id]->has_reached_threshold())
-			*raster_plot_file << last_id <<"," << neurons_[last_id]->get_t() << std::endl;
+        Neuron * last_neuron = neurons_[last_id];
+        bool has_reached_threshold = last_neuron->update(dt);
+        if (has_reached_threshold)
+            *raster_plot_file << last_neuron->get_neuron_id() <<"," << last_neuron->get_t() << std::endl;
         return neurons_[second_last_id]->get_t(); //The 2nd last is now the last, return its time
 	}
 }
@@ -151,7 +152,6 @@ Neuron_last Network::get_last_neurons()
     nl.second_last_id=0;
     for (unsigned int n=1; n<get_neurons_size(); n++)
     {
-        std::cout << "neuron "<<n <<": " << neurons_[n]->get_t() << std::endl;
         if (neurons_[n]->get_t() <= neurons_[nl.last_id]->get_t() )
         {
             nl.second_last_id = nl.last_id;
@@ -162,6 +162,5 @@ Neuron_last Network::get_last_neurons()
             nl.second_last_id = n;
         }
     }
-    std::cout << "==== last "<<nl.last_id <<" second " << nl.second_last_id << std::endl;
     return nl;
 }

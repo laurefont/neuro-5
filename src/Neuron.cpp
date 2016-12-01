@@ -5,7 +5,7 @@
 #include <chrono>
 #include <random>
 #include <Neuron.hpp>
-#include <Simulation.hpp> //needed for get_time_of_simulation
+
 
 unsigned int Neuron::neuron_id_ = 0;
 /*Physics::Potential const Neuron::firing_threshold_= FIRING_THRESHOLD;
@@ -49,7 +49,7 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential
 	
 	Physics::Time t(time_of_simulation);
 	
-	while(last_spike_time_ < t)
+	while(last_spike_sent < t)
 	{
 		last_spike_sent += d(gen);
 		if(last_spike_sent < t)

@@ -51,12 +51,13 @@ TEST(TestsCategoryName, TestSetConnections)
 TEST(TestsCategoryName, TestAddEvent)
 {
     Neuron neuron1(NeuronType, true);
+    int initial_size = neuron1.get_event_in_size();
     Event event1(1, 1.0);
     neuron1.add_event_in(event1);
     int result = neuron1.get_event_in_size();
 
-    EXPECT_EQ (1, result); //initial size is 0
-    EXPECT_TRUE(result==1);
+    EXPECT_EQ ((1+initial_size), result); //initial size is 0
+    EXPECT_TRUE(result==(1+initial_size));
 }
 
 TEST(TestsCategoryName, TestInputRI)
@@ -76,13 +77,15 @@ TEST(TestsCategoryName, TestOutput)
     Neuron neuron1(NeuronType, true);
     Neuron neuron2(NeuronType, true);
     double i(10.0);
+    
+    int initial_size = neuron2.get_event_in_size();
 
     neuron1.Neuron::add_connection(&neuron2);   //ajout de neuron2 au tableau de synapses de neuron1
     neuron1.output(i);                          //ajoute un event à neuron2
     int result = neuron2.get_event_in_size();
 
-    EXPECT_EQ (1, result); //initial size is 0
-    EXPECT_TRUE(result==1);
+    EXPECT_EQ ((1+initial_size), result); //initial size is 0
+    EXPECT_TRUE(result==(1+initial_size));
 }
 
 TEST(TestsCategoryName, TestSynapticConnetivity)

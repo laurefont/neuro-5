@@ -92,6 +92,10 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
 {
     Neuron neuron1(NeuronType, true);
     Neuron neuron2(NeuronType, true);
+    
+    int initial_synapse_size1 = neuron1.get_synapses_size();
+    int initial_event_in_size2 = neuron2.get_event_in_size();
+    
     neuron1.add_connection(&neuron2);
 
     //We set dt to transmission delay to be sure that:
@@ -126,13 +130,13 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
     EXPECT_NEAR (RESET_POTENTIAL , vm1_reset,  0.000001);
 
     //Test insertion of synapses
-    EXPECT_EQ (1, synapses_size1);
+    EXPECT_EQ ((1+initial_synapse_size1), synapses_size1);
 
     //Test event addition to neuron 2
-    EXPECT_EQ (1, events_size2);
+    EXPECT_EQ ((1+initial_event_in_size2), events_size2);
 
     //test new voltage of neuron that received network current
-    EXPECT_NEAR (1, vm2,  0.1);
+    EXPECT_NEAR (1.0, vm2,  0.1);
 }
 
 

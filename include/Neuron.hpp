@@ -16,6 +16,7 @@ class Neuron {
     Neuron(SimulationType const& a_type, 
 		   bool const& exc,
            Physics::Potential firing_threshold = FIRING_THRESHOLD,
+           Physics::Time time_of_simulation = SIMULATION_TIME,
            Physics::Time refractory_period = REFRACTORY_PERIOD,
            Physics::Potential resting_potential = RESTING_POTENTIAL,
            Physics::Potential reset_potential = RESET_POTENTIAL,

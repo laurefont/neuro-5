@@ -20,6 +20,7 @@ Network::Network(   SimulationType const& type,
 					Physics::Potential reset_potential, 
 					Physics::Time transmission_delay, 
 					Physics::Time tau,
+					Physics::Time time_of_simulation,
 					double initial_Vm ) 
 					
 	: N_(number_neurons),
@@ -32,10 +33,11 @@ Network::Network(   SimulationType const& type,
 	
 	for (unsigned int i(0); i < N_; ++i)
 	{
+		
 		for (size_t j(0); j < neuron_csv_files->size(); ++j)
 		{
 			neurons_.push_back(	std::unique_ptr<Neuron>(new Neuron(type, 
-								(i < Ne_), firing_threshold, 
+								(i < Ne_), firing_threshold, time_of_simulation,
 								refractory_period, resting_potential, 
 								reset_potential, transmission_delay, 
 								tau,  external_factor, 

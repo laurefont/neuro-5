@@ -15,7 +15,7 @@ Simulation::Simulation( unsigned int const number_neurons,
 						double const& external_factor,
 						double initial_Vm )
     : network_(type, number_neurons, neuron_csv_files, gamma, epsilon, external_factor,firing_threshold, 
-    refractory_period, resting_potential, reset_potential, transmission_delay, tau, initial_Vm),
+    refractory_period, resting_potential, reset_potential, transmission_delay, tau, time_of_simulation, initial_Vm),
 	time_of_simulation_(time_of_simulation),
 	time_step_(time_step)
 	{}

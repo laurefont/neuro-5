@@ -5,6 +5,7 @@
 #include <chrono>
 #include <random>
 #include <Neuron.hpp>
+#include <Simulation.hpp> //needed for get_time_of_simulation
 
 unsigned int Neuron::neuron_id_ = 0;
 /*Physics::Potential const Neuron::firing_threshold_= FIRING_THRESHOLD;
@@ -16,7 +17,7 @@ Physics::Time const Neuron::tau_ = TAU;*/
 
 using namespace std;
 
-Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential firing_threshold,
+Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential firing_threshold, Physics::Time time_of_simulation,
 			   Physics::Time refractory_period, Physics::Potential resting_potential,Physics::Potential reset_potential, 
 			   Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, double initial_Vm, bool outputCsvFile)
                 : type_(a_type), 
@@ -33,6 +34,33 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential
                   outputCsvFile_(outputCsvFile)
                   
 {
+	
+	//insert all the external spikes in the queue
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	
+	//calculates lambda = parameter of the exponential process for the external spikes generator (Analytical)
+	double lambda;
+	lambda = (external_factor_ * firing_threshold_) / (WEIGHT_J_EXC * tau_);
+	
+	std::exponential_distribution<> d(lambda);
+	
+	Physics::Time last_spike_sent(0);
+	
+	Physics::Time t(time_of_simulation);
+	
+	while(last_spike_time_ < t)
+	{
+		last_spike_sent += d(gen);
+		if(last_spike_sent < t)
+		{
+			Event Ev(last_spike_sent + transmission_delay_, WEIGHT_J_EXC);
+			add_event_in(Ev);			
+		}		
+	}
+	
+	
+	
     last_spike_time_ = -Neuron::refractory_period_;
     //no spike is added between last_spike_time_ and last_spike_time_+refractory_period
     //see add_event_in() function (discards spikes during refraction)

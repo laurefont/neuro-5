@@ -18,6 +18,7 @@
 #define GAMMA 0.25 //1 to 4 ratio between Inh and Exc neurons count
 #define EPSILON 0.1 //10% connectivity
 
+
 /**
  * @brief The main class of the simulation
  *

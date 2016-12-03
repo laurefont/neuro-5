@@ -77,18 +77,24 @@ TEST(TestsCategoryName, TestOutput)
     Neuron neuron2(NeuronType, true);
     double i(10.0);
 
-    neuron1.Neuron::add_connection(&neuron2);   //ajout de neuron2 au tableau de synapses de neuron1
-    neuron1.output(i);                          //ajoute un event à neuron2
+    int initial_size = neuron2.get_event_in_size();
+
+    neuron1.Neuron::add_connection(&neuron2);   //create a connection (=1 synapse) between neuron1 and another neuron = neuron2
+    neuron1.output(i);                          //add one event to neuron2
     int result = neuron2.get_event_in_size();
 
-    EXPECT_EQ (1, result); //initial size is 0
-    EXPECT_TRUE(result==1);
+    EXPECT_EQ ((1+initial_size), result); //initial size isn't 0 anymore
+    EXPECT_TRUE(result==(1+initial_size));
 }
 
 TEST(TestsCategoryName, TestSynapticConnetivity)
 {
     Neuron neuron1(NeuronType, true);
     Neuron neuron2(NeuronType, true);
+
+    int initial_synapse_size1 = neuron1.get_synapses_size();
+    int initial_event_in_size2 = neuron2.get_event_in_size();
+
     neuron1.add_connection(&neuron2);
 
     //We set dt to transmission delay to be sure that:
@@ -121,10 +127,10 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
     EXPECT_NEAR (RESET_POTENTIAL , vm1_reset,  0.000001);
 
     //Test insertion of synapses
-    EXPECT_EQ (1, synapses_size1);
+    EXPECT_EQ ((1+initial_synapse_size1), synapses_size1);
 
     //Test event addition to neuron 2
-    EXPECT_EQ (1, events_size2);
+    EXPECT_EQ ((1+initial_event_in_size2), events_size2);
 
     //test new voltage of neuron that received network current
     EXPECT_NEAR (2.4, vm2,  0.1);

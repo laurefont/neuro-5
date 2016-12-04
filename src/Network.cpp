@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include <set>
+#include <algorithm>
 
 #include <cmath>
 #include <random>
@@ -11,7 +12,7 @@
 
 Network::Network(   SimulationType const& type, 
 					unsigned int const& number_neurons,
-					std::vector<unsigned int>* neuron_csv_files, 
+                    std::vector<unsigned int>* output_neuron_ids,
 					double const& gamma, 
 					double const& epsilon, 
 					double const& external_factor, 
@@ -32,13 +33,12 @@ Network::Network(   SimulationType const& type,
       type_(type)
 {
 	
-    std::set<unsigned> output_neurons_id(neuron_csv_files->begin(), neuron_csv_files->end());
-
     std::cout << "Creating Neurons ..." << std::endl;
     neurons_ = new Neuron*[number_neurons];
 	for (unsigned int i(0); i < N_; ++i)
 	{
-        bool output = output_neurons_id.find(i)!=output_neurons_id.end();
+        bool output =  output_neuron_ids != NULL //not empty
+                    && std::find(output_neuron_ids->begin(), output_neuron_ids->end(), i) != output_neuron_ids->end();
         neurons_[i] = new Neuron(type, (i < Ne_), true,
                                 firing_threshold, time_of_simulation,
                                 refractory_period, resting_potential,

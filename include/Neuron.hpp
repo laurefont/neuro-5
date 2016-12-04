@@ -15,6 +15,7 @@ class Neuron {
     ///constructeur et destructeur
     Neuron(SimulationType const& a_type, 
 		   bool const& exc,
+           bool const& add_external_current = true,
            Physics::Potential firing_threshold = FIRING_THRESHOLD,
            Physics::Time time_of_simulation = SIMULATION_TIME,
            Physics::Time refractory_period = REFRACTORY_PERIOD,

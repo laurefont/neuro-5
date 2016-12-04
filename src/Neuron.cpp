@@ -8,7 +8,8 @@
 
 using namespace std;
 
-Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential firing_threshold, Physics::Time time_of_simulation,
+Neuron::Neuron(SimulationType const& a_type, bool const& exc,
+               bool const& add_external_current, Physics::Potential firing_threshold, Physics::Time time_of_simulation,
 			   Physics::Time refractory_period, Physics::Potential resting_potential,Physics::Potential reset_potential, 
                Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, double initial_Vm,
                bool outputCsvFile, int neuron_id)
@@ -27,19 +28,24 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc, Physics::Potential
                   neuron_id_(neuron_id)
 {
 	
-	//insert all the external spikes in the queue
-	std::random_device rd;
-	std::mt19937 gen(rd());
+    if (add_external_current)
+    {
+      //insert all the external spikes in the queue
+      std::random_device rd;
+      std::mt19937 gen(rd());
 	
-	//calculates lambda = parameter of the exponential process for the external spikes generator (Analytical)
-    double lambda = (external_factor_ * firing_threshold_) / (WEIGHT_J_EXC * tau_);
-    assert(lambda>0);
+      //calculates lambda = parameter of the exponential process for the external spikes generator (Analytical)
+      double lambda = (external_factor_ * firing_threshold_) / (WEIGHT_J_EXC * tau_);
+      assert(lambda>0);
 	
-	std::exponential_distribution<> d(lambda);
-    for (Physics::Time last_external_spike_sent =  d(gen);
-         last_external_spike_sent < time_of_simulation;
-         last_external_spike_sent += d(gen))
-        add_event_in(Event(last_external_spike_sent + transmission_delay_, WEIGHT_J_EXC));
+      std::exponential_distribution<> d(lambda);
+      for ( Physics::Time last_external_spike_sent =  d(gen);
+            last_external_spike_sent < time_of_simulation;
+            last_external_spike_sent += d(gen))
+      {
+         add_event_in(Event(last_external_spike_sent + transmission_delay_, WEIGHT_J_EXC));
+      }
+    }
 	
     last_spike_time_ = -Neuron::refractory_period_;
     //no spike is added between last_spike_time_ and last_spike_time_+refractory_period
@@ -228,6 +234,8 @@ Physics::Amplitude Neuron::RI(Physics::Time const& dt)
     //(+0.000000001 is to fix rounding errors in time)
     while(!events_in_.empty() && events_in_.top().get_t() <= t_ + dt + 0.0001)
     {
+        double xxx = events_in_.top().get_t();
+        double yyy = events_in_.size();
         assert(events_in_.top().get_t()>=t_);
         sum_incoming_J += events_in_.top().get_J();
         events_in_.pop();

@@ -62,14 +62,13 @@ TEST(TestsCategoryName, TestAddEvent)
 
 TEST(TestsCategoryName, TestInputRI)
 {
-    Neuron neuron1(NeuronType, true);
+    Neuron neuron1(NeuronType, true, false); //no external current
     Event event1(1, 1);
     neuron1.add_event_in(event1);
     int dt(3);
     Physics::Amplitude RI = neuron1.RI(dt);
 
-    EXPECT_NEAR ( 20, RI,  0.000001);   //initial current = 10 and membrane_resistance = 1
-    EXPECT_TRUE(abs(RI - 20) < 0.000001);
+    EXPECT_NEAR ( TAU, RI,  0.000001);   //initial current = 10 and membrane_resistance = 1
 }
 
 TEST(TestsCategoryName, TestOutput)
@@ -90,8 +89,8 @@ TEST(TestsCategoryName, TestOutput)
 
 TEST(TestsCategoryName, TestSynapticConnetivity)
 {
-    Neuron neuron1(NeuronType, true);
-    Neuron neuron2(NeuronType, true);
+    Neuron neuron1(NeuronType, true, false); //no external current
+    Neuron neuron2(NeuronType, true, false); //no external current
     
     int initial_synapse_size1 = neuron1.get_synapses_size();
     int initial_event_in_size2 = neuron2.get_event_in_size();

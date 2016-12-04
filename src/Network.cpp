@@ -39,8 +39,8 @@ Network::Network(   SimulationType const& type,
 	for (unsigned int i(0); i < N_; ++i)
 	{
         bool output = output_neurons_id.find(i)!=output_neurons_id.end();
-        neurons_[i] = new Neuron(type,
-                                (i < Ne_), firing_threshold, time_of_simulation,
+        neurons_[i] = new Neuron(type, (i < Ne_), true,
+                                firing_threshold, time_of_simulation,
                                 refractory_period, resting_potential,
                                 reset_potential, transmission_delay,
                                 tau,  external_factor, initial_Vm, output, i);

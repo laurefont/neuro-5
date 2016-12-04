@@ -234,8 +234,6 @@ Physics::Amplitude Neuron::RI(Physics::Time const& dt)
     //(+0.000000001 is to fix rounding errors in time)
     while(!events_in_.empty() && events_in_.top().get_t() <= t_ + dt + 0.0001)
     {
-        double xxx = events_in_.top().get_t();
-        double yyy = events_in_.size();
         assert(events_in_.top().get_t()>=t_);
         sum_incoming_J += events_in_.top().get_J();
         events_in_.pop();

@@ -9,7 +9,7 @@
 #define REFRACTORY_PERIOD 2
 #define TRANSMISSION_DELAY 1.5
 #define TAU 20
-#define WEIGHT_J_EXC 1
+#define WEIGHT_J_EXC 0.1
 #define WEIGHT_J_INH -0.5
 #define GAMMA 0.25 //1 to 4 ratio between Inh and Exc neurons count
 #define EPSILON 0.1 //10% connectivity
@@ -17,7 +17,7 @@
 #define EXTERNAL_FACTOR 0.5
 #define NUMBER_OF_NEURONS 10000
 #define SIMULATION_TIME 100 //ms
-#define TIME_STEP 1 //ms
+#define TIME_STEP 0.1 //ms
 
 enum class SimulationType : short
 {

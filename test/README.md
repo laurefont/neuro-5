@@ -6,4 +6,4 @@ Library test
 
 ## Classes Structure
 
-![alt text](test/diagram_test.png "Diagram of tests")
+![alt text](../doc/diagram_test.png "Diagram of tests")

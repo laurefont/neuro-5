@@ -25,7 +25,7 @@ void UserArguments::parse(int argc, char** argv)
         TCLAP::ValueArg<Physics::Potential> reset_potential_arg("P", "reset_potential", "", false, RESET_POTENTIAL, "Time", cmd);
         TCLAP::ValueArg<Physics::Time> transmission_delay_arg("D", "transmission_delay", "duration of the transmission of a spike", false, TRANSMISSION_DELAY, "Time", cmd);
         TCLAP::ValueArg<Physics::Time> tau_arg("T", "tau", "membrane time constant", false, TAU, "Time", cmd);
-		
+		TCLAP::SwitchArg add_external_current_arg("E", "external_current", "current arriving from external neurons or not" , cmd, false);
         cmd.parse(argc, argv);
 
         time_of_simulation = time_of_simulation_arg.getValue();
@@ -40,7 +40,7 @@ void UserArguments::parse(int argc, char** argv)
         reset_potential = reset_potential_arg.getValue();
         transmission_delay = transmission_delay_arg.getValue();
         tau = tau_arg.getValue();
-        
+        add_external_current = add_external_current_arg.getValue();
         output_neuron_ids = output_neuron_ids_arg.getValue();
 
         if ( verbose_arg.getValue() )
@@ -125,6 +125,11 @@ Physics::Potential UserArguments::get_tau()
     return tau;
 }
 
+bool UserArguments::get_add_external_current()
+{
+	return add_external_current;
+}
+
 
 void UserArguments::print_info()
 {
@@ -140,6 +145,7 @@ void UserArguments::print_info()
 	std::cout << "The reset potential is : " << reset_potential << std::endl;
 	std::cout << "The transmission delay is : " << transmission_delay << std::endl;
 	std::cout << "The value of tau is : " << tau << std::endl;
+	std::cout << "The value of external_current :" << add_external_current << std::endl;
 }
 
 void UserArguments::print_warning_no_output_neuron_ids()

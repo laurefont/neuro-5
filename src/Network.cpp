@@ -12,6 +12,7 @@
 
 Network::Network(   SimulationType const& type, 
 					unsigned int const& number_neurons,
+					bool const& add_external_current,
                     std::vector<unsigned int>* output_neuron_ids,
 					double const& gamma, 
 					double const& epsilon, 
@@ -39,7 +40,7 @@ Network::Network(   SimulationType const& type,
 	{
         bool output =  output_neuron_ids != NULL //not empty
                     && std::find(output_neuron_ids->begin(), output_neuron_ids->end(), i) != output_neuron_ids->end();
-        neurons_[i] = new Neuron(type, (i < Ne_), true,
+        neurons_[i] = new Neuron(type, (i < Ne_), add_external_current,
                                 firing_threshold, time_of_simulation,
                                 refractory_period, resting_potential,
                                 reset_potential, transmission_delay,

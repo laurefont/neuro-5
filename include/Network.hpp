@@ -45,6 +45,7 @@ public:
     ///
     Network(SimulationType const& type,
             unsigned int const& number_neurons,
+            bool const& add_external_current = true,
             std::vector<unsigned int>* output_neuron_ids = NULL,
             double const& gamma = GAMMA,
             double const& epsilon = EPSILON,

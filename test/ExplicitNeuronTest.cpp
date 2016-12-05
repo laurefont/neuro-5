@@ -139,12 +139,13 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
 }
 
 TEST(TestsCategoryName, TestDecayNeuronVoltage)
-{
-    Simulation simulation( 1, 100, 1, SimulationType::Explicit);
+{ 
+
+	Simulation simulation( 1, 100, 1, SimulationType::Explicit, false);
     simulation.get_network()->get_neuron(0)->set_Vm(10);
     simulation.launch_simulation();
     Physics::Potential vm = simulation.get_network()->get_neuron(0)->get_Vm();
-    EXPECT_NEAR(vm, RESTING_POTENTIAL, 0.00001);
+    EXPECT_NEAR(vm, RESTING_POTENTIAL, 1.0);
 }
 
 int main(int argc, char* argv[])

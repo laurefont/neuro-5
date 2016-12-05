@@ -6,4 +6,4 @@ Applications
 
 ## Classes Structure
 
-![alt text](apps/diagram_apps.png "Diagram of applications")
+![alt text](../doc/diagram_apps.png "Diagram of applications")

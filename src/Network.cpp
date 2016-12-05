@@ -34,7 +34,7 @@ Network::Network(   SimulationType const& type,
       type_(type)
 {
 	
-    std::cout << "Creating Neurons ..." << std::endl;
+    std::cout << "Creating " << N_ << " Neurons ..." << std::endl;
     neurons_ = new Neuron*[number_neurons];
 	for (unsigned int i(0); i < N_; ++i)
 	{
@@ -47,7 +47,7 @@ Network::Network(   SimulationType const& type,
                                 tau,  external_factor, initial_Vm, output, i);
     }
 
-    std::cout << "Creating Network Connections..." << std::endl;
+    std::cout << "Creating " << epsilon_*100 << "\% Network Connections..." << std::endl;
     make_connections();
 	
 	raster_plot_file = new std::ofstream ("raster-plot.csv");

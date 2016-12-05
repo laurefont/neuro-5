@@ -33,7 +33,8 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc,
       //insert all the external spikes in the queue
       std::random_device rd;
       std::mt19937 gen(rd());
-	
+      //std::mt19937 gen(neuron_id_);
+
       //calculates lambda = parameter of the exponential process for the external spikes generator (Analytical)
       double lambda = (external_factor_ * firing_threshold_) / (WEIGHT_J_EXC * tau_);
       assert(lambda>0);
@@ -191,11 +192,14 @@ void Neuron::step(Physics::Time dt) // faire en sorte que dans commandline on pu
 		     break;
 	}
     t_+=dt;
+    if (Vm_ < resting_potential_)
+        Vm_ = reset_potential_; //never below resting_potential
 }
 
 
 void Neuron::step_analytic(Physics::Time const& dt)
 {
+    //Plot intermediate points for decay
 	for (int i=1; i<4; i++)
     {
 		double temp_Vm = Vm_ * exp((-dt/4*i)/tau_);
@@ -204,14 +208,15 @@ void Neuron::step_analytic(Physics::Time const& dt)
     }
 
     Vm_ *= exp(-dt/tau_);  //calculate decay from previous timestep
-    Vm_ += RI(dt)*dt/tau_; //sum voltage from network contributions at next timestep
+    Vm_ += RI(dt); //TODO is this correct?
+    //Vm_ += RI(dt)*dt/tau_; //sum voltage from network contributions at next timestep
                    //eq 1.8 in http://neuronaldynamics.epfl.ch/online/Ch1.S3.html
 }
 
 
 void Neuron::step_explicit(Physics::Time const& dt)// Use of V(t-1)=Vm_ to calculate the new Vm_
 {
-    if( t_ + dt > last_spike_time_ + refractory_period_)
+    //if( t_ + dt >= last_spike_time_ + refractory_period_)
     {
        Vm_ += ((-Vm_ + RI(dt)) * dt) / tau_;
 	}
@@ -220,7 +225,7 @@ void Neuron::step_explicit(Physics::Time const& dt)// Use of V(t-1)=Vm_ to calcu
 
 void Neuron::step_implicit(Physics::Time const& dt)
 {
-    if( t_ + dt > last_spike_time_ + refractory_period_)
+    //if( t_ + dt >= last_spike_time_ + refractory_period_)
 	{
 		Vm_ = ((dt * RI(dt) ) + (tau_ * Vm_)) / ( dt + tau_);
 	}
@@ -240,7 +245,6 @@ Physics::Amplitude Neuron::RI(Physics::Time const& dt)
 	}
     return tau_ * sum_incoming_J;
 }
-
 
 Physics::Time Neuron::get_t() const
 {

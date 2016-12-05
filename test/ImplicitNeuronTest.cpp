@@ -135,7 +135,7 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
     EXPECT_EQ ((1+initial_event_in_size2), events_size2);
 
     //test new voltage of neuron that received network current
-    EXPECT_NEAR (1.0, vm2,  0.1);
+    EXPECT_NEAR (WEIGHT_J_EXC*0.1, vm2,  0.1);
 }
 
 TEST(TestsCategoryName, TestDecayNeuronVoltage)

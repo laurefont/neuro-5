@@ -49,14 +49,14 @@ public:
             double const& gamma = GAMMA,
             double const& epsilon = EPSILON,
             double const& external_factor = EXTERNAL_FACTOR,
+            unsigned random_seed = RANDOM_SEED,
             Physics::Potential firing_threshold = FIRING_THRESHOLD,
             Physics::Time refractory_period = REFRACTORY_PERIOD,
             Physics::Potential resting_potential = RESTING_POTENTIAL,
             Physics::Potential reset_potential = RESET_POTENTIAL,
             Physics::Time transmission_delay = TRANSMISSION_DELAY,
             Physics::Time tau = TAU,
-            Physics::Time time_of_simulation = SIMULATION_TIME, 
-            double initial_Vm = RESTING_POTENTIAL );
+            Physics::Time time_of_simulation = SIMULATION_TIME);
             
 	Network(Network const &) = delete;
 	Network& operator=(Network const &) = delete;

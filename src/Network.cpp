@@ -16,14 +16,14 @@ Network::Network(   SimulationType const& type,
 					double const& gamma, 
 					double const& epsilon, 
 					double const& external_factor, 
+					unsigned random_seed,
 					Physics::Potential firing_threshold,
 					Physics::Time refractory_period, 
 					Physics::Potential resting_potential,
 					Physics::Potential reset_potential, 
 					Physics::Time transmission_delay, 
 					Physics::Time tau,
-					Physics::Time time_of_simulation,
-					double initial_Vm ) 
+					Physics::Time time_of_simulation) 
 					
 	: N_(number_neurons),
 	  Ne_(std::round(N_ / (1 + gamma))),
@@ -43,7 +43,7 @@ Network::Network(   SimulationType const& type,
                                 firing_threshold, time_of_simulation,
                                 refractory_period, resting_potential,
                                 reset_potential, transmission_delay,
-                                tau,  external_factor, initial_Vm, output, i);
+                                tau,  external_factor, random_seed, output, i);
     }
 
     std::cout << "Creating Network Connections..." << std::endl;

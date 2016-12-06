@@ -13,9 +13,9 @@ Simulation::Simulation( unsigned int const number_neurons,
 						Physics::Time tau,
 						double const gamma, double const epsilon,
 						double const& external_factor,
-						double initial_Vm )
-    : network_(type, number_neurons, neuron_csv_files, gamma, epsilon, external_factor,firing_threshold, 
-    refractory_period, resting_potential, reset_potential, transmission_delay, tau, time_of_simulation, initial_Vm),
+						unsigned random_seed)
+    : network_(type, number_neurons, neuron_csv_files, gamma, epsilon, external_factor, random_seed, firing_threshold, 
+    refractory_period, resting_potential, reset_potential, transmission_delay, tau, time_of_simulation),
 	time_of_simulation_(time_of_simulation),
 	time_step_(time_step)
 	{}
@@ -32,7 +32,8 @@ Simulation::Simulation( unsigned int const number_neurons,
                         Physics::Time tau,
                         double const gamma, 
                         double const epsilon,
-                        double const& external_factor)
+                        double const& external_factor,
+                        unsigned random_seed)
 
 		: Simulation(   number_neurons,
 						time_of_simulation,  
@@ -47,7 +48,8 @@ Simulation::Simulation( unsigned int const number_neurons,
 						tau, 
 						gamma, 
 						epsilon,
-						external_factor)
+						external_factor,
+						random_seed)
 {}
 
 

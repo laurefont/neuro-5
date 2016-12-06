@@ -18,6 +18,7 @@ public:
     double get_gamma();
     double get_epsilon();
     double get_external_factor();
+    unsigned get_random_seed();
     Physics::Time get_time_step();
     Physics::Potential get_resting_potential();
     Physics::Potential get_reset_potential();
@@ -39,6 +40,7 @@ private:
     double gamma;
     double epsilon;
     double external_factor;
+    unsigned random_seed;
     Physics::Potential firing_threshold;
     Physics::Time refractory_period;
     Physics::Potential resting_potential;

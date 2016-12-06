@@ -1,0 +1,18 @@
+\documentclass{standalone}
+\usepackage{pgfplots}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}
+[
+  legend pos=outer north east,
+  xlabel={time ($ms$)},
+  ylabel={$V_m$ ($mV$)},  
+]
+\addplot +[mark=none] table [x=t, y=vm, col sep=comma] {neuron_plot_explicit.csv};
+\addplot +[mark=none] table [x=t, y=vm, col sep=comma] {neuron_plot_implicit.csv};
+\addplot +[mark=none] table [x=t, y=vm, col sep=comma] {neuron_plot_analytic.csv};
+\legend{Implcit,Explicit,Analytic}
+\end{axis}
+\end{tikzpicture}
+\end{document}

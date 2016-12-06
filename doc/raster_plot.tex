@@ -1,0 +1,16 @@
+\documentclass{standalone}
+\usepackage{pgfplots}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}
+[
+  legend pos=outer north east,
+  xlabel={time ($ms$)},
+  ylabel={neuron id},  
+]
+\addplot[scatter,only marks,mark size=0.2] table [x=t, y=neuron, col sep=comma] {raster_plot.csv};
+\legend{Implcit,Explicit,Analytic}
+\end{axis}
+\end{tikzpicture}
+\end{document}

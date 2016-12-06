@@ -1,6 +1,7 @@
 #include "Neuron.hpp"
 #include <cmath>
 #include <string>
+#include <iomanip>
 #include <assert.h>
 #include <chrono>
 #include <random>
@@ -24,9 +25,10 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc,
                   transmission_delay_(transmission_delay), 
                   tau_(tau), 
                   outputCsvFile_(outputCsvFile),
-                  neuron_id_(neuron_id)
+                  neuron_id_(neuron_id),
+                  Vm_(resting_potential)
 {
-	
+
     if (add_external_current)
     {
       //insert all the external spikes in the queue
@@ -62,6 +64,7 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc,
             throw string("Error: The file doesn't exist !");
         } else {
             *neuron_file << "t,vm" << endl;
+            write_voltage_to_file();
         }
     }
 }
@@ -165,7 +168,7 @@ bool Neuron::update(Physics::Time dt)
 void Neuron::write_voltage_to_file()
 {
     if (neuron_file)
-        *neuron_file << t_ << "," << Vm_ << endl;
+        *neuron_file << t_ << "," << std::fixed << std::setprecision(3) << Vm_ << endl;
 }
 
 void Neuron::add_connection(Neuron* neuron)
@@ -203,7 +206,7 @@ void Neuron::step_analytic(Physics::Time const& dt)
     {
 		double temp_Vm = Vm_ * exp((-dt/4*i)/tau_);
         if (neuron_file)
-          *neuron_file << this->t_ + dt/4*i  << "," << temp_Vm << endl;
+          *neuron_file << this->t_ + dt/4*i  << "," <<  std::fixed << std::setprecision(3) << temp_Vm << endl;
     }
 
     Vm_ *= exp(-dt/tau_);  //calculate decay from previous timestep

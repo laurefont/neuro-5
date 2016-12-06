@@ -17,14 +17,14 @@ Network::Network(   SimulationType const& type,
 					double const& gamma, 
 					double const& epsilon, 
 					double const& external_factor, 
+					unsigned random_seed,
 					Physics::Potential firing_threshold,
 					Physics::Time refractory_period, 
 					Physics::Potential resting_potential,
 					Physics::Potential reset_potential, 
 					Physics::Time transmission_delay, 
 					Physics::Time tau,
-					Physics::Time time_of_simulation,
-					double initial_Vm ) 
+					Physics::Time time_of_simulation) 
 					
 	: N_(number_neurons),
 	  Ne_(std::round(N_ / (1 + gamma))),
@@ -44,11 +44,11 @@ Network::Network(   SimulationType const& type,
                                 firing_threshold, time_of_simulation,
                                 refractory_period, resting_potential,
                                 reset_potential, transmission_delay,
-                                tau,  external_factor, initial_Vm, output, i);
+                                tau,  external_factor, random_seed, output, i);
     }
 
-    std::cout << "Creating " << epsilon_*100 << "\% Network Connections..." << std::endl;
-    make_connections();
+    std::cout << "Creating " << epsilon_*100 << "\% Network Connections (random seed " << random_seed << ")..." << std::endl;
+    make_connections(random_seed);
 	
 	raster_plot_file = new std::ofstream ("raster-plot.csv");
 	if (raster_plot_file->fail()) 
@@ -78,10 +78,10 @@ size_t Network::get_neurons_size()
     return N_;
 }
 
-void Network::make_connections()
+void Network::make_connections(unsigned seed)
 {
 	// Construct a random generator engine from a time-based seed
-	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+	//auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
 
 	// Use a bernoulli distribution with a epsilon_ chance of success

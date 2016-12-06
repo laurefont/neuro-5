@@ -10,8 +10,8 @@ using namespace std;
 
 Neuron::Neuron(SimulationType const& a_type, bool const& exc,
                bool const& add_external_current, Physics::Potential firing_threshold, Physics::Time time_of_simulation,
-			   Physics::Time refractory_period, Physics::Potential resting_potential,Physics::Potential reset_potential, 
-               Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, double initial_Vm,
+			   Physics::Time refractory_period, Physics::Potential resting_potential, Physics::Potential reset_potential, 
+               Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, unsigned random_seed,
                bool outputCsvFile, int neuron_id)
                 : type_(a_type), 
 				  external_factor_(external_factor), 
@@ -23,7 +23,6 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc,
                   reset_potential_(reset_potential), 
                   transmission_delay_(transmission_delay), 
                   tau_(tau), 
-                  Vm_(initial_Vm),
                   outputCsvFile_(outputCsvFile),
                   neuron_id_(neuron_id)
 {
@@ -31,10 +30,10 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc,
     if (add_external_current)
     {
       //insert all the external spikes in the queue
-      std::random_device rd;
-      std::mt19937 gen(rd());
-      //std::mt19937 gen(neuron_id_);
-
+      // std::random_device rd; plus besoin
+      //std::cout << random_seed + neuron_id_ << endl;
+	  std::mt19937 gen(random_seed + neuron_id_);
+	
       //calculates lambda = parameter of the exponential process for the external spikes generator (Analytical)
       double lambda = (external_factor_ * firing_threshold_) / (WEIGHT_J_EXC * tau_);
       assert(lambda>0);

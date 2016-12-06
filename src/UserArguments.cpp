@@ -1,6 +1,7 @@
 #include <iostream>
 #include <tclap/CmdLine.h>
 #include "UserArguments.hpp"
+#include <random>
 
 UserArguments::UserArguments(int argc, char** argv) {
     parse(argc, argv);
@@ -8,6 +9,7 @@ UserArguments::UserArguments(int argc, char** argv) {
 
 void UserArguments::parse(int argc, char** argv)
 {
+	std::random_device rd;
     try
     {
         TCLAP::CmdLine cmd("Simulation of neurons network");
@@ -16,6 +18,7 @@ void UserArguments::parse(int argc, char** argv)
         TCLAP::ValueArg<double> gamma_arg("g", "gamma", "proportion of inhibitory over excitatory neurons", false, GAMMA, "double", cmd);
         TCLAP::ValueArg<double> epsilon_arg("e", "epsilon", "connections density", false, EPSILON, "double", cmd);
         TCLAP::ValueArg<double> external_factor_arg("f", "factor", "external factor", false, EXTERNAL_FACTOR, "double", cmd);
+        TCLAP::ValueArg<unsigned> random_seed_arg("R", "random_seed", "number for the external spike generator to make the solution comparaison possible", false, rd(), "double", cmd);
         TCLAP::ValueArg<Physics::Time> time_step_arg("d", "dt", "time step of the simulation", false, TIME_STEP, "Physics::Time", cmd);
         TCLAP::MultiArg<unsigned int> output_neuron_ids_arg("o", "output", "specific files opening", false, "int", cmd, 0);
 		TCLAP::SwitchArg verbose_arg("v", "verbose", "explain what is being done", cmd, false);
@@ -33,6 +36,7 @@ void UserArguments::parse(int argc, char** argv)
         gamma = gamma_arg.getValue();
         epsilon = epsilon_arg.getValue();
         external_factor = external_factor_arg.getValue();
+        random_seed = random_seed_arg.getValue();
         time_step = time_step_arg.getValue();
         firing_threshold = firing_threshold_arg.getValue();
         refractory_period = refractory_period_arg.getValue();
@@ -68,6 +72,11 @@ double UserArguments::get_epsilon()
 double UserArguments::get_external_factor()
 {
     return external_factor;
+}
+
+unsigned UserArguments::get_random_seed()
+{
+	return random_seed;
 }
 
 double UserArguments::get_gamma()

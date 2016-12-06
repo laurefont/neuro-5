@@ -24,7 +24,7 @@ class Neuron {
            Physics::Time transmission_delay = TRANSMISSION_DELAY,
            Physics::Time tau = TAU,
            double const& external_factor = EXTERNAL_FACTOR,
-           double initial_Vm = RESTING_POTENTIAL,
+           unsigned random_seed = RANDOM_SEED,
            bool outputCsvFile_ = false,
            int neuron_id_ = -1);
             ///< constructor takes arguments that will be modified during time

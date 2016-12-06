@@ -47,8 +47,8 @@ Network::Network(   SimulationType const& type,
                                 tau,  external_factor, random_seed, output, i);
     }
 
-    std::cout << "Creating " << epsilon_*100 << "\% Network Connections..." << std::endl;
-    make_connections();
+    std::cout << "Creating " << epsilon_*100 << "\% Network Connections (random seed " << random_seed << ")..." << std::endl;
+    make_connections(random_seed);
 	
 	raster_plot_file = new std::ofstream ("raster-plot.csv");
 	if (raster_plot_file->fail()) 
@@ -78,10 +78,10 @@ size_t Network::get_neurons_size()
     return N_;
 }
 
-void Network::make_connections()
+void Network::make_connections(unsigned seed)
 {
 	// Construct a random generator engine from a time-based seed
-	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+	//auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
 
 	// Use a bernoulli distribution with a epsilon_ chance of success

@@ -80,7 +80,7 @@ private:
 	///
 	/// Each neurons has epsilon_ chance to make a connection with each other neurons
 	///
-	void make_connections();
+	void make_connections(unsigned seed);
 	
 	///
 	/// Returns time of the almost last neuron and index of the last neuron

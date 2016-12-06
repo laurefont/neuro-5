@@ -26,6 +26,7 @@ public:
     Physics::Potential get_tau();
     Physics::Potential get_firing_threshold();
     Physics::Time get_refractory_period();
+    bool get_add_external_current();
 
     std::vector<unsigned int> * get_output_neuron_ids();
 
@@ -48,4 +49,5 @@ private:
     Physics::Time transmission_delay;
     Physics::Time tau;
     std::vector<unsigned int> output_neuron_ids;
+    bool add_external_current;
 };

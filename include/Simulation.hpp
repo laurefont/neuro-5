@@ -26,6 +26,7 @@ class Simulation
                     Physics::Time const& time_of_simulation,
                     Physics::Time const& time_step,
                     SimulationType const& type,
+                    bool const& add_external_current = true,
                     std::vector<unsigned int>* neuron_csv_files = NULL,
                     Physics::Potential firing_threshold = FIRING_THRESHOLD,
                     Physics::Time refractory_period = REFRACTORY_PERIOD,
@@ -50,10 +51,11 @@ class Simulation
 		///
         Simulation( unsigned int const number_neurons,
                     Physics::Time const& time_of_simulation,
+                    bool const& add_external_current = true,
                     std::vector<unsigned int>* neuron_csv_files = NULL,
                     Physics::Potential firing_threshold = FIRING_THRESHOLD,
                     Physics::Time refractory_period = REFRACTORY_PERIOD,
-                    Physics::Potential resting_potential = RESTING_POTENTIAL,\
+                    Physics::Potential resting_potential = RESTING_POTENTIAL,
                     Physics::Potential reset_potential = RESET_POTENTIAL,
                     Physics::Time transmission_delay = TRANSMISSION_DELAY,
                     Physics::Time tau = TAU,

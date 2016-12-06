@@ -12,6 +12,7 @@
 
 Network::Network(   SimulationType const& type, 
 					unsigned int const& number_neurons,
+					bool const& add_external_current,
                     std::vector<unsigned int>* output_neuron_ids,
 					double const& gamma, 
 					double const& epsilon, 
@@ -33,20 +34,20 @@ Network::Network(   SimulationType const& type,
       type_(type)
 {
 	
-    std::cout << "Creating Neurons ..." << std::endl;
+    std::cout << "Creating " << N_ << " Neurons ..." << std::endl;
     neurons_ = new Neuron*[number_neurons];
 	for (unsigned int i(0); i < N_; ++i)
 	{
         bool output =  output_neuron_ids != NULL //not empty
                     && std::find(output_neuron_ids->begin(), output_neuron_ids->end(), i) != output_neuron_ids->end();
-        neurons_[i] = new Neuron(type, (i < Ne_), true,
+        neurons_[i] = new Neuron(type, (i < Ne_), add_external_current,
                                 firing_threshold, time_of_simulation,
                                 refractory_period, resting_potential,
                                 reset_potential, transmission_delay,
                                 tau,  external_factor, random_seed, output, i);
     }
 
-    std::cout << "Creating Network Connections..." << std::endl;
+    std::cout << "Creating " << epsilon_*100 << "\% Network Connections..." << std::endl;
     make_connections();
 	
 	raster_plot_file = new std::ofstream ("raster-plot.csv");
@@ -112,7 +113,7 @@ Physics::Time Network::update(Physics::Time dt)
 	  {
 		neurons_[i]->update(dt);
 		if (neurons_[i]->has_reached_threshold())
-			*raster_plot_file <<i <<"," << neurons_[i]->get_t() << std::endl;
+			*raster_plot_file << neurons_[i]->get_t() <<"," << i << std::endl;
 	  }
       return neurons_[0]->get_t(); //time of the last neuron (send 0, all neurons have same time)
     }

@@ -5,11 +5,14 @@ int main (int argc, char** argv)
 {
     UserArguments user_arguments(argc, argv);
 
+    //TODO check if implicit, explicit or analytic and call it 
+
     Simulation simulation(
                 user_arguments.get_number_neurons(),
                 user_arguments.get_time_of_simulation(),
                 user_arguments.get_time_step(),
                 SimulationType::Explicit,
+                user_arguments.get_add_external_current(),
                 user_arguments.get_output_neuron_ids(),
                 user_arguments.get_firing_threshold(),
                 user_arguments.get_refractory_period(),

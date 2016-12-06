@@ -135,16 +135,16 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
     EXPECT_EQ ((1+initial_event_in_size2), events_size2);
 
     //test new voltage of neuron that received network current
-    EXPECT_NEAR (1.0, vm2,  0.1);
+    EXPECT_NEAR (WEIGHT_J_EXC*0.1, vm2,  0.1);
 }
 
 TEST(TestsCategoryName, TestDecayNeuronVoltage)
 {
-    Simulation simulation( 1, 100, 1, SimulationType::Explicit);
+    Simulation simulation( 1, 100, 1, SimulationType::Explicit, false);
     simulation.get_network()->get_neuron(0)->set_Vm(10);
     simulation.launch_simulation();
     Physics::Potential vm = simulation.get_network()->get_neuron(0)->get_Vm();
-    EXPECT_NEAR(vm, RESTING_POTENTIAL, 0.00001);
+    EXPECT_NEAR(vm, RESTING_POTENTIAL, 1.0);
 }
 
 int main(int argc, char* argv[])

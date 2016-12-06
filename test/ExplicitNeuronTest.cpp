@@ -135,17 +135,76 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
     EXPECT_EQ ((1+initial_event_in_size2), events_size2);
 
     //test new voltage of neuron that received network current
-    EXPECT_NEAR (1.0, vm2,  0.1);
+    EXPECT_NEAR (WEIGHT_J_EXC*0.1, vm2,  0.1);
 }
 
 TEST(TestsCategoryName, TestDecayNeuronVoltage)
-{
-    Simulation simulation( 1, 100, 1, SimulationType::Explicit);
+{ 
+
+	Simulation simulation( 1, 100, 1, SimulationType::Explicit, false);
     simulation.get_network()->get_neuron(0)->set_Vm(10);
     simulation.launch_simulation();
     Physics::Potential vm = simulation.get_network()->get_neuron(0)->get_Vm();
-    EXPECT_NEAR(vm, RESTING_POTENTIAL, 0.00001);
+    EXPECT_NEAR(vm, RESTING_POTENTIAL, 1.0);
 }
+
+/*
+TEST(TestsCategoryName, TestLowVolateFiringReset)
+{
+    Neuron neuron (NeuronType, true, false, FIRING_THRESHOLD, SIMULATION_TIME, REFRACTORY_PERIOD, RESTING_POTENTIAL,RESET_POTENTIAL, TRANSMISSION_DELAY, TAU, 
+					EXTERNAL_FACTOR, RESTING_POTENTIAL, true);
+    Physics::Time dt = 1.0;
+    Physics::Time DT = TIME_STEP;
+    Physics::Potential weight = 0.2;
+    for(Physics::Time i(0.0); i< 1000 ; i+=dt)
+    {
+		Event event(i, weight);
+		neuron.add_event_in(event); 
+	}
+    while( neuron.get_t() < 1000)
+    {
+		neuron.update(DT);
+	}
+}
+
+
+TEST(TestsCategoryName, TestMediumVolateFiringReset)
+{
+    Neuron neuron (NeuronType, true, false, FIRING_THRESHOLD, SIMULATION_TIME, REFRACTORY_PERIOD, RESTING_POTENTIAL,RESET_POTENTIAL, TRANSMISSION_DELAY, TAU, 
+					EXTERNAL_FACTOR, RESTING_POTENTIAL, true);
+    Physics::Time dt = 1.0;
+    Physics::Time DT = TIME_STEP;
+    Physics::Potential weight = 10;
+    for(Physics::Time i(0.0); i< 1000 ; i+=dt)
+    {
+		Event event(i, weight);
+		neuron.add_event_in(event); 
+	}
+    while( neuron.get_t() < 1000)
+    {
+		neuron.update(DT);
+	}
+}
+*/
+
+TEST(TestsCategoryName, TestHighVolateFiringReset)
+{
+    Neuron neuron (NeuronType, true, false, FIRING_THRESHOLD, SIMULATION_TIME, REFRACTORY_PERIOD, RESTING_POTENTIAL,RESET_POTENTIAL, TRANSMISSION_DELAY, TAU, 
+					EXTERNAL_FACTOR, RESTING_POTENTIAL, true);
+    Physics::Time dt = 1.0;
+    Physics::Time DT = TIME_STEP;
+    Physics::Potential weight = 20;
+    for(Physics::Time i(0.0); i< 1000 ; i+=dt)
+    {
+		Event event(i, weight);
+		neuron.add_event_in(event); 
+	}
+    while( neuron.get_t() < 1000)
+    {
+		neuron.update(DT);
+	}
+}
+
 
 int main(int argc, char* argv[])
 {

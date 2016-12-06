@@ -70,7 +70,7 @@ Physics::Time Simulation::get_simulation_time()
 
 void Simulation::launch_simulation()
 {
-    std::cout << "Launching Simulation for " << time_of_simulation_ << "ms..." << std::endl;
+    std::cout << "Running simulation for " << time_of_simulation_ << "ms..." << std::endl;
     while (network_.update(time_step_) < time_of_simulation_){};
 }
 

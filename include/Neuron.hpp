@@ -80,6 +80,8 @@ class Neuron {
     void step_analytic(Physics::Time const& dt); ///< analytic time-stepping solution
     void step_explicit(Physics::Time const& dt); ///< explicit time-stepping solution
     void step_implicit(Physics::Time const& dt); ///< implicit time-stepping solution
+
+    bool is_not_in_refractory_period(Physics::Time const& dt); ///< true if neuron is in regraction
 };
 
 

@@ -47,6 +47,7 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc,
       {
          add_event_in(Event(last_external_spike_sent + transmission_delay_, WEIGHT_J_EXC));
       }
+      //printf("Neuron %d, total external events for whole simulation: %d\n", get_neuron_id(), events_in_.size());
     }
 	
     last_spike_time_ = -Neuron::refractory_period_;
@@ -181,7 +182,8 @@ void Neuron::step(Physics::Time dt) // faire en sorte que dans commandline on pu
 {
 	switch(type_)
 	{
-        case SimulationType::Analytic :
+        case SimulationType::Analytic:
+        case SimulationType::AnalyticFixedStep:
              step_analytic(dt);
 		     break;
 
@@ -194,31 +196,44 @@ void Neuron::step(Physics::Time dt) // faire en sorte que dans commandline on pu
 		     break;
 	}
     t_+=dt;
-    if (Vm_ < resting_potential_)
-        Vm_ = reset_potential_; //never below resting_potential
 }
 
+bool Neuron::is_not_in_refractory_period(Physics::Time const& dt)
+{
+    return t_ + dt >= last_spike_time_ + refractory_period_;
+}
 
 void Neuron::step_analytic(Physics::Time const& dt)
 {
-    //Plot intermediate points for decay
-	for (int i=1; i<4; i++)
+    //This condition is only useful for analytic solution with fixed step
+    if( is_not_in_refractory_period(dt) )
     {
-		double temp_Vm = Vm_ * exp((-dt/4*i)/tau_);
+      //Plot intermediate points for decay
+      if (type_ == SimulationType::Analytic)
+      {
+        //Commented so that we  output less points
+        /*
         if (neuron_file)
-          *neuron_file << this->t_ + dt/4*i  << "," <<  std::fixed << std::setprecision(3) << temp_Vm << endl;
-    }
+          for (int i=1; i<4; i++)
+          {
+            double temp_Vm = Vm_ * exp((-dt/4*i)/tau_);
+            *neuron_file << this->t_ + dt/4*i  << "," <<  std::fixed << std::setprecision(3) << temp_Vm << endl;
+          }
+        */
+      }
 
-    Vm_ *= exp(-dt/tau_);  //calculate decay from previous timestep
-    Vm_ += RI(dt); //TODO is this correct?
-    //Vm_ += RI(dt)*dt/tau_; //sum voltage from network contributions at next timestep
+      Vm_ *= exp(-dt/tau_);  //calculate decay from previous timestep
+      //Vm_ += RI(dt)/tau_*(1-exp(-dt/tau_)); //slides from professor
+      Vm_ += RI(dt)/tau_; //vertical jump in voltage (same as before but without exp growth)
+      //Vm_ += RI(dt)*dt/tau_; //sum voltage from network contributions at next timestep
                    //eq 1.8 in http://neuronaldynamics.epfl.ch/online/Ch1.S3.html
+    }
 }
 
 
 void Neuron::step_explicit(Physics::Time const& dt)// Use of V(t-1)=Vm_ to calculate the new Vm_
 { 
-    if( t_ + dt >= last_spike_time_ + refractory_period_)
+    if( is_not_in_refractory_period(dt) )
     {
        Vm_ += ((-Vm_ + RI(dt)) * dt) / tau_;
 	}
@@ -227,7 +242,7 @@ void Neuron::step_explicit(Physics::Time const& dt)// Use of V(t-1)=Vm_ to calcu
 
 void Neuron::step_implicit(Physics::Time const& dt)
 {
-    if( t_ + dt >= last_spike_time_ + refractory_period_)
+    if( is_not_in_refractory_period(dt) )
 	{
 		Vm_ = ((dt * RI(dt) ) + (tau_ * Vm_)) / ( dt + tau_);
 	}

@@ -7,12 +7,19 @@
 [
   legend pos=outer north east,
   xlabel={time ($ms$)},
-  ylabel={$V_m$ ($mV$)},  
+  ylabel={$V_m$ ($mV$)},
+  width=50cm,
+  height=8cm,
+  xmin=0,
+  ymin=0,
+  xmax=1000,
+  ymax=25,
 ]
 \addplot +[mark=none] table [x=t, y=vm, col sep=comma] {neuron_plot_explicit.csv};
 \addplot +[mark=none] table [x=t, y=vm, col sep=comma] {neuron_plot_implicit.csv};
 \addplot +[mark=none] table [x=t, y=vm, col sep=comma] {neuron_plot_analytic.csv};
-\legend{Implcit,Explicit,Analytic}
+\addplot +[mark=none] table [x=t, y=vm, col sep=comma] {neuron_plot_analytic_fixed_step.csv};
+\legend{Implcit,Explicit,{Analytic (variable $\Delta t$)}, {Analytic (fixed $\Delta t$)} }
 \end{axis}
 \end{tikzpicture}
 \end{document}

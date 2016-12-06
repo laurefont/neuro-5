@@ -13,15 +13,15 @@
 #define WEIGHT_J_INH -0.5
 #define GAMMA 0.25 //1 to 4 ratio between Inh and Exc neurons count
 #define EPSILON 0.1 //10% connectivity
-#define RANDOM_SEED 0
-#define EXTERNAL_FACTOR 0.5
+#define RANDOM_SEED 0 //default random seed (if called from command line, is random)
+#define EXTERNAL_FACTOR 2 //20 spikes per ms (see Nest Software wiki page, or eta variable in paper above)
 #define NUMBER_OF_NEURONS 10000
 #define SIMULATION_TIME 100 //ms
-#define TIME_STEP 0.1 //ms
+#define TIME_STEP 0.2 //ms
 
 enum class SimulationType : short
 {
-	Analytic, Explicit, Implicit
+    Analytic, Explicit, Implicit, AnalyticFixedStep
 };
 
 /**

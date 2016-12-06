@@ -34,7 +34,7 @@ Network::Network(   SimulationType const& type,
       type_(type)
 {
 	
-    std::cout << "Creating " << N_ << " Neurons ..." << std::endl;
+    std::cout << "Creating " << N_ << " neurons..." << std::endl;
     neurons_ = new Neuron*[number_neurons];
 	for (unsigned int i(0); i < N_; ++i)
 	{
@@ -47,7 +47,7 @@ Network::Network(   SimulationType const& type,
                                 tau,  external_factor, random_seed, output, i);
     }
 
-    std::cout << "Creating " << epsilon_*100 << "\% Network Connections (random seed " << random_seed << ")..." << std::endl;
+    std::cout << "Creating " << epsilon_*100 << "\% network connections (random seed " << random_seed << ")..." << std::endl;
     make_connections(random_seed);
 	
     raster_plot_file = new std::ofstream ("raster_plot.csv");
@@ -107,7 +107,7 @@ void Network::make_connections(unsigned seed)
 
 Physics::Time Network::update(Physics::Time dt)
 {
-    if (type_ != SimulationType::Analytic) //Implicit or Explicit Solution
+    if (type_ != SimulationType::Analytic) //Fixed Step methods
     {
       for (unsigned int i=0; i< get_neurons_size(); ++i)
 	  {
@@ -117,7 +117,7 @@ Physics::Time Network::update(Physics::Time dt)
 	  }
       return neurons_[0]->get_t(); //time of the last neuron (send 0, all neurons have same time)
     }
-    else //Analytic solution
+    else //Analytic variable-step solution
     {
         Neuron_last last_neurons = get_last_neurons();
         int & last_id = last_neurons.last_id;

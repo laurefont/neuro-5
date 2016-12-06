@@ -31,6 +31,7 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc,
     {
       //insert all the external spikes in the queue
       // std::random_device rd; plus besoin
+      //std::cout << random_seed + neuron_id_ << endl;
 	  std::mt19937 gen(random_seed + neuron_id_);
 	
       //calculates lambda = parameter of the exponential process for the external spikes generator (Analytical)

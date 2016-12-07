@@ -3,7 +3,7 @@
 #include "Simulation.hpp"
 
 #define TestsCategoryName AnalyticNeuronTests
-#define NeuronType SimulationType::Analytic
+#define NeuronType SimulationType::AnalyticFixedStep
 
 TEST(TestsCategoryName, TestThreshold)
 {

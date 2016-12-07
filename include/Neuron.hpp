@@ -40,7 +40,7 @@ class Neuron {
     Physics::Potential get_Vm() const; ///< returns potential of neuron
     void set_Vm(Physics::Potential vm);
     Physics::Time get_t() const;  ///<returns the time of the neuron
-    void output(double const& x); ///< fires a spike to all post-synaptic neurons
+    void output(Physics::Amplitude const& x); ///< fires a spike to all post-synaptic neurons
     void add_event_in(Event const& ev); ///< add spike event to the queue of incoming spikes
     bool is_excitatory(); ///< true if excitatory, false if inhibitory
     int get_synapses_size() const; ///< number of outgoing synapses
@@ -53,9 +53,8 @@ class Neuron {
     ///contribution of incoming currents
     Physics::Amplitude RI(Physics::Time const& dt);
 
-    double external_spike_generator(Physics::Time const& dt);
-    
     void write_voltage_to_file();
+
   private:
     int neuron_id_;
     const SimulationType type_;

@@ -16,12 +16,12 @@
 #define RANDOM_SEED 0 //default random seed (if called from command line, is random)
 #define EXTERNAL_FACTOR 2 //20 spikes per ms (see Nest Software wiki page, or eta variable in paper above)
 #define NUMBER_OF_NEURONS 10000
-#define SIMULATION_TIME 100 //ms
-#define TIME_STEP 0.2 //ms
+#define SIMULATION_TIME 1000 //ms
+#define TIME_STEP 0.1 //ms
 
 enum class SimulationType : short
 {
-    Analytic, Explicit, Implicit, AnalyticFixedStep
+    AnalyticFixedStep, AnalyticVariableStep, ExplicitBackwardEuler, ImplicitForwardEuler
 };
 
 /**

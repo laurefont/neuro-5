@@ -47,7 +47,7 @@ Network::Network(   SimulationType const& type,
                                 tau,  external_factor, random_seed, output, i);
     }
 
-    std::cout << "Creating " << epsilon_*100 << "\% network connections (random seed " << random_seed << ")..." << std::endl;
+    std::cout << "Creating " << epsilon_*100 << "\% network connectivity (random seed " << random_seed << ")..." << std::endl;
     make_connections(random_seed);
 	
     raster_plot_file = new std::ofstream ("raster_plot.csv");
@@ -107,7 +107,7 @@ void Network::make_connections(unsigned seed)
 
 Physics::Time Network::update(Physics::Time dt)
 {
-    if (type_ != SimulationType::Analytic) //Fixed Step methods
+    if (type_ != SimulationType::AnalyticVariableStep) //Fixed Step methods
     {
       for (unsigned int i=0; i< get_neurons_size(); ++i)
 	  {

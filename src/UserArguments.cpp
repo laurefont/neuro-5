@@ -13,22 +13,22 @@ void UserArguments::parse(int argc, char** argv)
     try
     {
         TCLAP::CmdLine cmd("Simulation of neurons network");
-        TCLAP::ValueArg<Physics::Time> time_of_simulation_arg("t", "time","total simulation time", false, SIMULATION_TIME, "double", cmd);
+        TCLAP::SwitchArg verbose_arg("v", "verbose", "output execution parameters", cmd, false);
+        TCLAP::ValueArg<Physics::Time> time_of_simulation_arg("t", "time","total simulation time", false, SIMULATION_TIME, "Physics::Time", cmd);
         TCLAP::ValueArg<unsigned int> number_neurons_arg("n", "neurons", "total number of neurons to consider for the simulation", false, NUMBER_OF_NEURONS, "int", cmd);
         TCLAP::ValueArg<double> gamma_arg("g", "gamma", "proportion of inhibitory over excitatory neurons", false, GAMMA, "double", cmd);
         TCLAP::ValueArg<double> epsilon_arg("e", "epsilon", "connections density", false, EPSILON, "double", cmd);
         TCLAP::ValueArg<double> external_factor_arg("f", "factor", "external factor", false, EXTERNAL_FACTOR, "double", cmd);
-        TCLAP::ValueArg<unsigned> random_seed_arg("R", "random_seed", "number for the external spike generator to make the solution comparaison possible", false, rd(), "double", cmd);
+        TCLAP::ValueArg<unsigned> random_seed_arg("R", "random_seed", "random seed for external events and network connectivity (default: random)", false, rd(), "unsigned", cmd);
         TCLAP::ValueArg<Physics::Time> time_step_arg("d", "dt", "time step of the simulation", false, TIME_STEP, "Physics::Time", cmd);
-        TCLAP::MultiArg<unsigned int> output_neuron_ids_arg("o", "output", "specific files opening", false, "int", cmd, 0);
-		TCLAP::SwitchArg verbose_arg("v", "verbose", "explain what is being done", cmd, false);
-        TCLAP::ValueArg<Physics::Potential> firing_threshold_arg("F", "firing_threshold", "potential that must be reached to generate a spike", false, FIRING_THRESHOLD, "Potential", cmd);
-        TCLAP::ValueArg<Physics::Time> refractory_period_arg("r", "refractory", "period during which the neuron is insensitive to arriving spikes", false, REFRACTORY_PERIOD, "Time", cmd);
-        TCLAP::ValueArg<Physics::Potential> resting_potential_arg("p", "resting_potential", "resting potential", false, RESTING_POTENTIAL, "Potential", cmd);
-        TCLAP::ValueArg<Physics::Potential> reset_potential_arg("P", "reset_potential", "", false, RESET_POTENTIAL, "Time", cmd);
-        TCLAP::ValueArg<Physics::Time> transmission_delay_arg("D", "transmission_delay", "duration of the transmission of a spike", false, TRANSMISSION_DELAY, "Time", cmd);
-        TCLAP::ValueArg<Physics::Time> tau_arg("T", "tau", "membrane time constant", false, TAU, "Time", cmd);
+        TCLAP::ValueArg<Physics::Potential> firing_threshold_arg("F", "firing_threshold", "potential that must be reached to generate a spike", false, FIRING_THRESHOLD, "Physics::Potential", cmd);
+        TCLAP::ValueArg<Physics::Time> refractory_period_arg("r", "refractory", "period during which the neuron is insensitive to arriving spikes", false, REFRACTORY_PERIOD, "Physics::Time", cmd);
+        TCLAP::ValueArg<Physics::Potential> resting_potential_arg("p", "resting_potential", "resting potential", false, RESTING_POTENTIAL, "Physics::Potential", cmd);
+        TCLAP::ValueArg<Physics::Potential> reset_potential_arg("P", "reset_potential", "", false, RESET_POTENTIAL, "Physics::Time", cmd);
+        TCLAP::ValueArg<Physics::Time> transmission_delay_arg("D", "transmission_delay", "duration of the transmission of a spike", false, TRANSMISSION_DELAY, "Physics::Time", cmd);
+        TCLAP::ValueArg<Physics::Time> tau_arg("T", "tau", "membrane time constant", false, TAU, "Physics::Time", cmd);
 		TCLAP::SwitchArg add_external_current_arg("E", "external_current", "current arriving from external neurons or not" , cmd, true);
+        TCLAP::MultiArg<unsigned int> output_neuron_ids_arg("o", "output", "specific files opening", false, "unsigned	", cmd, 0);
         cmd.parse(argc, argv);
 
         time_of_simulation = time_of_simulation_arg.getValue();
@@ -142,19 +142,21 @@ bool UserArguments::get_add_external_current()
 
 void UserArguments::print_info()
 {
-	std::cout << "The simulation time is : " << time_of_simulation << " ms" << std::endl;
-	std::cout << "The time step is : " << time_step << " ms" << std::endl;
-	std::cout << "The number of neurons is : " << number_neurons << std::endl;
-	std::cout << "The proportion of inhibitory over excitatory neurons is : " << gamma << std::endl;
-	std::cout << "The connections density is : " << epsilon << std::endl;
-	std::cout << "The external factor is : " << external_factor << std::endl;
-	std::cout << "The firing threshold is : " << firing_threshold << std::endl;
-	std::cout << "The refractory period is : " << refractory_period << std::endl;
-	std::cout << "The resting potential is : " << resting_potential << std::endl;
-	std::cout << "The reset potential is : " << reset_potential << std::endl;
-	std::cout << "The transmission delay is : " << transmission_delay << std::endl;
-	std::cout << "The value of tau is : " << tau << std::endl;
-	std::cout << "The value of external_current :" << add_external_current << std::endl;
+    std::cout << "Execution Parameters:" << std::endl;
+    std::cout << "- simulation time: " << time_of_simulation << " ms" << std::endl;
+    std::cout << "- time step: " << time_step << " ms" << std::endl;
+    std::cout << "- number of neurons: " << number_neurons << std::endl;
+    std::cout << "- proportion of inhibitory over excitatory neurons: " << gamma << std::endl;
+    std::cout << "- connections density (epsilon): " << epsilon << std::endl;
+    std::cout << "- external factor is : " << external_factor << std::endl;
+    std::cout << "- firing threshold: " << firing_threshold << std::endl;
+    std::cout << "- refractory period: " << refractory_period << std::endl;
+    std::cout << "- resting potential: " << resting_potential << std::endl;
+    std::cout << "- reset potential: " << reset_potential << std::endl;
+    std::cout << "- transmission delay: " << transmission_delay << std::endl;
+    std::cout << "- membrane time constant (tau): " << tau << std::endl;
+    std::cout << "- external current :" << add_external_current << std::endl;
+    std::cout << "- random seed :" << random_seed << std::endl;
 }
 
 void UserArguments::print_warning_no_output_neuron_ids()

@@ -21,7 +21,7 @@
 
 enum class SimulationType : short
 {
-    AnalyticFixedStep, AnalyticVariableStep, ExplicitBackwardEuler, ImplicitForwardEuler
+    AnalyticFixedStep, AnalyticVariableStep, ExplicitForwardEuler, ImplicitBackwardEuler
 };
 
 /**

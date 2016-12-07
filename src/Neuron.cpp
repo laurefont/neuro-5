@@ -173,11 +173,11 @@ void Neuron::step(Physics::Time dt) // faire en sorte que dans commandline on pu
              step_analytic(dt);
 		     break;
 
-        case SimulationType::ExplicitBackwardEuler :
+        case SimulationType::ExplicitForwardEuler :
 		     step_explicit(dt);
 		     break;
 
-        case SimulationType::ImplicitForwardEuler :
+        case SimulationType::ImplicitBackwardEuler :
 		     step_implicit(dt);
 		     break;
 	}

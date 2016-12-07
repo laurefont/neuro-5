@@ -3,7 +3,7 @@
 #include "Simulation.hpp"
 
 #define TestsCategoryName ExplicitNeuronTests
-#define NeuronType SimulationType::ExplicitBackwardEuler
+#define NeuronType SimulationType::ExplicitForwardEuler
 
 TEST(TestsCategoryName, TestThreshold)
 {
@@ -129,12 +129,11 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
 
 TEST(TestsCategoryName, TestDecayNeuronVoltage)
 { 
-
-	Simulation simulation( 1, 100, 1, SimulationType::ExplicitBackwardEuler, false);
+    Simulation simulation( 1, 200, 0.1, SimulationType::ExplicitForwardEuler, false, NULL);
     simulation.get_network()->get_neuron(0)->set_Vm(10);
     simulation.launch_simulation();
     Physics::Potential vm = simulation.get_network()->get_neuron(0)->get_Vm();
-    EXPECT_NEAR(vm, RESTING_POTENTIAL, 1.0);
+    EXPECT_NEAR(vm, RESTING_POTENTIAL, 0.001);
 }
 
 /*

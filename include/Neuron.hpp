@@ -26,7 +26,7 @@ class Neuron {
            double const& external_factor = EXTERNAL_FACTOR,
            unsigned random_seed = RANDOM_SEED,
            bool outputCsvFile_ = false,
-           int neuron_id_ = -1);
+           int neuron_id_ = 0);
             ///< constructor takes arguments that will be modified during time
 
     ~Neuron();

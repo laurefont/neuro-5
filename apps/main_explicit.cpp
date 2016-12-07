@@ -9,7 +9,7 @@ int main (int argc, char** argv)
                 user_arguments.get_number_neurons(),
                 user_arguments.get_time_of_simulation(),
                 user_arguments.get_time_step(),
-                SimulationType::ExplicitBackwardEuler,
+                SimulationType::ExplicitForwardEuler,
                 user_arguments.get_add_external_current(),
                 user_arguments.get_output_neuron_ids(),
                 user_arguments.get_firing_threshold(),

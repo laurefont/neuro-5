@@ -17,17 +17,6 @@ TEST(TestsCategoryName, TestThreshold)
     EXPECT_TRUE( neurone.has_reached_threshold());
 }
 
-TEST(TestsCategoryName, TestDecay)
-{
-    Neuron neurone(NeuronType, true);
-    Physics::Time dt = 1;
-    neurone.set_Vm(7);
-    neurone.step(dt);
-    Physics::Potential result = neurone.get_Vm();
-
-    EXPECT_NEAR (6.6, result,  0.1);
-}
-
 TEST(TestsCategoryName, TestResetPotential)
 {
     Neuron neurone(NeuronType, true);

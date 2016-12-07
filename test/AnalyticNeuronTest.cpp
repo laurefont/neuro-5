@@ -3,7 +3,7 @@
 #include "Simulation.hpp"
 
 #define TestsCategoryName AnalyticNeuronTests
-#define NeuronType SimulationType::AnalyticFixedStep
+#define NeuronType SimulationType::AnalyticVariableStep
 
 TEST(TestsCategoryName, TestThreshold)
 {
@@ -15,17 +15,6 @@ TEST(TestsCategoryName, TestThreshold)
     neurone.step(dt);
 
     EXPECT_TRUE( neurone.has_reached_threshold());
-}
-
-TEST(TestsCategoryName, TestDecay)
-{
-    Neuron neurone(NeuronType, true);
-    Physics::Time dt = 1;
-    neurone.set_Vm(7);
-    neurone.step(dt);
-    Physics::Potential result = neurone.get_Vm();
-
-    EXPECT_NEAR (6.6, result,  0.1);
 }
 
 TEST(TestsCategoryName, TestResetPotential)
@@ -101,8 +90,8 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
     //- neuron1 processes event at time 0 and spikes at time dt
     //- neuron2 receives at time dt+TRANSMISSION DELAY and processes it
     //(accounting for the transmission delay)
-    Physics::Time dt = 10;
-    Event event1(0.9, 1.0);
+    Physics::Time dt = 0.2;
+    Event event1(0.1, WEIGHT_J_EXC*100);
     neuron1.add_event_in(event1); //make neuron1 spike
 
     Physics::Potential vm1_rest = neuron1.get_Vm();
@@ -113,7 +102,8 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
     size_t synapses_size1 = neuron1.get_synapses_size();
     size_t events_size2 = neuron2.get_event_in_size();
 
-    neuron2.update(dt); //step neuron 2
+    //neuron1 transmits event at time 0.1+TRANSMISSION DELAY to neuron2
+    neuron2.update(dt+TRANSMISSION_DELAY); //step neuron 2
 
     Physics::Potential vm2 = neuron2.get_Vm();
 
@@ -133,7 +123,7 @@ TEST(TestsCategoryName, TestSynapticConnetivity)
     EXPECT_EQ ((1+initial_event_in_size2), events_size2);
 
     //test new voltage of neuron that received network current
-    EXPECT_NEAR (WEIGHT_J_EXC*0.24, vm2,  0.1);
+    EXPECT_NEAR (WEIGHT_J_EXC, vm2,  0.1);
 }
 
 TEST(TestsCategoryName, TestSingleNeuronSimulation)

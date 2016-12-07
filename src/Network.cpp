@@ -113,7 +113,7 @@ Physics::Time Network::update(Physics::Time dt)
 	  {
         bool has_reached_threshold = neurons_[i]->update(dt);
         if (has_reached_threshold)
-			*raster_plot_file << neurons_[i]->get_t() <<"," << i << std::endl;
+            *raster_plot_file << neurons_[i]->get_t() <<"," << i << std::endl;
 	  }
       return neurons_[0]->get_t(); //time of the last neuron (send 0, all neurons have same time)
     }
@@ -132,7 +132,7 @@ Physics::Time Network::update(Physics::Time dt)
         Neuron * last_neuron = neurons_[last_id];
         bool has_reached_threshold = last_neuron->update(dt);
         if (has_reached_threshold)
-            *raster_plot_file << last_neuron->get_neuron_id() <<"," << last_neuron->get_t() << std::endl;
+            *raster_plot_file << last_neuron->get_t() <<"," << last_neuron->get_neuron_id() << std::endl;
         return neurons_[second_last_id]->get_t(); //The 2nd last is now the last, return its time
 	}
 }

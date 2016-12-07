@@ -215,11 +215,14 @@ void Neuron::step_analytic(Physics::Time const& dt)
 }
 
 
-void Neuron::step_explicit(Physics::Time const& dt)// Use of V(t-1)=Vm_ to calculate the new Vm_
+void Neuron::step_explicit(Physics::Time const& dt)
 { 
     if( is_not_in_refractory_period(dt) )
     {
-       Vm_ += (-Vm_ + RI(dt))/tau_ * dt;
+       //we divide RI(dt) by dt because when we integrate the dirac-function in
+       //RI we get the delta function, dividing it by dt gives us the dirac
+       //Vm_ += (-Vm_ + RI(dt))/tau_ * dt; //OLD
+       Vm_ += (-Vm_ + RI(dt)/dt)/tau_ * dt;
     }
 }
 
@@ -228,8 +231,9 @@ void Neuron::step_implicit(Physics::Time const& dt)
 {
     if( is_not_in_refractory_period(dt) )
 	{
-		Vm_ = ((dt * RI(dt) ) + (tau_ * Vm_)) / ( dt + tau_);
-	}
+        //Vm_ = ((dt * RI(dt) ) + (tau_ * Vm_)) / ( dt + tau_); //OLD
+        Vm_ = (RI(dt) + (tau_ * Vm_)) / ( dt + tau_);
+    }
 }
 
 Physics::Amplitude Neuron::RI(Physics::Time const& dt)
@@ -243,7 +247,7 @@ Physics::Amplitude Neuron::RI(Physics::Time const& dt)
         assert(events_in_.top().get_t()>=t_);
         sum_incoming_J += events_in_.top().get_J();
         events_in_.pop();
-	}
+    }
     return tau_ * sum_incoming_J;
 }
 

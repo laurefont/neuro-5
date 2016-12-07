@@ -6,6 +6,7 @@
 \begin{axis}
 [
   legend pos=outer north east,
+  legend cell align=left,
   xlabel={time ($ms$)},
   ylabel={$V_m$ ($mV$)},
   width=50cm,
@@ -13,7 +14,7 @@
   xmin=0,
   ymin=0,
   xmax=1000,
-  ymax=25,
+  ymax=25, 
 ]
 \addplot +[mark=none] table [x=t, y=vm, col sep=comma] {neuron_plot_explicit.csv};
 \addplot +[mark=none] table [x=t, y=vm, col sep=comma] {neuron_plot_implicit.csv};

@@ -6,7 +6,13 @@
 \begin{axis}
 [
   xlabel={time ($ms$)},
-  ylabel={neuron id},  
+  ylabel={neuron id},
+  %width=50cm,
+  height=10cm,
+  ymin=0,
+  ymax=10000,
+  xmin=0,
+  %xmax=1000
 ]
 \addplot[scatter,only marks,mark size=0.2, each nth point=10] table [x=t, y=neuron, col sep=comma] {raster_plot.csv};
 \end{axis}

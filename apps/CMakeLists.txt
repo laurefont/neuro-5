@@ -7,8 +7,8 @@ add_executable (${project_name}_implicit main_implicit.cpp)
 target_link_libraries (${project_name}_implicit simulation)
 
 # Create main for Fixed-Step simulation with Analytic solver
-add_executable (${project_name}_analytic main_analytic.cpp)
-target_link_libraries (${project_name}_analytic simulation)
+add_executable (${project_name}_analytic_variable_step main_analytic_variable_step.cpp)
+target_link_libraries (${project_name}_analytic_variable_step simulation)
 
 # Create main for Fixed-Step simulation with User-defineable solver
 add_executable (${project_name}_analytic_fixed_step main_analytic_fixed_step.cpp)

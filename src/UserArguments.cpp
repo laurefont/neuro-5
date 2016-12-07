@@ -149,14 +149,14 @@ void UserArguments::print_info()
     std::cout << "- proportion of inhibitory over excitatory neurons: " << gamma << std::endl;
     std::cout << "- connections density (epsilon): " << epsilon << std::endl;
     std::cout << "- external factor is : " << external_factor << std::endl;
-    std::cout << "- firing threshold: " << firing_threshold << std::endl;
-    std::cout << "- refractory period: " << refractory_period << std::endl;
-    std::cout << "- resting potential: " << resting_potential << std::endl;
-    std::cout << "- reset potential: " << reset_potential << std::endl;
-    std::cout << "- transmission delay: " << transmission_delay << std::endl;
-    std::cout << "- membrane time constant (tau): " << tau << std::endl;
-    std::cout << "- external current :" << add_external_current << std::endl;
-    std::cout << "- random seed :" << random_seed << std::endl;
+    std::cout << "- resting potential: " << resting_potential << " mV" << std::endl;
+    std::cout << "- reset potential: " << reset_potential << " mV" << std::endl;
+    std::cout << "- firing threshold: " << firing_threshold << " mV" << std::endl;
+    std::cout << "- refractory period: " << refractory_period << " ms" << std::endl;
+    std::cout << "- transmission delay: " << transmission_delay << " ms" << std::endl;
+    std::cout << "- membrane time constant (tau): " << tau << " ms" << std::endl;
+    std::cout << "- external current: " << (add_external_current ? "yes" : "no") << std::endl;
+    std::cout << "- random seed: " << random_seed << std::endl;
 }
 
 void UserArguments::print_warning_no_output_neuron_ids()

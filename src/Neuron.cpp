@@ -28,6 +28,12 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc,
                   neuron_id_(neuron_id),
                   Vm_(resting_potential)
 {
+    //no spike is added between last_spike_time_ and last_spike_time_+refractory_period
+    //see add_event_in() function (discards spikes during refraction)
+    last_spike_time_ = -Neuron::refractory_period_;
+
+     //if (exc) J_=WEIGHT_EXC; else J_=WEIGHT_INH;
+    J_ = exc ? WEIGHT_J_EXC : WEIGHT_J_INH;
 
     if (add_external_current)
     {
@@ -50,13 +56,6 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc,
       //printf("Neuron %d, total external events for whole simulation: %d\n", get_neuron_id(), events_in_.size());
     }
 	
-    last_spike_time_ = -Neuron::refractory_period_;
-    //no spike is added between last_spike_time_ and last_spike_time_+refractory_period
-    //see add_event_in() function (discards spikes during refraction)
-
-     //if (exc) J_=WEIGHT_EXC; else J_=WEIGHT_INH;
-    J_ = exc ? WEIGHT_J_EXC : WEIGHT_J_INH;
-		
     if (outputCsvFile)
     {
         string fileName =  "neuron_" + to_string(neuron_id_) + ".csv";
@@ -137,7 +136,7 @@ bool Neuron::update(Physics::Time dt)
 
     if (has_reached_threshold())
     {
-        output(J_); //TODO output is spiking at t+dt, shouldnt it be t only?
+        output(J_);
         last_spike_time_ = t_;
         reset_potential();
         write_voltage_to_file(); //draw vertical line for drop of voltage

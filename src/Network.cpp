@@ -111,8 +111,8 @@ Physics::Time Network::update(Physics::Time dt)
     {
       for (unsigned int i=0; i< get_neurons_size(); ++i)
 	  {
-		neurons_[i]->update(dt);
-		if (neurons_[i]->has_reached_threshold())
+        bool has_reached_threshold = neurons_[i]->update(dt);
+        if (has_reached_threshold)
 			*raster_plot_file << neurons_[i]->get_t() <<"," << i << std::endl;
 	  }
       return neurons_[0]->get_t(); //time of the last neuron (send 0, all neurons have same time)

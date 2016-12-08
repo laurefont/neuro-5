@@ -13,14 +13,14 @@
   height=10cm,
   xmin=0,
   ymin=0,
-  xmax=1000,
+  xmax=200,
   ymax=25, 
 ]
-\addplot +[mark=none] table [x=t, y=vm, col sep=comma] {neuron_plot_explicit.csv};
-\addplot +[mark=none] table [x=t, y=vm, col sep=comma] {neuron_plot_implicit.csv};
-\addplot +[mark=none,green] table [x=t, y=vm, col sep=comma] {neuron_plot_analytic_fixed_step.csv};
-\addplot +[mark=none,black] table [x=t, y=vm, col sep=comma] {neuron_plot_analytic_variable_step.csv};
-\legend{{Backward Euler (Explicit $\Delta t = 0.2ms$)},{Forward Euler (Implicit $\Delta t = 0.2ms$)}, {Analytic ($\Delta t = 0.2ms$)} , {Analytic (variable $\Delta t$)}}
+\addplot +[mark=none] table [x=t, y=vm, col sep=comma] {csv/neuron_plot_explicit.csv};
+\addplot +[mark=none] table [x=t, y=vm, col sep=comma] {csv/neuron_plot_implicit.csv};
+\addplot +[mark=none,green] table [x=t, y=vm, col sep=comma] {csv/neuron_plot_analytic_fixed_step.csv};
+%\addplot +[mark=none,black] table [x=t, y=vm, col sep=comma] {csv/neuron_plot_analytic_variable_step.csv};
+\legend{{Forward Euler (Explicit $\Delta t = 0.1ms$)},{Backward Euler (Implicit $\Delta t = 0.1ms$)}, {Analytic ($\Delta t = 0.1ms$)} , {Analytic (variable $\Delta t$)}}
 \end{axis}
 \end{tikzpicture}
 \end{document}

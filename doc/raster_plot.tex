@@ -1,20 +1,32 @@
 \documentclass{standalone}
 \usepackage{pgfplots}
 
+%if you run out of memory
+%find your texmf.conf file:  kpsewhich texmf.cnf
+%sudo vi /opt/local/etc/texmf/texmf.cnf
+%increase main_memory value or add it if not there (see other texmf.cnf)
+%relaunch settings: `sudo fmtutil-sys --all`
+
+%OR simply use lualatex instead of latex
+% lualatex -shell-escape --enable-write18 raster_plot
+
 \begin{document}
 \begin{tikzpicture}
 \begin{axis}
 [
   xlabel={time ($ms$)},
   ylabel={neuron id},
-  %width=50cm,
+  width=40cm,
   height=10cm,
   ymin=0,
   ymax=10000,
   xmin=0,
-  %xmax=1000
+  xmax=1000
 ]
-\addplot[scatter,only marks,mark size=0.2, each nth point=10] table [x=t, y=neuron, col sep=comma] {raster_plot.csv};
+%add scatter for ascending rainbow color coding
+%\addplot+[only marks,mark size=0.1, each nth point=1] table [x=t, y=neuron, col sep=comma] {csv/raster_plot_implicit.csv};
+%\addplot+[only marks,mark size=0.2, each nth point=2] table [x=t, y=neuron, col sep=comma] {csv/raster_plot_implicit.csv};
+\addplot+[only marks,mark size=0.2, each nth point=4] table [x=t, y=neuron, col sep=comma] {csv/raster_plot_analytic_fixed_step.csv};
 \end{axis}
 \end{tikzpicture}
 \end{document}

@@ -12,7 +12,10 @@ Applications
 
 ### General differential equation
 
-![alt text](../doc/GE.png "General equation")
+![alt text](../doc/GE_RI.png "General equation")
+
+swe have seen ![alt text](../doc/test_Jij.png "test")so hahahahha
+
 
 ### Types of solutions
 
@@ -23,7 +26,7 @@ Applications
 ![alt text](../doc/FE.png "Forward Euler´s formula")
 
 ```
-Bblabla 
+Bblabla
 ```
 
 #### Backward Euler (implicit method)

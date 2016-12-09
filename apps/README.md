@@ -10,7 +10,7 @@ Applications
 
 ## Theoretical explanation 
 
-### General differential euqati
+### General differential equation
 
 ![alt text](../doc/GE.png "General equation")
 

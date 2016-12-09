@@ -3,6 +3,7 @@
 
 int main (int argc, char** argv)
 {
+	
     UserArguments user_arguments(argc, argv);
 
     Simulation simulation(

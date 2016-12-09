@@ -14,7 +14,10 @@ Applications
 
 ![alt text](../doc/GE_RI.png "General equation")
 
-swe have seen ![alt text](../doc/test_Jij.png "test")so hahahahha
+with![alt text](../doc/Jij.PNG "test")the postsynaptic potential amplitude,
+![alt text](../doc/delta.PNG "test")the dirac function,
+![alt text](../doc/tkj.PNG "test")is the emission time of kth spike at
+neuron j and D the transmission delay.
 
 
 ### Types of solutions
@@ -39,7 +42,7 @@ Bblabla
 
 #### Analytical solution with fixed step 
 
-![alt text](../doc/as_fs.png "Analytical solution´s with fixed step formula")
+![alt text](../doc/as_fs.png "Analytical solution´s formula")
 
 ```
 
@@ -47,7 +50,6 @@ Bblabla
 
 #### Analytical solution with variable step 
 
-![alt text](../doc/as_vs.png "Analytical solution´s with variable step formula")
 
 ```
 

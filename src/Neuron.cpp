@@ -14,19 +14,23 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc,
 			   Physics::Time refractory_period, Physics::Potential resting_potential, Physics::Potential reset_potential, 
                Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, unsigned random_seed,
                bool outputCsvFile, int neuron_id)
-                : type_(a_type), 
+                : neuron_id_(neuron_id),
+				  type_(a_type), 
+				  outputCsvFile_(outputCsvFile),
 				  external_factor_(external_factor), 
 				  t_(0), 
 				  neuron_file(NULL),
+                  Vm_(resting_potential),
                   firing_threshold_(firing_threshold), 
                   refractory_period_(refractory_period), 
                   resting_potential_(resting_potential),
                   reset_potential_(reset_potential), 
-                  transmission_delay_(transmission_delay), 
-                  tau_(tau), 
-                  outputCsvFile_(outputCsvFile),
-                  neuron_id_(neuron_id),
-                  Vm_(resting_potential)
+                  transmission_delay_(transmission_delay),
+                  tau_(tau)
+                 
+
+                  
+                  
 {
     //no spike is added between last_spike_time_ and last_spike_time_+refractory_period
     //see add_event_in() function (discards spikes during refraction)

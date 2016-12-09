@@ -15,4 +15,7 @@ add_executable (${project_name}_analytic_fixed_step main_analytic_fixed_step.cpp
 target_link_libraries (${project_name}_analytic_fixed_step simulation)
 
 
+# Create main for General simulation with User-defineable solver
+add_executable (${project_name} main.cpp)
+target_link_libraries (${project_name} simulation)
 

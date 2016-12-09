@@ -12,7 +12,9 @@ Applications
 
 ### General differential equation
 
+```
 ![alt text](../doc/GE_RI.png "General equation")
+```
 
 with![alt text](../doc/Jij.PNG "test")the postsynaptic potential amplitude,
 ![alt text](../doc/delta.PNG "test")the dirac function,
@@ -25,27 +27,20 @@ neuron j and D the transmission delay.
 #### Forward Euler (explicit method)
 
 
-
-![alt text](../doc/FE.png "Forward Euler´s formula")
-
 ```
-Bblabla
+![alt text](../doc/FE.png "Forward Euler´s formula")
 ```
 
 #### Backward Euler (implicit method)
 
-![alt text](../doc/BE.png "Backward Euler´s formula")
-
 ```
-
+![alt text](../doc/BE.png "Backward Euler´s formula")
 ```
 
 #### Analytical solution with fixed step 
 
-![alt text](../doc/as_fs.png "Analytical solution´s formula")
-
 ```
-
+![alt text](../doc/as_fs.png "Analytical solution´s formula")
 ```
 
 #### Analytical solution with variable step 

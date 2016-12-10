@@ -62,7 +62,7 @@ Network::~Network()
 	raster_plot_file->close();
     delete raster_plot_file;
 
-    for (int i=0; i<N_; i++)
+    for (unsigned int i=0; i<N_; i++)
         delete neurons_[i];
     delete [] neurons_;
 }
@@ -87,10 +87,10 @@ void Network::make_connections(unsigned seed)
 	// Use a bernoulli distribution with a epsilon_ chance of success
 	std::bernoulli_distribution distribution(epsilon_);
 
-    for (int n1 = 0; n1<get_neurons_size(); n1++)
+    for (unsigned int n1 = 0; n1<get_neurons_size(); n1++)
     {
         Neuron * neuron = get_neuron(n1);
-        for (int n2 = 0; n2<get_neurons_size(); n2++)
+        for (unsigned int n2 = 0; n2<get_neurons_size(); n2++)
         {
             Neuron * potential_neuron_connected = get_neuron(n2);
 

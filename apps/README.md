@@ -40,7 +40,7 @@ neuron is able to steeply rise its potential when there is an input of
 current (modeled by equation (2)). Equation (3) comprises the discharge
 of the capacity by an exponential decay with the time contant ![alt text](../doc/tau.png "tau"). 
 
-#####Fixed-time stepping solutions
+####Fixed-time stepping solutions
 
 A simpler and faster way of stimulating those neurons with the same model
 to use equation (1) and solve it with a fixed-time step. There are two
@@ -49,11 +49,11 @@ implicit solution (5). Explicit method relies on everything that happened
 before the time ![alt text](../doc/t.png "t") ![alt text](../doc/vt_1.png "velocity at t-1") and ![alt text](../doc/I.png "Current") to compute ![alt text](../doc/vt.png "Instantaneous Velocity")
 whereas implicit solution starts where ![alt text](../doc/vt.png "Instantaneous velocity") is on both sides of the equations.
 
-Fixed-time stepping explicit solution
+Explicit solution
 
 ![alt text](../doc/es_fs.png "Explicit solution")
 
-Fixed-time stepping implicit solution
+Implicit solution
 
 ![alt text](../doc/is_fs.png "Explicit solution")
 

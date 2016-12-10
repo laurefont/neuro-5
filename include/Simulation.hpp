@@ -1,5 +1,8 @@
 #ifndef SIMULATION_HPP
 #define SIMULATION_HPP
+
+#include <gtest/gtest.h>
+
 #include <Physics.hpp>
 #include <Network.hpp>
 
@@ -66,13 +69,23 @@ class Simulation
 
         virtual ~Simulation();
         void launch_simulation();
-        Network * get_network();
         Physics::Time get_simulation_time();
+
+    private:
+        Network * get_network();
 
     private:
         Network network_;
         Physics::Time time_of_simulation_;
         Physics::Time time_step_;
+
+    private:
+        FRIEND_TEST(AnalyticNeuronTests, TestSingleNeuronSimulation);
+        FRIEND_TEST(AnalyticNeuronTests, TestDecayNeuronVoltage);
+        FRIEND_TEST(ExplicitNeuronTests, TestSingleNeuronSimulation);
+        FRIEND_TEST(ExplicitNeuronTests, TestDecayNeuronVoltage);
+        FRIEND_TEST(ImplicitNeuronTests, TestSingleNeuronSimulation);
+        FRIEND_TEST(ImplicitNeuronTests, TestDecayNeuronVoltage);
 };
 
 #endif // SIMULATION_HPP

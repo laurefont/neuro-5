@@ -5,9 +5,10 @@
 #include <memory>
 #include <fstream>      // std::ofstream
 
+#include <gtest/gtest.h>
+
 #include <Physics.hpp>
 #include <Neuron.hpp>
-#include <ExternalNeuron.hpp>
 
 ///
 /// @brief structure used to return the latest neuron in time and the time of almost last neuron in time in method get_back_neuron
@@ -70,10 +71,6 @@ public:
 	/// @param dt time interval
     Physics::Time update(Physics::Time dt);
 
-    Neuron* get_neuron(unsigned int n);
-
-    size_t get_neurons_size();
-
 private:
 	///
 	/// Create connections between neurons
@@ -86,6 +83,8 @@ private:
 	/// Returns time of the almost last neuron and index of the last neuron
 	///
     Neuron_last get_last_neurons();
+
+    Neuron* get_neuron(unsigned int n);
 
 private:
 	unsigned int const N_; ///< total number of neurons
@@ -115,7 +114,13 @@ private:
 
     SimulationType const type_; ///< type of simulation (analytical, explicit, implicit)
 	
-	
+private:
+    FRIEND_TEST(AnalyticNeuronTests, TestSingleNeuronSimulation);
+    FRIEND_TEST(AnalyticNeuronTests, TestDecayNeuronVoltage);
+    FRIEND_TEST(ExplicitNeuronTests, TestSingleNeuronSimulation);
+    FRIEND_TEST(ExplicitNeuronTests, TestDecayNeuronVoltage);
+    FRIEND_TEST(ImplicitNeuronTests, TestSingleNeuronSimulation);
+    FRIEND_TEST(ImplicitNeuronTests, TestDecayNeuronVoltage);
 };
 
 #endif // NETWORK_HPP

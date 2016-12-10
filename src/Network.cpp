@@ -62,7 +62,7 @@ Network::~Network()
 	raster_plot_file->close();
     delete raster_plot_file;
 
-    for (int i=0; i<N_; i++)
+    for (unsigned int i=0; i<N_; i++)
         delete neurons_[i];
     delete [] neurons_;
 }
@@ -71,11 +71,6 @@ Neuron* Network::get_neuron(unsigned int n)
 {
     assert(n<=N_);
     return neurons_[n];
-}
-
-size_t Network::get_neurons_size()
-{
-    return N_;
 }
 
 void Network::make_connections(unsigned seed)
@@ -87,10 +82,10 @@ void Network::make_connections(unsigned seed)
 	// Use a bernoulli distribution with a epsilon_ chance of success
 	std::bernoulli_distribution distribution(epsilon_);
 
-    for (int n1 = 0; n1<get_neurons_size(); n1++)
+    for (unsigned int n1 = 0; n1<N_; n1++)
     {
         Neuron * neuron = get_neuron(n1);
-        for (int n2 = 0; n2<get_neurons_size(); n2++)
+        for (unsigned int n2 = 0; n2<N_; n2++)
         {
             Neuron * potential_neuron_connected = get_neuron(n2);
 
@@ -109,7 +104,7 @@ Physics::Time Network::update(Physics::Time dt)
 {
     if (type_ != SimulationType::AnalyticVariableStep) //Fixed Step methods
     {
-      for (unsigned int i=0; i< get_neurons_size(); ++i)
+      for (unsigned int i=0; i< N_; ++i)
 	  {
         bool has_reached_threshold = neurons_[i]->update(dt);
         if (has_reached_threshold)
@@ -151,7 +146,7 @@ Neuron_last Network::get_last_neurons()
     Neuron_last nl;
     nl.last_id=0;
     nl.second_last_id=0;
-    for (unsigned int n=1; n<get_neurons_size(); n++)
+    for (unsigned int n=1; n<N_; n++)
     {
         if (neurons_[n]->get_t() <= neurons_[nl.last_id]->get_t() )
         {

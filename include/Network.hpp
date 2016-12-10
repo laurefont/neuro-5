@@ -9,7 +9,6 @@
 
 #include <Physics.hpp>
 #include <Neuron.hpp>
-#include <ExternalNeuron.hpp>
 
 ///
 /// @brief structure used to return the latest neuron in time and the time of almost last neuron in time in method get_back_neuron

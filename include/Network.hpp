@@ -72,8 +72,6 @@ public:
 	/// @param dt time interval
     Physics::Time update(Physics::Time dt);
 
-    size_t get_neurons_size();
-
 private:
 	///
 	/// Create connections between neurons

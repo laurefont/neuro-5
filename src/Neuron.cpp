@@ -1,6 +1,7 @@
 #include "Neuron.hpp"
 #include <cmath>
 #include <string>
+#include <iomanip>
 #include <assert.h>
 #include <chrono>
 #include <random>
@@ -10,31 +11,41 @@ using namespace std;
 
 Neuron::Neuron(SimulationType const& a_type, bool const& exc,
                bool const& add_external_current, Physics::Potential firing_threshold, Physics::Time time_of_simulation,
-			   Physics::Time refractory_period, Physics::Potential resting_potential,Physics::Potential reset_potential, 
-               Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, double initial_Vm,
+			   Physics::Time refractory_period, Physics::Potential resting_potential, Physics::Potential reset_potential, 
+               Physics::Time transmission_delay, Physics::Time tau, double const& external_factor, unsigned random_seed,
                bool outputCsvFile, int neuron_id)
-                : type_(a_type), 
+                : neuron_id_(neuron_id),
+				  type_(a_type), 
+				  outputCsvFile_(outputCsvFile),
 				  external_factor_(external_factor), 
 				  t_(0), 
 				  neuron_file(NULL),
+                  Vm_(resting_potential),
                   firing_threshold_(firing_threshold), 
                   refractory_period_(refractory_period), 
                   resting_potential_(resting_potential),
                   reset_potential_(reset_potential), 
-                  transmission_delay_(transmission_delay), 
-                  tau_(tau), 
-                  Vm_(initial_Vm),
-                  outputCsvFile_(outputCsvFile),
-                  neuron_id_(neuron_id)
+                  transmission_delay_(transmission_delay),
+                  tau_(tau)
+                 
+
+                  
+                  
 {
-	
+    //no spike is added between last_spike_time_ and last_spike_time_+refractory_period
+    //see add_event_in() function (discards spikes during refraction)
+    last_spike_time_ = -Neuron::refractory_period_;
+
+     //if (exc) J_=WEIGHT_EXC; else J_=WEIGHT_INH;
+    J_ = exc ? WEIGHT_J_EXC : WEIGHT_J_INH;
+
     if (add_external_current)
     {
       //insert all the external spikes in the queue
-      std::random_device rd;
-      std::mt19937 gen(rd());
-      //std::mt19937 gen(neuron_id_);
-
+      // std::random_device rd; plus besoin
+      //std::cout << random_seed + neuron_id_ << endl;
+	  std::mt19937 gen(random_seed + neuron_id_);
+	
       //calculates lambda = parameter of the exponential process for the external spikes generator (Analytical)
       double lambda = (external_factor_ * firing_threshold_) / (WEIGHT_J_EXC * tau_);
       assert(lambda>0);
@@ -44,17 +55,11 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc,
             last_external_spike_sent < time_of_simulation;
             last_external_spike_sent += d(gen))
       {
-         add_event_in(Event(last_external_spike_sent + transmission_delay_, WEIGHT_J_EXC));
+         add_event_in(Event(last_external_spike_sent, WEIGHT_J_EXC));
       }
+      //printf("Neuron %d, total external events for whole simulation: %d\n", get_neuron_id(), events_in_.size());
     }
 	
-    last_spike_time_ = -Neuron::refractory_period_;
-    //no spike is added between last_spike_time_ and last_spike_time_+refractory_period
-    //see add_event_in() function (discards spikes during refraction)
-
-     //if (exc) J_=WEIGHT_EXC; else J_=WEIGHT_INH;
-    J_ = exc ? WEIGHT_J_EXC : WEIGHT_J_INH;
-		
     if (outputCsvFile)
     {
         string fileName =  "neuron_" + to_string(neuron_id_) + ".csv";
@@ -63,6 +68,7 @@ Neuron::Neuron(SimulationType const& a_type, bool const& exc,
             throw string("Error: The file doesn't exist !");
         } else {
             *neuron_file << "t,vm" << endl;
+            write_voltage_to_file();
         }
     }
 }
@@ -82,10 +88,9 @@ int Neuron::get_neuron_id()
     return neuron_id_;
 }
 
-void Neuron::output(double const& x)
+void Neuron::output(Physics::Amplitude const& x)
 {
     Event ev(t_+transmission_delay_, x);
-
     for (auto& s : synapses_)
         s->add_event_in(ev);
 }
@@ -99,8 +104,8 @@ bool Neuron::has_reached_threshold() const
 
 void Neuron::add_event_in(Event const& ev)
 {
-    //TODO this should work
-    //assert(ev.get_t() >= last_spike_time_);
+    //if this fails: either this neuron jumped too much in time, or event was delivered wrongly
+    assert(ev.get_t() >= last_spike_time_);
 
     //only adds spikes that are delivered after refraction
     if (ev.get_t() >= last_spike_time_ + refractory_period_)
@@ -108,30 +113,24 @@ void Neuron::add_event_in(Event const& ev)
 }
 
 
-// remet le potentiel de membrane au potentiel au repos, cette méthode sera appelée
-// dans update si le threshold est dépassé
 void Neuron::reset_potential()
 {
     Vm_ = reset_potential_;
 }
 
 
-double Neuron::external_spike_generator(Physics::Time const& dt)
-{
-	/// Construct a random generator engine from a time-based seed
-	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-	std::default_random_engine generator(seed);
-
-	/// Use a Poisson distribution with a rate 
-	//std::poisson_distribution<double> distribution(external_factor_*dt);
-	//return distribution(generator);
-	return 0;		
-}
-
 bool Neuron::update(Physics::Time dt)
 {
-    //real step size is the minimum of max step or until arrival of next event
-    if (type_ == SimulationType::Analytic)
+    //make sure I didn't miss any event (leave the {...} around the assert, it's a macro)
+    if (!events_in_.empty())
+        {assert(events_in_.top().get_t() + 0.00001 >= t_); }
+
+    //remove all future events during my refraction period (if applicable)
+    while(!events_in_.empty() && events_in_.top().get_t() < last_spike_time_ + refractory_period_)
+        events_in_.pop();
+
+    //real step size is the minimum of max step or until arrival of next event (outside refrection)
+    if (type_ == SimulationType::AnalyticVariableStep)
         if (!events_in_.empty())
             dt = std::min(dt, events_in_.top().get_t() - t_);
 
@@ -144,16 +143,10 @@ bool Neuron::update(Physics::Time dt)
         output(J_);
         last_spike_time_ = t_;
         reset_potential();
-        write_voltage_to_file(); //vertical line for drop of voltage
+        write_voltage_to_file(); //draw vertical line for drop of voltage
 
-        //remove all Poisson (only events between my time and the
-        //end of refractory period
-        //TODO Implicit Explicit double -check!
-        while(!events_in_.empty() && events_in_.top().get_t() <= t_ + refractory_period_ + 0.0001)
-            events_in_.pop();
-
-        //fixed absolute refractory period
-        if (type_ == SimulationType::Analytic)
+        //fixed absolute refractory period for variable step only
+        if (type_ == SimulationType::AnalyticVariableStep)
         {
             t_ += refractory_period_;
             write_voltage_to_file(); //horizontal line for fixed refractory period
@@ -166,7 +159,7 @@ bool Neuron::update(Physics::Time dt)
 void Neuron::write_voltage_to_file()
 {
     if (neuron_file)
-        *neuron_file << t_ << "," << Vm_ << endl;
+        *neuron_file << t_ << "," << std::fixed << std::setprecision(3) << Vm_ << endl;
 }
 
 void Neuron::add_connection(Neuron* neuron)
@@ -179,56 +172,72 @@ void Neuron::step(Physics::Time dt) // faire en sorte que dans commandline on pu
 {
 	switch(type_)
 	{
-        case SimulationType::Analytic :
+        case SimulationType::AnalyticVariableStep:
+        case SimulationType::AnalyticFixedStep:
              step_analytic(dt);
 		     break;
 
-        case SimulationType::Explicit :
+        case SimulationType::ExplicitForwardEuler :
 		     step_explicit(dt);
 		     break;
 
-        case SimulationType::Implicit :
+        case SimulationType::ImplicitBackwardEuler :
 		     step_implicit(dt);
 		     break;
 	}
     t_+=dt;
-    if (Vm_ < resting_potential_)
-        Vm_ = reset_potential_; //never below resting_potential
 }
 
+bool Neuron::is_not_in_refractory_period(Physics::Time const& dt)
+{
+    return t_ + dt >= last_spike_time_ + refractory_period_;
+}
 
 void Neuron::step_analytic(Physics::Time const& dt)
 {
-    //Plot intermediate points for decay
-	for (int i=1; i<4; i++)
+    //This condition is only useful for analytic solution with fixed step
+    if( is_not_in_refractory_period(dt) )
     {
-		double temp_Vm = Vm_ * exp((-dt/4*i)/tau_);
+      //Commented so that we  output less points
+      /*
+      //Plot intermediate points for decay
+      if (type_ == SimulationType::Analytic)
+      {
         if (neuron_file)
-          *neuron_file << this->t_ + dt/4*i  << "," << temp_Vm << endl;
-    }
+          for (int i=1; i<4; i++)
+          {
+            double temp_Vm = Vm_ * exp((-dt/4*i)/tau_);
+            *neuron_file << this->t_ + dt/4*i  << "," <<  std::fixed << std::setprecision(3) << temp_Vm << endl;
+          }
+      }
+      */
 
-    Vm_ *= exp(-dt/tau_);  //calculate decay from previous timestep
-    Vm_ += RI(dt); //TODO is this correct?
-    //Vm_ += RI(dt)*dt/tau_; //sum voltage from network contributions at next timestep
-                   //eq 1.8 in http://neuronaldynamics.epfl.ch/online/Ch1.S3.html
+      Vm_ *= exp(-dt/tau_);  //calculate decay from previous timestep
+      //Vm_ += RI(dt)/tau_*(1-exp(-dt/tau_)); //slides from professor
+      Vm_ += RI(dt)/tau_; //vertical jump in voltage (same as before but without exp growth)
+    }
 }
 
 
-void Neuron::step_explicit(Physics::Time const& dt)// Use of V(t-1)=Vm_ to calculate the new Vm_
-{
-    //if( t_ + dt >= last_spike_time_ + refractory_period_)
+void Neuron::step_explicit(Physics::Time const& dt)
+{ 
+    if( is_not_in_refractory_period(dt) )
     {
-       Vm_ += ((-Vm_ + RI(dt)) * dt) / tau_;
-	}
+       //we divide RI(dt) by dt because when we integrate the dirac-function in
+       //RI we get the delta function, dividing it by dt gives us the dirac
+       //Vm_ += (-Vm_ + RI(dt))/tau_ * dt; //OLD
+       Vm_ += (-Vm_ + RI(dt)/dt)/tau_ * dt;
+    }
 }
 
 
 void Neuron::step_implicit(Physics::Time const& dt)
 {
-    //if( t_ + dt >= last_spike_time_ + refractory_period_)
+    if( is_not_in_refractory_period(dt) )
 	{
-		Vm_ = ((dt * RI(dt) ) + (tau_ * Vm_)) / ( dt + tau_);
-	}
+        //Vm_ = ((dt * RI(dt) ) + (tau_ * Vm_)) / ( dt + tau_); //OLD
+        Vm_ = (RI(dt) + (tau_ * Vm_)) / ( dt + tau_);
+    }
 }
 
 Physics::Amplitude Neuron::RI(Physics::Time const& dt)
@@ -242,7 +251,7 @@ Physics::Amplitude Neuron::RI(Physics::Time const& dt)
         assert(events_in_.top().get_t()>=t_);
         sum_incoming_J += events_in_.top().get_J();
         events_in_.pop();
-	}
+    }
     return tau_ * sum_incoming_J;
 }
 

@@ -24,9 +24,9 @@ class Neuron {
            Physics::Time transmission_delay = TRANSMISSION_DELAY,
            Physics::Time tau = TAU,
            double const& external_factor = EXTERNAL_FACTOR,
-           double initial_Vm = RESTING_POTENTIAL,
+           unsigned random_seed = RANDOM_SEED,
            bool outputCsvFile_ = false,
-           int neuron_id_ = -1);
+           int neuron_id_ = 0);
             ///< constructor takes arguments that will be modified during time
 
     ~Neuron();
@@ -40,7 +40,7 @@ class Neuron {
     Physics::Potential get_Vm() const; ///< returns potential of neuron
     void set_Vm(Physics::Potential vm);
     Physics::Time get_t() const;  ///<returns the time of the neuron
-    void output(double const& x); ///< fires a spike to all post-synaptic neurons
+    void output(Physics::Amplitude const& x); ///< fires a spike to all post-synaptic neurons
     void add_event_in(Event const& ev); ///< add spike event to the queue of incoming spikes
     bool is_excitatory(); ///< true if excitatory, false if inhibitory
     int get_synapses_size() const; ///< number of outgoing synapses
@@ -53,9 +53,8 @@ class Neuron {
     ///contribution of incoming currents
     Physics::Amplitude RI(Physics::Time const& dt);
 
-    double external_spike_generator(Physics::Time const& dt);
-    
     void write_voltage_to_file();
+
   private:
     int neuron_id_;
     const SimulationType type_;
@@ -70,8 +69,8 @@ class Neuron {
     std::priority_queue <Event> events_in_; ///<queue of input events 
     std::vector <Neuron*> synapses_; ///<table with the neurons it's sending signals to
 
-    /*static*/ const Physics::Time refractory_period_; ///<tau_rp (period after an output, during which neuron can't receive inputs and can't fire)
-    /*static*/ const Physics::Potential firing_threshold_; ///<membrane potential level at which neuron fires
+	/*static*/ const Physics::Potential firing_threshold_; ///<membrane potential level at which neuron fires
+    /*static*/ const Physics::Time refractory_period_; ///<tau_rp (period after an output, during which neuron can't receive inputs and can't fire) 
     /*static*/ const Physics::Potential resting_potential_; ///<resting potential (voltage in equilibrium)
     /*static*/ const Physics::Potential reset_potential_; ///< reset potential after the neuron has fired)
     /*static*/ const Physics::Time transmission_delay_; ///<D (time taken by a signal after it's been produced to reach the receiving neuron)
@@ -80,6 +79,8 @@ class Neuron {
     void step_analytic(Physics::Time const& dt); ///< analytic time-stepping solution
     void step_explicit(Physics::Time const& dt); ///< explicit time-stepping solution
     void step_implicit(Physics::Time const& dt); ///< implicit time-stepping solution
+
+    bool is_not_in_refractory_period(Physics::Time const& dt); ///< true if neuron is in regraction
 };
 
 

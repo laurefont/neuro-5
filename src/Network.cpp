@@ -17,14 +17,14 @@ Network::Network(   SimulationType const& type,
 					double const& gamma, 
 					double const& epsilon, 
 					double const& external_factor, 
+					unsigned random_seed,
 					Physics::Potential firing_threshold,
 					Physics::Time refractory_period, 
 					Physics::Potential resting_potential,
 					Physics::Potential reset_potential, 
 					Physics::Time transmission_delay, 
 					Physics::Time tau,
-					Physics::Time time_of_simulation,
-					double initial_Vm ) 
+					Physics::Time time_of_simulation) 
 					
 	: N_(number_neurons),
 	  Ne_(std::round(N_ / (1 + gamma))),
@@ -34,7 +34,7 @@ Network::Network(   SimulationType const& type,
       type_(type)
 {
 	
-    std::cout << "Creating " << N_ << " Neurons ..." << std::endl;
+    std::cout << "Creating " << N_ << " neurons..." << std::endl;
     neurons_ = new Neuron*[number_neurons];
 	for (unsigned int i(0); i < N_; ++i)
 	{
@@ -44,13 +44,13 @@ Network::Network(   SimulationType const& type,
                                 firing_threshold, time_of_simulation,
                                 refractory_period, resting_potential,
                                 reset_potential, transmission_delay,
-                                tau,  external_factor, initial_Vm, output, i);
+                                tau,  external_factor, random_seed, output, i);
     }
 
-    std::cout << "Creating " << epsilon_*100 << "\% Network Connections..." << std::endl;
-    make_connections();
+    std::cout << "Creating " << epsilon_*100 << "\% network connectivity (random seed " << random_seed << ")..." << std::endl;
+    make_connections(random_seed);
 	
-	raster_plot_file = new std::ofstream ("raster-plot.csv");
+    raster_plot_file = new std::ofstream ("raster_plot.csv");
 	if (raster_plot_file->fail()) 
 	    throw std::runtime_error("file not found");
     else
@@ -62,7 +62,7 @@ Network::~Network()
 	raster_plot_file->close();
     delete raster_plot_file;
 
-    for (int i=0; i<N_; i++)
+    for (unsigned int i=0; i<N_; i++)
         delete neurons_[i];
     delete [] neurons_;
 }
@@ -73,24 +73,19 @@ Neuron* Network::get_neuron(unsigned int n)
     return neurons_[n];
 }
 
-size_t Network::get_neurons_size()
-{
-    return N_;
-}
-
-void Network::make_connections()
+void Network::make_connections(unsigned seed)
 {
 	// Construct a random generator engine from a time-based seed
-	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+	//auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
 
 	// Use a bernoulli distribution with a epsilon_ chance of success
 	std::bernoulli_distribution distribution(epsilon_);
 
-    for (int n1 = 0; n1<get_neurons_size(); n1++)
+    for (unsigned int n1 = 0; n1<N_; n1++)
     {
         Neuron * neuron = get_neuron(n1);
-        for (int n2 = 0; n2<get_neurons_size(); n2++)
+        for (unsigned int n2 = 0; n2<N_; n2++)
         {
             Neuron * potential_neuron_connected = get_neuron(n2);
 
@@ -107,17 +102,17 @@ void Network::make_connections()
 
 Physics::Time Network::update(Physics::Time dt)
 {
-    if (type_ != SimulationType::Analytic) //Implicit or Explicit Solution
+    if (type_ != SimulationType::AnalyticVariableStep) //Fixed Step methods
     {
-      for (unsigned int i=0; i< get_neurons_size(); ++i)
+      for (unsigned int i=0; i< N_; ++i)
 	  {
-		neurons_[i]->update(dt);
-		if (neurons_[i]->has_reached_threshold())
-			*raster_plot_file << neurons_[i]->get_t() <<"," << i << std::endl;
+        bool has_reached_threshold = neurons_[i]->update(dt);
+        if (has_reached_threshold)
+            *raster_plot_file << neurons_[i]->get_t() <<"," << i << std::endl;
 	  }
       return neurons_[0]->get_t(); //time of the last neuron (send 0, all neurons have same time)
     }
-    else //Analytic solution
+    else //Analytic variable-step solution
     {
         Neuron_last last_neurons = get_last_neurons();
         int & last_id = last_neurons.last_id;
@@ -132,7 +127,7 @@ Physics::Time Network::update(Physics::Time dt)
         Neuron * last_neuron = neurons_[last_id];
         bool has_reached_threshold = last_neuron->update(dt);
         if (has_reached_threshold)
-            *raster_plot_file << last_neuron->get_neuron_id() <<"," << last_neuron->get_t() << std::endl;
+            *raster_plot_file << last_neuron->get_t() <<"," << last_neuron->get_neuron_id() << std::endl;
         return neurons_[second_last_id]->get_t(); //The 2nd last is now the last, return its time
 	}
 }
@@ -151,7 +146,7 @@ Neuron_last Network::get_last_neurons()
     Neuron_last nl;
     nl.last_id=0;
     nl.second_last_id=0;
-    for (unsigned int n=1; n<get_neurons_size(); n++)
+    for (unsigned int n=1; n<N_; n++)
     {
         if (neurons_[n]->get_t() <= neurons_[nl.last_id]->get_t() )
         {

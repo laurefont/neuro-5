@@ -21,6 +21,10 @@ set (CMAKE_CXX_STANDARD_REQUIRED 1)
 # Tell CMake to automatically include all files inside include folder
 include_directories (${PROJECT_SOURCE_DIR}/include)
 
+#add GoogleTest dependency
+find_package (GTest REQUIRED)
+include_directories (${GTEST_INCLUDE_DIRS})
+
 # Simulation library (libsimulation)
 add_subdirectory(src)
 

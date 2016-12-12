@@ -2,6 +2,7 @@
 #include <tclap/CmdLine.h>
 #include "UserArguments.hpp"
 #include <random>
+#include <vector>
 
 UserArguments::UserArguments(int argc, char** argv) {
     parse(argc, argv);
@@ -9,13 +10,20 @@ UserArguments::UserArguments(int argc, char** argv) {
 
 void UserArguments::parse(int argc, char** argv)
 {
+		std::vector <unsigned int> allowed;
+		allowed.push_back(0);
+		allowed.push_back(1);
+		allowed.push_back(2);
+		allowed.push_back(3);
+		TCLAP::ValuesConstraint<unsigned int> allowedVals( allowed );
+
 	std::random_device rd;
     try
     {
         TCLAP::CmdLine cmd("Simulation of neurons network");
         TCLAP::SwitchArg verbose_arg("v", "verbose", "output execution parameters", cmd, false);
         TCLAP::ValueArg<Physics::Time> time_of_simulation_arg("t", "time","total simulation time", false, SIMULATION_TIME, "Physics::Time", cmd);
-        TCLAP::ValueArg<unsigned int> number_neurons_arg("n", "neurons", "total number of neurons to consider for the simulation", false, NUMBER_OF_NEURONS, "int", cmd);
+        TCLAP::ValueArg<unsigned int> number_neurons_arg("n", "neurons", "total number of neurons to consider for the simulation", false, NUMBER_OF_NEURONS, "unsigned", cmd);
         TCLAP::ValueArg<double> gamma_arg("g", "gamma", "proportion of inhibitory over excitatory neurons", false, GAMMA, "double", cmd);
         TCLAP::ValueArg<double> epsilon_arg("e", "epsilon", "connections density", false, EPSILON, "double", cmd);
         TCLAP::ValueArg<double> external_factor_arg("f", "factor", "external factor", false, EXTERNAL_FACTOR, "double", cmd);
@@ -27,8 +35,10 @@ void UserArguments::parse(int argc, char** argv)
         TCLAP::ValueArg<Physics::Potential> reset_potential_arg("P", "reset_potential", "", false, RESET_POTENTIAL, "Physics::Time", cmd);
         TCLAP::ValueArg<Physics::Time> transmission_delay_arg("D", "transmission_delay", "duration of the transmission of a spike", false, TRANSMISSION_DELAY, "Physics::Time", cmd);
         TCLAP::ValueArg<Physics::Time> tau_arg("T", "tau", "membrane time constant", false, TAU, "Physics::Time", cmd);
+        TCLAP::ValueArg<unsigned int> simulation_type_arg("m", "mode", "Solution wanted (0 for Analytic_fixed_step, 1 for Explicit, 2 for Implicit, 3 for Variable_step)", false, 0, &allowedVals, cmd);
 		TCLAP::SwitchArg add_external_current_arg("E", "external_current", "current arriving from external neurons or not" , cmd, true);
-        TCLAP::MultiArg<unsigned int> output_neuron_ids_arg("o", "output", "specific files opening", false, "unsigned	", cmd, 0);
+        TCLAP::MultiArg<unsigned int> output_neuron_ids_arg("o", "output", "specific files opening", false, "unsigned", cmd, 0);
+        
         cmd.parse(argc, argv);
 
         time_of_simulation = time_of_simulation_arg.getValue();
@@ -46,6 +56,7 @@ void UserArguments::parse(int argc, char** argv)
         tau = tau_arg.getValue();
         add_external_current = add_external_current_arg.getValue();
         output_neuron_ids = output_neuron_ids_arg.getValue();
+		simulation_type = simulation_type_arg.getValue();
 
         if ( verbose_arg.getValue() )
             print_info();
@@ -139,6 +150,11 @@ bool UserArguments::get_add_external_current()
 	return add_external_current;
 }
 
+unsigned int UserArguments::get_simulation_type()
+{
+	return simulation_type;
+}
+
 
 void UserArguments::print_info()
 {
@@ -157,6 +173,7 @@ void UserArguments::print_info()
     std::cout << "- membrane time constant (tau): " << tau << " ms" << std::endl;
     std::cout << "- external current: " << (add_external_current ? "yes" : "no") << std::endl;
     std::cout << "- random seed: " << random_seed << std::endl;
+    std::cout << "- simulation type: " << simulation_type << std::endl;
 }
 
 void UserArguments::print_warning_no_output_neuron_ids()

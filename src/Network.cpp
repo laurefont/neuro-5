@@ -46,7 +46,7 @@ Network::Network(   SimulationType const& type,
                                 tau,  external_factor, random_seed, output, i);
     }
 
-    std::cout << "Creating " << epsilon_*100 << "\% network connectivity (random seed " << random_seed << ")..." << std::endl;
+    std::cout << "Creating " << epsilon_*100 << " network connectivity (random seed " << random_seed << ")..." << std::endl;
     make_connections(random_seed);
 	
 	spike_times_ = new unsigned int[time_of_simulation]();

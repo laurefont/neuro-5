@@ -6,7 +6,7 @@ Applications
 
 ## Classes Structure
 
-![alt text](../doc/diagram_apps.png "Diagram of applications")
+![alt text](../doc/png/diagram_apps.png "Diagram of applications")
 
 ## Theoretical explanation of Brunel´s Network
 

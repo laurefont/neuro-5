@@ -7,6 +7,10 @@
 #include <random>
 #include <Neuron.hpp>
 
+
+
+
+
 using namespace std;
 
 Neuron::Neuron(SimulationType const& a_type, bool const& exc,
@@ -141,6 +145,7 @@ bool Neuron::update(Physics::Time dt)
     if (has_reached_threshold())
     {
         output(J_);
+        
         last_spike_time_ = t_;
         reset_potential();
         write_voltage_to_file(); //draw vertical line for drop of voltage
@@ -295,3 +300,5 @@ bool Neuron::is_excitatory()
     assert(J_!=0);
     return J_ > 0;
 }
+
+	

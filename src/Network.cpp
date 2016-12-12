@@ -33,7 +33,6 @@ Network::Network(   SimulationType const& type,
 	  epsilon_(epsilon),
       type_(type)
 {
-	
     std::cout << "Creating " << N_ << " neurons..." << std::endl;
     neurons_ = new Neuron*[number_neurons];
 	for (unsigned int i(0); i < N_; ++i)
@@ -50,21 +49,35 @@ Network::Network(   SimulationType const& type,
     std::cout << "Creating " << epsilon_*100 << "\% network connectivity (random seed " << random_seed << ")..." << std::endl;
     make_connections(random_seed);
 	
+	spike_times_ = new unsigned int[time_of_simulation]();
     raster_plot_file = new std::ofstream ("raster_plot.csv");
 	if (raster_plot_file->fail()) 
 	    throw std::runtime_error("file not found");
     else
         *raster_plot_file << "t,neuron" << std::endl;
+        
+    spike_file = new std::ofstream ("firing_rate.csv");
+    if  (spike_file->fail()) 
+	    throw std::runtime_error("file not found");
+    else
+        *spike_file << "t,spikes" << std::endl;
  }
 
 Network::~Network()
 {
 	raster_plot_file->close();
     delete raster_plot_file;
+    
+    spike_file->close();
+    delete spike_file;
 
     for (unsigned int i=0; i<N_; i++)
         delete neurons_[i];
-    delete [] neurons_;
+        
+    delete[] neurons_;
+    
+    if(spike_times_) ///> True if spike_times_ is not a null pointer
+        delete[] spike_times_;
 }
 
 Neuron* Network::get_neuron(unsigned int n)
@@ -108,7 +121,10 @@ Physics::Time Network::update(Physics::Time dt)
 	  {
         bool has_reached_threshold = neurons_[i]->update(dt);
         if (has_reached_threshold)
+			{
             *raster_plot_file << neurons_[i]->get_t() <<"," << i << std::endl;
+            ++spike_times_[(int)neurons_[i]->get_t()];
+			}
 	  }
       return neurons_[0]->get_t(); //time of the last neuron (send 0, all neurons have same time)
     }
@@ -126,8 +142,11 @@ Physics::Time Network::update(Physics::Time dt)
 
         Neuron * last_neuron = neurons_[last_id];
         bool has_reached_threshold = last_neuron->update(dt);
-        if (has_reached_threshold)
-            *raster_plot_file << last_neuron->get_t() <<"," << last_neuron->get_neuron_id() << std::endl;
+        if (has_reached_threshold) 
+			{
+				*raster_plot_file << last_neuron->get_t() <<"," << last_neuron->get_neuron_id() << std::endl;
+				++spike_times_[(int)last_neuron->get_t()];
+			}
         return neurons_[second_last_id]->get_t(); //The 2nd last is now the last, return its time
 	}
 }
@@ -159,4 +178,14 @@ Neuron_last Network::get_last_neurons()
         }
     }
     return nl;
+}
+
+void Network::write_spikes_to_file(unsigned int const& t)
+{
+    if (spike_file)
+		{
+			for (size_t i(0); i < t; ++i)
+				*spike_file << i << "," << spike_times_[i] << std::endl;
+				
+		}
 }

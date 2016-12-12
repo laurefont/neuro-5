@@ -62,6 +62,7 @@ public:
             
 	Network(Network const &) = delete;
 	Network& operator=(Network const &) = delete;
+	void write_spikes_to_file(unsigned int const& t);
 
 	virtual ~Network();
 
@@ -111,8 +112,12 @@ private:
     Neuron** neurons_;
 	
 	std::ofstream * raster_plot_file; ///< output file for raster plot
+	
+	std::ofstream * spike_file; ///< output file of firing rate
 
     SimulationType const type_; ///< type of simulation (analytical, explicit, implicit)
+    
+    unsigned int* spike_times_;
 	
 private:
     FRIEND_TEST(AnalyticNeuronTests, TestSingleNeuronSimulation);

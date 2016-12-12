@@ -72,5 +72,6 @@ void Simulation::launch_simulation()
 {
     std::cout << "Running simulation for " << time_of_simulation_ << " ms..." << std::endl;
     while (network_.update(time_step_) < time_of_simulation_){};
+    network_.write_spikes_to_file(time_of_simulation_);
 }
 

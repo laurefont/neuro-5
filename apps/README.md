@@ -8,7 +8,7 @@ Applications
 
 ![alt text](../doc/png/diagram_apps.png "Diagram of applications")
 
-###The three population of the Network
+##The three population of the Network
 
 ![alt text](../doc/png/network.png "The Network")
 

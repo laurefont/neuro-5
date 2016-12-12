@@ -2,38 +2,38 @@
 #include <Simulation.hpp>
 
 int main (int argc, char** argv)
+
 {	
-	std::cout << "You are in in the simulation of Leaky Integrate-and-Fire Neuron models." << std::endl;
-	std::cout <<"Please choose a type of solution" << std::endl;
-	std::cout <<"(E for explicit solution, I for implicit solution and A for analytic solution)" << std::endl; 
-    char answer1; 
-    SimulationType answer2; 
-    std::cin >> answer1 ;
-    
-    if (answer1 == 'E')
-    {
-		answer2 = SimulationType::ExplicitForwardEuler; 
-		
-	}
-	else if (answer1 == 'I') 
+	UserArguments user_arguments(argc, argv);
+	
+	SimulationType type;
+	
+	if (user_arguments.get_simulation_type() == 0)
 	{
-		answer2 = SimulationType::ImplicitBackwardEuler;
-		
+		type = SimulationType::AnalyticFixedStep;
+		std:: cout << "Running AnalyticFixedStep simulation..." <<std::endl;
 	}
-	else if (answer1 == 'A')
+	else if (user_arguments.get_simulation_type() == 1)
 	{
-		answer2 = SimulationType::AnalyticVariableStep;
-		
+		type = SimulationType::ExplicitForwardEuler;
+		std:: cout << "Running Explicit simulation..." <<std::endl;
+	}
+	else if (user_arguments.get_simulation_type() == 2)
+	{
+		type = SimulationType::ImplicitBackwardEuler;
+		std:: cout << "Running Implicit simulation..." <<std::endl;
+	}
+	else if (user_arguments.get_simulation_type() == 3)
+	{
+		type = SimulationType::AnalyticVariableStep;
+		std:: cout << "Running AnalyticVariableStep simulation..." <<std::endl;
 	}
 	else 
-	{	
-		std::cout << " Invalide entry. Please choose : E, I or A" <<std::endl; // gerer les mauvaises entrées pour que la simulation ne se lance pas si erreur
+	{
+		type = SimulationType::AnalyticFixedStep;
+		std:: cout << "Running AnalyticFixedStep simulation..." <<std::endl;
 	}
 	
-	
-    UserArguments user_arguments(argc, argv);
-    
-    
 
     //TODO check if implicit, explicit or analytic and call it 
 
@@ -41,7 +41,7 @@ int main (int argc, char** argv)
                 user_arguments.get_number_neurons(),
                 user_arguments.get_time_of_simulation(),
                 user_arguments.get_time_step(),
-                answer2,
+                type,
                 user_arguments.get_add_external_current(),
                 user_arguments.get_output_neuron_ids(),
                 user_arguments.get_firing_threshold(),

@@ -12,6 +12,9 @@ Applications
 
 ![alt text](../doc/png/network.png "The Network")
 
+The three populations being the excitatory, inhibitory and the exterior neurons 
+which are excitatory represented by the independent Poisson generators.
+
 ## Theoretical explanation of Brunel´s Network
 
 For further explanation of our modelisation please confere to this following document on a

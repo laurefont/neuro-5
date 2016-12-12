@@ -6,4 +6,4 @@ Library simulation
 
 ## Classes Structure
 
-![alt text](../doc/diagram_classes.png "Diagram of classes interaction")
+![alt text](../doc/png/diagram_classes.png "Diagram of classes interaction")

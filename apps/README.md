@@ -10,6 +10,6 @@ Applications
 
 ## Theoretical explanation of Brunel´s Network
 
-For further explanation of our modelisation please confere to this following document:
+For further explanation of our modelisation please confere to this following document: 
 
-![alt text](../doc/equations.pdf "Brunel Network")
+* [github](doc/equations.pdf)

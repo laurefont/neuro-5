@@ -6,7 +6,7 @@ A Simulation of Leaky Integrate-and-Fire Neuron models with the Brunel Network a
 
 ## Code Structure 
 
-![alt text](doc/diagramme_cmake.png "Diagramme cmake")
+![alt text](doc/png/diagramme_cmake.png "Diagramme cmake")
 
 ## External Documentation
 

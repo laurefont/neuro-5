@@ -6,7 +6,7 @@ Library test
 
 ## Classes Structure
 
-![alt text](../doc/diagram_test.png "Diagram of tests")
+![alt text](../doc/png/diagram_test.png "Diagram of tests")
 
 ## Manual 
 

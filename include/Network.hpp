@@ -5,9 +5,10 @@
 #include <memory>
 #include <fstream>      // std::ofstream
 
+#include <gtest/gtest.h>
+
 #include <Physics.hpp>
 #include <Neuron.hpp>
-#include <ExternalNeuron.hpp>
 
 ///
 /// @brief structure used to return the latest neuron in time and the time of almost last neuron in time in method get_back_neuron
@@ -50,14 +51,14 @@ public:
             double const& gamma = GAMMA,
             double const& epsilon = EPSILON,
             double const& external_factor = EXTERNAL_FACTOR,
+            unsigned random_seed = RANDOM_SEED,
             Physics::Potential firing_threshold = FIRING_THRESHOLD,
             Physics::Time refractory_period = REFRACTORY_PERIOD,
             Physics::Potential resting_potential = RESTING_POTENTIAL,
             Physics::Potential reset_potential = RESET_POTENTIAL,
             Physics::Time transmission_delay = TRANSMISSION_DELAY,
             Physics::Time tau = TAU,
-            Physics::Time time_of_simulation = SIMULATION_TIME, 
-            double initial_Vm = RESTING_POTENTIAL );
+            Physics::Time time_of_simulation = SIMULATION_TIME);
             
 	Network(Network const &) = delete;
 	Network& operator=(Network const &) = delete;
@@ -70,22 +71,20 @@ public:
 	/// @param dt time interval
     Physics::Time update(Physics::Time dt);
 
-    Neuron* get_neuron(unsigned int n);
-
-    size_t get_neurons_size();
-
 private:
 	///
 	/// Create connections between neurons
 	///
 	/// Each neurons has epsilon_ chance to make a connection with each other neurons
 	///
-	void make_connections();
+	void make_connections(unsigned seed);
 	
 	///
 	/// Returns time of the almost last neuron and index of the last neuron
 	///
     Neuron_last get_last_neurons();
+
+    Neuron* get_neuron(unsigned int n);
 
 private:
 	unsigned int const N_; ///< total number of neurons
@@ -115,7 +114,13 @@ private:
 
     SimulationType const type_; ///< type of simulation (analytical, explicit, implicit)
 	
-	
+private:
+    FRIEND_TEST(AnalyticNeuronTests, TestSingleNeuronSimulation);
+    FRIEND_TEST(AnalyticNeuronTests, TestDecayNeuronVoltage);
+    FRIEND_TEST(ExplicitNeuronTests, TestSingleNeuronSimulation);
+    FRIEND_TEST(ExplicitNeuronTests, TestDecayNeuronVoltage);
+    FRIEND_TEST(ImplicitNeuronTests, TestSingleNeuronSimulation);
+    FRIEND_TEST(ImplicitNeuronTests, TestDecayNeuronVoltage);
 };
 
 #endif // NETWORK_HPP

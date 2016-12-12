@@ -12,8 +12,9 @@ Applications
 
 ![alt text](../doc/png/network.png "The Network")
 
-The three populations being the excitatory, inhibitory and the exterior neurons 
-which are excitatory represented by the independent Poisson generators.
+The three populations being the excitatory, inhibitory and the external excitatory 
+neurons represented by the independent Poisson generators delivering spikes 
+at a default rate of 20 spikes per millisecond.
 
 ## Theoretical explanation of Brunel´s Network
 

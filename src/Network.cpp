@@ -24,15 +24,19 @@ Network::Network(   SimulationType const& type,
 					Physics::Potential reset_potential, 
 					Physics::Time transmission_delay, 
 					Physics::Time tau,
-					Physics::Time time_of_simulation) 
+					Physics::Time time_of_simulation,
+					Physics::Time spike_interval ) 
 					
 	: N_(number_neurons),
 	  Ne_(std::round(N_ / (1 + gamma))),
 	  Ni_(N_ - Ne_),
 	  gamma_(gamma),
 	  epsilon_(epsilon),
-      type_(type)
+      type_(type),
+      spike_interval_(spike_interval)
 {
+    assert(spike_interval>0);
+
     std::cout << "Creating " << N_ << " neurons..." << std::endl;
     neurons_ = new Neuron*[number_neurons];
 	for (unsigned int i(0); i < N_; ++i)
@@ -49,16 +53,18 @@ Network::Network(   SimulationType const& type,
     std::cout << "Creating " << epsilon_*100 << " network connectivity (random seed " << random_seed << ")..." << std::endl;
     make_connections(random_seed);
 	
-	spike_times_ = new unsigned int*[(int)time_of_simulation];
+    unsigned number_of_spike_intervals = (unsigned) (time_of_simulation/spike_interval)+1;
+    spike_times_ = new unsigned int[number_of_spike_intervals]();
+    
     raster_plot_file = new std::ofstream ("raster_plot.csv");
 	if (raster_plot_file->fail()) 
-	    throw std::runtime_error("file not found");
+        throw std::runtime_error("Could not create raster plot.");
     else
         *raster_plot_file << "t,neuron" << std::endl;
         
     spike_file = new std::ofstream ("firing_rate.csv");
     if  (spike_file->fail()) 
-	    throw std::runtime_error("file not found");
+        throw std::runtime_error("Could not create spike rate file.");
     else
         *spike_file << "t,spikes" << std::endl;
  }
@@ -75,9 +81,7 @@ Network::~Network()
         delete neurons_[i];
         
     delete[] neurons_;
-    
-    if(spike_times_) ///> True if spike_times_ is not a null pointer
-        delete[] spike_times_;
+    delete[] spike_times_;
 }
 
 Neuron* Network::get_neuron(unsigned int n)
@@ -121,10 +125,11 @@ Physics::Time Network::update(Physics::Time dt)
 	  {
         bool has_reached_threshold = neurons_[i]->update(dt);
         if (has_reached_threshold)
-			{
+        {
             *raster_plot_file << neurons_[i]->get_t() <<"," << i << std::endl;
-            ++spike_times_[(int)neurons_[i]->get_t()];
-			}
+            unsigned spike_interval_index = neurons_[i]->get_t() / spike_interval_;
+            spike_times_[spike_interval_index]++;
+        }
 	  }
       return neurons_[0]->get_t(); //time of the last neuron (send 0, all neurons have same time)
     }
@@ -145,7 +150,7 @@ Physics::Time Network::update(Physics::Time dt)
         if (has_reached_threshold) 
 			{
 				*raster_plot_file << last_neuron->get_t() <<"," << last_neuron->get_neuron_id() << std::endl;
-				++spike_times_[(int)last_neuron->get_t()];
+                spike_times_[(int)last_neuron->get_t()]++;
 			}
         return neurons_[second_last_id]->get_t(); //The 2nd last is now the last, return its time
 	}
@@ -180,12 +185,9 @@ Neuron_last Network::get_last_neurons()
     return nl;
 }
 
-void Network::write_spikes_to_file(unsigned int const& t)
+void Network::write_spikes_to_file(unsigned int const& times)
 {
     if (spike_file)
-		{
-			for (size_t i(0); i < t; ++i)
-				*spike_file << i << "," << spike_times_[i] << std::endl;
-				
-		}
+        for (size_t i = 0; i < times; ++i)
+            *spike_file << i * spike_interval_ << "," << spike_times_[i] << std::endl;
 }

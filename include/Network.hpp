@@ -58,11 +58,12 @@ public:
             Physics::Potential reset_potential = RESET_POTENTIAL,
             Physics::Time transmission_delay = TRANSMISSION_DELAY,
             Physics::Time tau = TAU,
-            Physics::Time time_of_simulation = SIMULATION_TIME);
+            Physics::Time time_of_simulation = SIMULATION_TIME,
+            Physics::Time spike_interval = SPIKE_INTERVAL );
             
 	Network(Network const &) = delete;
 	Network& operator=(Network const &) = delete;
-	void write_spikes_to_file(unsigned int const& t);
+    void write_spikes_to_file(unsigned int const& times);
 
 	virtual ~Network();
 
@@ -116,8 +117,11 @@ private:
 	std::ofstream * spike_file; ///< output file of firing rate
 
     SimulationType const type_; ///< type of simulation (analytical, explicit, implicit)
-    
-    unsigned int** spike_times_;
+
+
+    unsigned int* spike_times_;
+
+    Physics::Time spike_interval_;
 	
 private:
     FRIEND_TEST(AnalyticNeuronTests, TestSingleNeuronSimulation);

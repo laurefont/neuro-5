@@ -22,7 +22,8 @@ int main (int argc, char** argv)
                 user_arguments.get_gamma(),
                 user_arguments.get_epsilon(),
                 user_arguments.get_external_factor(),
-                user_arguments.get_random_seed()
+                user_arguments.get_random_seed(),
+                user_arguments.get_spike_interval()
                 );
 
     simulation.launch_simulation();

@@ -38,6 +38,7 @@ void UserArguments::parse(int argc, char** argv)
         TCLAP::ValueArg<unsigned int> simulation_type_arg("m", "mode", "Solution wanted (0 for Analytic_fixed_step, 1 for Explicit, 2 for Implicit, 3 for Variable_step)", false, 0, &allowedVals, cmd);
 		TCLAP::SwitchArg add_external_current_arg("E", "external_current", "current arriving from external neurons or not" , cmd, true);
         TCLAP::MultiArg<unsigned int> output_neuron_ids_arg("o", "output", "specific files opening", false, "unsigned", cmd, 0);
+        TCLAP::ValueArg<Physics::Time> spike_interval_arg("s", "spike", "spike counting time interval", false, SPIKE_INTERVAL, "Physics::Time", cmd);
         
         cmd.parse(argc, argv);
 
@@ -57,6 +58,7 @@ void UserArguments::parse(int argc, char** argv)
         add_external_current = add_external_current_arg.getValue();
         output_neuron_ids = output_neuron_ids_arg.getValue();
 		simulation_type = simulation_type_arg.getValue();
+		spike_interval = spike_interval_arg.getValue();
 
         if ( verbose_arg.getValue() )
             print_info();
@@ -153,6 +155,11 @@ bool UserArguments::get_add_external_current()
 unsigned int UserArguments::get_simulation_type()
 {
 	return simulation_type;
+}
+
+Physics::Time UserArguments::get_spike_interval()
+{
+	return spike_interval;
 }
 
 

@@ -118,10 +118,11 @@ private:
 
     SimulationType const type_; ///< type of simulation (analytical, explicit, implicit)
 
+
     unsigned int* spike_times_;
 
     Physics::Time spike_interval_;
-
+	
 private:
     FRIEND_TEST(AnalyticNeuronTests, TestSingleNeuronSimulation);
     FRIEND_TEST(AnalyticNeuronTests, TestDecayNeuronVoltage);

@@ -117,7 +117,7 @@ private:
 
     SimulationType const type_; ///< type of simulation (analytical, explicit, implicit)
     
-    unsigned int* spike_times_;
+    unsigned int** spike_times_;
 	
 private:
     FRIEND_TEST(AnalyticNeuronTests, TestSingleNeuronSimulation);

@@ -49,7 +49,7 @@ Network::Network(   SimulationType const& type,
     std::cout << "Creating " << epsilon_*100 << " network connectivity (random seed " << random_seed << ")..." << std::endl;
     make_connections(random_seed);
 	
-	spike_times_ = new unsigned int[time_of_simulation]();
+	spike_times_ = new unsigned int*[(int)time_of_simulation];
     raster_plot_file = new std::ofstream ("raster_plot.csv");
 	if (raster_plot_file->fail()) 
 	    throw std::runtime_error("file not found");

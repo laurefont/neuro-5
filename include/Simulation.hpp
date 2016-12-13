@@ -40,7 +40,8 @@ class Simulation
                     double const gamma = GAMMA,
                     double const epsilon = EPSILON,
                     double const& external_factor = EXTERNAL_FACTOR,
-                    unsigned random_seed = RANDOM_SEED );
+                    unsigned random_seed = RANDOM_SEED,
+                    Physics::Time spike_interval = SPIKE_INTERVAL );
 
 
         ///
@@ -65,7 +66,8 @@ class Simulation
                     double const gamma = GAMMA,
                     double const epsilon = EPSILON,
                     double const& external_factor = EXTERNAL_FACTOR,
-                    unsigned random_seed = RANDOM_SEED);
+                    unsigned random_seed = RANDOM_SEED,
+                    Physics::Time spike_interval = SPIKE_INTERVAL );
 
         virtual ~Simulation();
         void launch_simulation();
@@ -78,6 +80,7 @@ class Simulation
         Network network_;
         Physics::Time time_of_simulation_;
         Physics::Time time_step_;
+        Physics::Time spike_interval_;
 
     private:
         FRIEND_TEST(AnalyticNeuronTests, TestSingleNeuronSimulation);

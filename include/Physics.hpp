@@ -18,6 +18,7 @@
 #define NUMBER_OF_NEURONS 10000
 #define SIMULATION_TIME 1000 //ms
 #define TIME_STEP 0.1 //ms
+#define SPIKE_INTERVAL 5 //ms
 
 enum class SimulationType : short
 {

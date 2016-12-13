@@ -14,12 +14,20 @@ Simulation::Simulation( unsigned int const number_neurons,
 						Physics::Time tau,
 						double const gamma, double const epsilon,
 						double const& external_factor,
-						unsigned random_seed)
-    : network_(type, number_neurons, add_external_current, neuron_csv_files, gamma, epsilon, external_factor, random_seed, firing_threshold, 
-    refractory_period, resting_potential, reset_potential, transmission_delay, tau, time_of_simulation),
-	time_of_simulation_(time_of_simulation),
-	time_step_(time_step)
-	{}
+						unsigned random_seed,
+						Physics::Time spike_interval)
+						
+						: network_(type, number_neurons, 
+							add_external_current, neuron_csv_files, 
+							gamma, epsilon, external_factor, 
+							random_seed, firing_threshold, 
+							refractory_period, resting_potential, 
+							reset_potential, transmission_delay, 
+							tau, time_of_simulation, spike_interval),
+						time_of_simulation_(time_of_simulation),
+						time_step_(time_step),
+						spike_interval_(spike_interval)
+{}
 
 
 Simulation::Simulation( unsigned int const number_neurons, 
@@ -35,7 +43,8 @@ Simulation::Simulation( unsigned int const number_neurons,
                         double const gamma, 
                         double const epsilon,
                         double const& external_factor,
-                        unsigned random_seed)
+                        unsigned random_seed,
+                        Physics::Time spike_interval )
 
 		: Simulation(   number_neurons,
 						time_of_simulation,  
@@ -51,7 +60,8 @@ Simulation::Simulation( unsigned int const number_neurons,
 						tau, 
 						gamma, 
 						epsilon,
-						external_factor)
+						external_factor,
+						spike_interval)
 {}
 
 
@@ -72,6 +82,7 @@ void Simulation::launch_simulation()
 {
     std::cout << "Running simulation for " << time_of_simulation_ << " ms..." << std::endl;
     while (network_.update(time_step_) < time_of_simulation_){};
-    network_.write_spikes_to_file(time_of_simulation_);
+    unsigned times = (unsigned int)(time_of_simulation_/spike_interval_)+1;
+    network_.write_spikes_to_file(times);
 }
 

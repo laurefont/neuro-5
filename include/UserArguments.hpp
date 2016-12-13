@@ -28,6 +28,7 @@ public:
     Physics::Time get_refractory_period();
     bool get_add_external_current();
     unsigned int get_simulation_type();
+    Physics::Time get_spike_interval();
 
     std::vector<unsigned int> * get_output_neuron_ids();
 
@@ -52,4 +53,6 @@ private:
     std::vector<unsigned int> output_neuron_ids;
     bool add_external_current;
     unsigned int simulation_type;
+    Physics::Time spike_interval;
 };
+

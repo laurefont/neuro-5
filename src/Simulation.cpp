@@ -25,8 +25,7 @@ Simulation::Simulation( unsigned int const number_neurons,
 							reset_potential, transmission_delay, 
 							tau, time_of_simulation, spike_interval),
 						time_of_simulation_(time_of_simulation),
-						time_step_(time_step),
-						spike_interval_(spike_interval)
+						time_step_(time_step)
 {}
 
 
@@ -82,7 +81,6 @@ void Simulation::launch_simulation()
 {
     std::cout << "Running simulation for " << time_of_simulation_ << " ms..." << std::endl;
     while (network_.update(time_step_) < time_of_simulation_){};
-    unsigned times = (unsigned int)(time_of_simulation_/spike_interval_)+1;
-    network_.write_spikes_to_file(times);
+    network_.write_spikes_to_file();
 }
 

@@ -63,7 +63,7 @@ public:
             
 	Network(Network const &) = delete;
 	Network& operator=(Network const &) = delete;
-    void write_spikes_to_file(unsigned int const& times);
+    void write_spikes_to_file();
 
 	virtual ~Network();
 
@@ -121,6 +121,8 @@ private:
 
     unsigned int* spike_times_;
 
+    Physics::Time time_of_simulation_;
+    
     Physics::Time spike_interval_;
 	
 private:

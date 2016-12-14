@@ -15,7 +15,7 @@ class Simulation
 {
     public:
         ///
-        /// Create a fix step method simulation
+        /// Create a fixed-step method simulation
         ///
         /// @param number_neurons number of neurons in the network
         /// @param time_of_simulation duration of the simulation
@@ -45,7 +45,7 @@ class Simulation
 
 
         ///
-        /// Create a simulation with an analytic solution
+        /// Create a simulation with an analytic variable-step solution
         ///
         /// @param number_neurons number of neurons in the network
         /// @param time_of_simulation duration of the simulation

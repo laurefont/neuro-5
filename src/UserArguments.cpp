@@ -57,8 +57,8 @@ void UserArguments::parse(int argc, char** argv)
         tau = tau_arg.getValue();
         add_external_current = add_external_current_arg.getValue();
         output_neuron_ids = output_neuron_ids_arg.getValue();
-	simulation_type = simulation_type_arg.getValue();
-	spike_interval = spike_interval_arg.getValue();
+        simulation_type = simulation_type_arg.getValue();
+        spike_interval = spike_interval_arg.getValue();
 
         if ( verbose_arg.getValue() )
             print_info();
@@ -181,6 +181,7 @@ void UserArguments::print_info()
     std::cout << "- external current: " << (add_external_current ? "yes" : "no") << std::endl;
     std::cout << "- random seed: " << random_seed << std::endl;
     std::cout << "- spiking rate interval for output: " << spike_interval << " ms" << std::endl;
+    //TODO this simulation_type is only correctly printed when calling the 'simulator', not the 'simulator_*' apps
     std::cout << "- simulation type: " << simulation_type << std::endl;
 }
 

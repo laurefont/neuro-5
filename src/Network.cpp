@@ -33,6 +33,7 @@ Network::Network(   SimulationType const& type,
 	  gamma_(gamma),
 	  epsilon_(epsilon),
       type_(type),
+      time_of_simulation_(time_of_simulation),
       spike_interval_(spike_interval)
 {
     assert(spike_interval>0);
@@ -119,6 +120,7 @@ void Network::make_connections(unsigned seed)
 
 Physics::Time Network::update(Physics::Time dt)
 {
+	int number_of_intervals = (int)time_of_simulation_/spike_interval_;
     if (type_ != SimulationType::AnalyticVariableStep) //Fixed Step methods
     {
       for (unsigned int i=0; i< N_; ++i)
@@ -128,6 +130,8 @@ Physics::Time Network::update(Physics::Time dt)
         {
             *raster_plot_file << neurons_[i]->get_t() <<"," << i << std::endl;
             unsigned spike_interval_index = neurons_[i]->get_t() / spike_interval_;
+            if (spike_interval_index > number_of_intervals)
+				spike_interval_index = number_of_intervals;
             spike_times_[spike_interval_index]++;
         }
 	  }
@@ -185,9 +189,10 @@ Neuron_last Network::get_last_neurons()
     return nl;
 }
 
-void Network::write_spikes_to_file(unsigned int const& times)
+void Network::write_spikes_to_file()
 {
+	int number_of_intervals = (int)time_of_simulation_/spike_interval_ +1;
     if (spike_file)
-        for (size_t i = 0; i < times; ++i)
+        for (size_t i = 0; i < number_of_intervals; ++i)
             *spike_file << i * spike_interval_ << "," << spike_times_[i] << std::endl;
 }

@@ -10,14 +10,14 @@ UserArguments::UserArguments(int argc, char** argv) {
 
 void UserArguments::parse(int argc, char** argv)
 {
-		std::vector <unsigned int> allowed;
-		allowed.push_back(0);
-		allowed.push_back(1);
-		allowed.push_back(2);
-		allowed.push_back(3);
-		TCLAP::ValuesConstraint<unsigned int> allowedVals( allowed );
+    std::vector <unsigned int> allowed;
+    allowed.push_back(0);
+    allowed.push_back(1);
+    allowed.push_back(2);
+    allowed.push_back(3);
+    TCLAP::ValuesConstraint<unsigned int> allowedVals( allowed );
 
-	std::random_device rd;
+    std::random_device rd;
     try
     {
         TCLAP::CmdLine cmd("Simulation of neurons network");

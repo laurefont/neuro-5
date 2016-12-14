@@ -164,6 +164,22 @@ TEST(TestsCategoryName, TestDecayNeuronVoltage)
     EXPECT_NEAR(vm, RESTING_POTENTIAL, 1.0);
 }
 
+TEST(TestsCategoryName, TestRefractoryPeriod)
+{
+	Neuron neuron (NeuronType, true, false, FIRING_THRESHOLD, SIMULATION_TIME, REFRACTORY_PERIOD, RESTING_POTENTIAL,RESET_POTENTIAL, TRANSMISSION_DELAY, TAU, 
+					EXTERNAL_FACTOR, 25, true);
+					
+	Physics::Time dt = 0.1;
+	for(Physics::Time i(0.0); i< 2.0 ; i+=dt)
+	{
+		neuron.update(dt);	
+	}
+	
+	double result = neuron.get_Vm();
+	EXPECT_EQ (RESTING_POTENTIAL, result);
+	
+}
+
 int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);

@@ -10,7 +10,20 @@
 %OR simply use lualatex instead of latex
 % lualatex -shell-escape --enable-write18 raster_plot
 
+
+\pgfplotsset{
+    dirac/.style={
+        mark=none, 
+        mark options={scale=0},
+        ycomb,
+        scatter,
+        visualization depends on={y/abs(y)-1 \as \sign},
+        scatter/@pre marker code/.code={\scope[rotate=90*\sign,yshift=-2pt]}
+    }
+}
+
 \begin{document}
+\begin{tabular}{l}
 \begin{tikzpicture}
 \begin{axis}
 [
@@ -23,11 +36,29 @@
   xmin=0,
   xmax=1000
 ]
-%add scatter for ascending rainbow color coding
-%\addplot+[only marks,mark size=0.1, each nth point=1] table [x=t, y=neuron, col sep=comma] {csv/raster_plot_implicit.csv};
-%\addplot+[only marks,mark size=0.2, each nth point=2] table [x=t, y=neuron, col sep=comma] {csv/raster_plot_implicit.csv};
-%\addplot+[only marks,mark size=0.2, each nth point=2] table [x=t, y=neuron, col sep=comma] {csv/raster_plot_analytic_fixed_step.csv};
-\addplot+[only marks,mark size=0.2, each nth point=2] table [x=t, y=neuron, col sep=comma] {csv/raster_plot_analytic_variable_step.csv};
+%uncomment the one you want to generate
+%\addplot+[only marks,mark size=0.1, each nth point=1] table [x=t, y=neuron, col sep=comma] {../csv/raster_plot_implicit.csv};
+%\addplot+[only marks,mark size=0.2, each nth point=2] table [x=t, y=neuron, col sep=comma] {../csv/raster_plot_implicit.csv};
+%\addplot+[only marks,mark size=0.2, each nth point=2] table [x=t, y=neuron, col sep=comma] {../csv/raster_plot_analytic_fixed_step.csv};
+%\addplot+[only marks,mark size=0.2, each nth point=2] table [x=t, y=neuron, col sep=comma] {../csv/raster_plot_analytic_variable_step.csv};
+\addplot+[only marks,mark size=0.2, each nth point=2] table [x=t, y=neuron, col sep=comma] {./raster_plot.csv};
 \end{axis}
 \end{tikzpicture}
+\\
+\begin{tikzpicture}
+\begin{axis}[
+  axis lines=middle,
+  xlabel={time interval ($ms$)},
+  ylabel={spikes count},
+  width=40cm,
+  height=5cm,
+  ymin=0,
+  xmin=0,
+  xmax=1000
+]
+%\addplot+table [x=t, y=spikes, col sep=comma, each nth point=10] {./firing_rate.csv};
+\addplot+[dirac] table [x=t, y=spikes, col sep=comma, each nth point=1] {./firing_rate.csv};
+\end{axis}
+\end{tikzpicture}
+\end{tabular}
 \end{document}

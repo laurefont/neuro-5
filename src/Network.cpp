@@ -63,7 +63,7 @@ Network::Network(   SimulationType const& type,
     else
         *raster_plot_file << "t,neuron" << std::endl;
         
-    spike_file = new std::ofstream ("firing_rate.csv");
+    spike_file = new std::ofstream ("spiking_rate.csv");
     if  (spike_file->fail()) 
         throw std::runtime_error("Could not create spike rate file.");
     else

@@ -16,11 +16,13 @@ A Simulation of Leaky Integrate-and-Fire Neuron models with the Brunel Network a
 
 ## Manual
 
-To execute the application, run
+To execute the default application, run
 
-    ./simulation
+    ./simulator
+in neuro-5/build/apps
 
-For help and parameters, type
+
+For help, mode and parameters, type
 
     ./simulation --help
     

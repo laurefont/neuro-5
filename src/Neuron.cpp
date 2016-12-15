@@ -138,7 +138,7 @@ bool Neuron::update(Physics::Time dt)
         if (!events_in_.empty())
             dt = std::min(dt, events_in_.top().get_t() - t_);
 
-    assert(dt>0);
+    assert(dt>=0);
     step(dt); //updates Voltage based on step size
     write_voltage_to_file();
 

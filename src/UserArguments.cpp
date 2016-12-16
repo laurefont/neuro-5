@@ -199,7 +199,8 @@ void UserArguments::check_arguments_validity()
         throw std::runtime_error("external factor not valid");
 
     // random_seed is in [0, max-unsigned-int]
-    if (not(0 <= random_seed && random_seed <= unsigned_max))
+    // unsiged int implies 0 <= random_seed is always true
+    if (not(random_seed <= unsigned_max))
         throw std::runtime_error("random seed not valid");
 
     // time_step is in (0, time_of_simulation]
@@ -231,8 +232,9 @@ void UserArguments::check_arguments_validity()
         throw std::runtime_error("membrane time constant not valid");
 
     // neuron_id in output_neuron_ids are in [0, number_neurons -1]
-    for (auto neuron_id : output_neuron_ids) {
-        if (not(0 <= neuron_id && neuron_id <= number_neurons -1))
+    for (unsigned int neuron_id : output_neuron_ids) {
+        // unsiged int implies 0 <= neuron_id is always true
+        if (not(neuron_id <= number_neurons -1))
             throw std::runtime_error("neuron id for output file not valid");
     }
 

@@ -120,7 +120,7 @@ void Network::make_connections(unsigned seed)
 
 Physics::Time Network::update(Physics::Time dt)
 {
-	int number_of_intervals = (int)time_of_simulation_/spike_interval_;
+	unsigned number_of_intervals = time_of_simulation_/spike_interval_;
     if (type_ != SimulationType::AnalyticVariableStep) //Fixed Step methods
     {
       for (unsigned int i=0; i< N_; ++i)
@@ -191,7 +191,7 @@ Neuron_last Network::get_last_neurons()
 
 void Network::write_spikes_to_file()
 {
-	int number_of_intervals = (int)time_of_simulation_/spike_interval_ +1;
+	unsigned number_of_intervals = time_of_simulation_/spike_interval_ +1;
     if (spike_file)
         for (size_t i = 0; i < number_of_intervals; ++i)
             *spike_file << i * spike_interval_ << "," << spike_times_[i] << std::endl;

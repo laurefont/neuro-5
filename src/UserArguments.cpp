@@ -5,6 +5,7 @@
 #include <vector>
 #include <stdexcept>
 #include <limits>
+#include <string>
 
 UserArguments::UserArguments(int argc, char** argv)
 {
@@ -23,25 +24,58 @@ void UserArguments::parse(int argc, char** argv)
     std::random_device rd;
     try
     {
-        TCLAP::CmdLine cmd("Simulation of neurons network");
+        TCLAP::CmdLine cmd("simulator for Leaky Integrate-and-Fire neurons following a Brunel model");
+
         TCLAP::SwitchArg verbose_arg("v", "verbose", "output execution parameters", cmd, false);
-        TCLAP::ValueArg<Physics::Time> time_of_simulation_arg("t", "time","total simulation time (unit: ms)", false, SIMULATION_TIME, "Physics::Time", cmd);
-        TCLAP::ValueArg<unsigned int> number_neurons_arg("n", "neurons", "total number of neurons to consider for the simulation", false, NUMBER_OF_NEURONS, "unsigned", cmd);
-        TCLAP::ValueArg<double> gamma_arg("g", "gamma", "proportion of inhibitory over excitatory neurons", false, GAMMA, "double", cmd);
-        TCLAP::ValueArg<double> epsilon_arg("e", "epsilon", "connections density", false, EPSILON, "double", cmd);
-        TCLAP::ValueArg<double> external_factor_arg("f", "factor", "external factor", false, EXTERNAL_FACTOR, "double", cmd);
-        TCLAP::ValueArg<unsigned> random_seed_arg("R", "random_seed", "random seed for external events and network connectivity (default: random)", false, rd(), "unsigned", cmd);
-        TCLAP::ValueArg<Physics::Time> time_step_arg("d", "dt", "time step of the simulation (unit: ms)", false, TIME_STEP, "Physics::Time", cmd);
-        TCLAP::ValueArg<Physics::Potential> firing_threshold_arg("F", "firing_threshold", "potential that must be reached to generate a spike (unit: mV)", false, FIRING_THRESHOLD, "Physics::Potential", cmd);
-        TCLAP::ValueArg<Physics::Time> refractory_period_arg("r", "refractory", "period during which the neuron is insensitive to arriving spikes (unit: ms)", false, REFRACTORY_PERIOD, "Physics::Time", cmd);
-        TCLAP::ValueArg<Physics::Potential> resting_potential_arg("p", "resting_potential", "resting potential, equilibrium state (unit: mV)", false, RESTING_POTENTIAL, "Physics::Potential", cmd);
-        TCLAP::ValueArg<Physics::Potential> reset_potential_arg("P", "reset_potential", "potential after the neuron has fired (unit: mV)", false, RESET_POTENTIAL, "Physics::Time", cmd);
-        TCLAP::ValueArg<Physics::Time> transmission_delay_arg("D", "transmission_delay", "duration of the transmission of a spike (unit: ms)", false, TRANSMISSION_DELAY, "Physics::Time", cmd);
-        TCLAP::ValueArg<Physics::Time> tau_arg("T", "tau", "membrane time constant (unit: ms)", false, TAU, "Physics::Time", cmd);
-        TCLAP::ValueArg<unsigned int> simulation_type_arg("m", "mode", "Solution wanted (0 for Analytic_fixed_step, 1 for Explicit, 2 for Implicit, 3 for Variable_step)", false, 0, &allowedVals, cmd);
-		TCLAP::SwitchArg add_external_current_arg("E", "external_current", "current arriving from external neurons or not" , cmd, true);
-        TCLAP::MultiArg<unsigned int> output_neuron_ids_arg("o", "output", "specific files opening", false, "unsigned", cmd, 0);
-        TCLAP::ValueArg<Physics::Time> spike_interval_arg("s", "spike", "spike counting time interval (unit: ms)", false, SPIKE_INTERVAL, "Physics::Time", cmd);
+
+        const std::string time_of_simulation_msg("total simulation time (unit: ms, validity range: must be positive, default value: " + std::to_string(SIMULATION_TIME) + " ms)");
+        TCLAP::ValueArg<Physics::Time> time_of_simulation_arg("t", "time", time_of_simulation_msg, false, SIMULATION_TIME, "Physics::Time", cmd);
+
+        const std::string number_neurons_msg("total number of neurons to consider for the simulation (validity range: must at least have 1, default value: " + std::to_string(NUMBER_OF_NEURONS) + ")");
+        TCLAP::ValueArg<unsigned int> number_neurons_arg("n", "neurons", number_neurons_msg, false, NUMBER_OF_NEURONS, "unsigned", cmd);
+
+        const std::string gamma_msg("proportion of inhibitory over excitatory neurons (validity range: must be between 0 and 1, default value: " + std::to_string(GAMMA) + ")");
+        TCLAP::ValueArg<double> gamma_arg("g", "gamma", gamma_msg, false, GAMMA, "double", cmd);
+
+        const std::string epsilon_msg("connections density (validity range: must be between 0 and 1, default value: " + std::to_string(EPSILON) + ")");
+        TCLAP::ValueArg<double> epsilon_arg("e", "epsilon", epsilon_msg, false, EPSILON, "double", cmd);
+
+        const std::string external_factor_msg("external factor (validity range: must be positive, default value: " + std::to_string(EXTERNAL_FACTOR) + ")");
+        TCLAP::ValueArg<double> external_factor_arg("f", "factor", external_factor_msg, false, EXTERNAL_FACTOR, "double", cmd);
+
+        const std::string random_seed_msg("random seed for external events and network connectivity (default value: random)");
+        TCLAP::ValueArg<unsigned> random_seed_arg("R", "random_seed", random_seed_msg, false, rd(), "unsigned", cmd);
+
+        const std::string time_step_msg("time step of the simulation (unit: ms, validity range: must be between 0 and the total simulation time, default value: " + std::to_string(TIME_STEP) + " ms)");
+        TCLAP::ValueArg<Physics::Time> time_step_arg("d", "dt", time_step_msg, false, TIME_STEP, "Physics::Time", cmd);
+
+        const std::string firing_threshold_msg("potential that must be reached to generate a spike (unit: mV, validity range: must be greater than the resting potential, default value: " + std::to_string(FIRING_THRESHOLD) + " mV)");
+        TCLAP::ValueArg<Physics::Potential> firing_threshold_arg("F", "firing_threshold", firing_threshold_msg, false, FIRING_THRESHOLD, "Physics::Potential", cmd);
+
+        const std::string refractory_period_msg("period during which the neuron is insensitive to arriving spikes (unit: ms, validity range: must be between 0 and the total simulation time, default value: " + std::to_string(REFRACTORY_PERIOD) + " ms)");
+        TCLAP::ValueArg<Physics::Time> refractory_period_arg("r", "refractory", refractory_period_msg, false, REFRACTORY_PERIOD, "Physics::Time", cmd);
+
+        const std::string resting_potential_msg("resting potential, equilibrium state (unit: mV, validity range: must be lower than the firing threshold, default value: " + std::to_string(RESTING_POTENTIAL) + " mV)");
+        TCLAP::ValueArg<Physics::Potential> resting_potential_arg("p", "resting_potential", resting_potential_msg, false, RESTING_POTENTIAL, "Physics::Potential", cmd);
+
+        const std::string reset_potential_msg("potential after the neuron has fired (unit: mV, validity range: must be lower than the firing threshold, default value: "  + std::to_string(RESET_POTENTIAL) + " mV)");
+        TCLAP::ValueArg<Physics::Potential> reset_potential_arg("P", "reset_potential", reset_potential_msg, false, RESET_POTENTIAL, "Physics::Time", cmd);
+
+        const std::string transmission_delay_msg("duration of the transmission of a spike (unit: ms, validity range: must be positive, default value: " + std::to_string(TRANSMISSION_DELAY) + " ms)");
+        TCLAP::ValueArg<Physics::Time> transmission_delay_arg("D", "transmission_delay", transmission_delay_msg, false, TRANSMISSION_DELAY, "Physics::Time", cmd);
+
+        const std::string tau_msg("membrane time constant (unit: ms, validity range: must be positive, default value: " + std::to_string(TAU) + " ms)");
+        TCLAP::ValueArg<Physics::Time> tau_arg("T", "tau", tau_msg, false, TAU, "Physics::Time", cmd);
+
+        TCLAP::ValueArg<unsigned int> simulation_type_arg("m", "mode", "Solution wanted (0 for Analytic_fixed_step, 1 for Explicit, 2 for Implicit, 3 for Variable_step, default value: 0)", false, 0, &allowedVals, cmd);
+
+		TCLAP::SwitchArg add_external_current_arg("E", "external_current", "current arriving from external neurons or not default value: true" , cmd, true);
+
+        const std::string output_neuron_ids_msg("specific neuron id for files opening (id validity range: between 0 and total number of neurons minus one, default value: output only for neuron id equal 0)");
+        TCLAP::MultiArg<unsigned int> output_neuron_ids_arg("o", "output", output_neuron_ids_msg, false, "unsigned", cmd, 0);
+
+        const std::string spike_interval_msg("spike counting time interval (unit: ms, validity range: must be between 0 and the total simulation time, default value: " + std::to_string(SPIKE_INTERVAL) + " ms)");
+        TCLAP::ValueArg<Physics::Time> spike_interval_arg("s", "spike", spike_interval_msg, false, SPIKE_INTERVAL, "Physics::Time", cmd);
         
         cmd.parse(argc, argv);
 
@@ -180,67 +214,67 @@ void UserArguments::check_arguments_validity()
 
     // time_of_simulation is in [0, max-Physics::Time]
     if (not(0 <= time_of_simulation && time_of_simulation <= time_max))
-        throw std::runtime_error("simulation time not valid");
+        throw std::runtime_error("simulation time not valid; use --help for help");
 
     // number_neurons is in [1, max-unsigned-int]
     if (not(1 <= number_neurons && number_neurons <= unsigned_max))
-        throw std::runtime_error("number of neurons not valid");
+        throw std::runtime_error("number of neurons not valid; use --help for help");
 
     // gamma is in [0, 1]
     if (not(0 <= gamma && gamma <= 1))
-        throw std::runtime_error("proportion of inhibitory over excitatory neurons not valid");
+        throw std::runtime_error("proportion of inhibitory over excitatory neurons not valid; use --help for help");
 
     // epsilon is in [0, 1]
     if (not(0 <= epsilon && epsilon <= 1))
-        throw std::runtime_error("connections density not valid");
+        throw std::runtime_error("connections density not valid; use --help for help");
 
     // external_factor is in [0, max-double]
     if (not(0 <= external_factor && external_factor <= double_max))
-        throw std::runtime_error("external factor not valid");
+        throw std::runtime_error("external factor not valid; use --help for help");
 
     // random_seed is in [0, max-unsigned-int]
     // unsiged int implies 0 <= random_seed is always true
     if (not(random_seed <= unsigned_max))
-        throw std::runtime_error("random seed not valid");
+        throw std::runtime_error("random seed not valid; use --help for help");
 
     // time_step is in (0, time_of_simulation]
     if (not(0 < time_step && time_step <= time_of_simulation))
-        throw std::runtime_error("time step not valid");
+        throw std::runtime_error("time step not valid; use --help for help");
 
     // firing_threshold is in [resting_potential, max-Physics::Potential]
     if (not(resting_potential <= firing_threshold && firing_threshold <= potential_max))
-        throw std::runtime_error("firing threshold not valid");
+        throw std::runtime_error("firing threshold not valid; use --help for help");
 
     // refractory_period is in (0, time_of_simulation]
     if (not(0 < refractory_period && refractory_period <= time_of_simulation))
-        throw std::runtime_error("refractory period not valid");
+        throw std::runtime_error("refractory period not valid; use --help for help");
 
     // resting_potential is in [min-Physics::Potential, firing_threshold]
     if (not(potential_lowest <= resting_potential && resting_potential <= firing_threshold))
-        throw std::runtime_error("resting potential not valid");
+        throw std::runtime_error("resting potential not valid; use --help for help");
 
     // reset_potential is in [min-Physics::Potential, firing_threshold]
     if (not(potential_lowest <= reset_potential && reset_potential <= firing_threshold))
-        throw std::runtime_error("reset potential not valid");
+        throw std::runtime_error("reset potential not valid; use --help for help");
 
     // transmission_delay is in [0, max-Physics::Time]
     if (not(0 <= transmission_delay && transmission_delay <= time_max))
-        throw std::runtime_error("transmission delay not valid");
+        throw std::runtime_error("transmission delay not valid; use --help for help");
 
     // tau is in [0, max-Physics::Time]
     if (not(0 <= tau && tau <= time_max))
-        throw std::runtime_error("membrane time constant not valid");
+        throw std::runtime_error("membrane time constant not valid; use --help for help");
 
     // neuron_id in output_neuron_ids are in [0, number_neurons -1]
     for (unsigned int neuron_id : output_neuron_ids) {
         // unsiged int implies 0 <= neuron_id is always true
         if (not(neuron_id <= number_neurons -1))
-            throw std::runtime_error("neuron id for output file not valid");
+            throw std::runtime_error("neuron id for output file not valid; use --help for help");
     }
 
     // spike_interval is in (0, time_of_simulation]
     if (not(0 < spike_interval && spike_interval <= time_of_simulation))
-        throw std::runtime_error("spike interval not valid");
+        throw std::runtime_error("spike interval not valid; use --help for help");
 }
 
 void UserArguments::print_info()

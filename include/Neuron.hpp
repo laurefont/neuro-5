@@ -8,13 +8,16 @@
 #include <Event.hpp>
 #include <queue>
 
-class Neuron {
-    
-  public :
-    
-    ///constructeur et destructeur
+class Neuron
+{
+public:
+    ///
+    /// @brief Constructor
+    ///
+    /// constructor takes arguments that will be modified during time
+    ///
     Neuron(SimulationType const& a_type, 
-		   bool const& exc,
+           bool const& exc,
            bool const& add_external_current = true,
            Physics::Potential firing_threshold = FIRING_THRESHOLD,
            Physics::Time time_of_simulation = SIMULATION_TIME,
@@ -27,11 +30,12 @@ class Neuron {
            unsigned random_seed = RANDOM_SEED,
            bool outputCsvFile_ = false,
            int neuron_id_ = 0);
-            ///< constructor takes arguments that will be modified during time
 
+    ///
+    /// @brief Destructor
+    ///
     ~Neuron();
     
-    //méthode publique
     bool has_reached_threshold() const;  ///< verify if Vm is >= thresold 
     bool update(Physics::Time dt); ///< in a first step, the function updates inputs, then if the thresold is reached, the function update ouputs
     void add_connection(Neuron* neuron); ////< add outgoing synapse
@@ -55,7 +59,14 @@ class Neuron {
 
     void write_voltage_to_file();
 
-  private:
+private:
+    void step_analytic(Physics::Time const& dt); ///< analytic time-stepping solution
+    void step_explicit(Physics::Time const& dt); ///< explicit time-stepping solution
+    void step_implicit(Physics::Time const& dt); ///< implicit time-stepping solution
+
+    bool is_not_in_refractory_period(Physics::Time const& dt); ///< true if neuron is in regraction
+
+private:
     int neuron_id_;
     const SimulationType type_;
     const bool outputCsvFile_;
@@ -69,19 +80,12 @@ class Neuron {
     std::priority_queue <Event> events_in_; ///<queue of input events 
     std::vector <Neuron*> synapses_; ///<table with the neurons it's sending signals to
 
-	/*static*/ const Physics::Potential firing_threshold_; ///<membrane potential level at which neuron fires
-    /*static*/ const Physics::Time refractory_period_; ///<tau_rp (period after an output, during which neuron can't receive inputs and can't fire) 
-    /*static*/ const Physics::Potential resting_potential_; ///<resting potential (voltage in equilibrium)
-    /*static*/ const Physics::Potential reset_potential_; ///< reset potential after the neuron has fired)
-    /*static*/ const Physics::Time transmission_delay_; ///<D (time taken by a signal after it's been produced to reach the receiving neuron)
-    /*static*/ const Physics::Time tau_; ///<Time constaint (tau)
-
-    void step_analytic(Physics::Time const& dt); ///< analytic time-stepping solution
-    void step_explicit(Physics::Time const& dt); ///< explicit time-stepping solution
-    void step_implicit(Physics::Time const& dt); ///< implicit time-stepping solution
-
-    bool is_not_in_refractory_period(Physics::Time const& dt); ///< true if neuron is in regraction
+    const Physics::Potential firing_threshold_; ///<membrane potential level at which neuron fires
+    const Physics::Time refractory_period_; ///<tau_rp (period after an output, during which neuron can't receive inputs and can't fire) 
+    const Physics::Potential resting_potential_; ///<resting potential (voltage in equilibrium)
+    const Physics::Potential reset_potential_; ///< reset potential after the neuron has fired)
+    const Physics::Time transmission_delay_; ///<D (time taken by a signal after it's been produced to reach the receiving neuron)
+    const Physics::Time tau_; ///<Time constaint (tau)
 };
 
-
-#endif
+#endif // NEURON_H

@@ -32,15 +32,16 @@
   width=40cm,
   height=10cm,
   ymin=0,
-  ymax=10000,
+  ymax=10000,  %%% number of neurons
   xmin=0,
-  xmax=1000
+  xmax=1000 %%% 0 to xmax milisec
 ]
 %uncomment the one you want to generate
 %\addplot+[only marks,mark size=0.1, each nth point=1] table [x=t, y=neuron, col sep=comma] {../csv/raster_plot_implicit.csv};
 %\addplot+[only marks,mark size=0.2, each nth point=2] table [x=t, y=neuron, col sep=comma] {../csv/raster_plot_implicit.csv};
 %\addplot+[only marks,mark size=0.2, each nth point=2] table [x=t, y=neuron, col sep=comma] {../csv/raster_plot_analytic_fixed_step.csv};
 %\addplot+[only marks,mark size=0.2, each nth point=2] table [x=t, y=neuron, col sep=comma] {../csv/raster_plot_analytic_variable_step.csv};
+%%%%% input file path below:
 \addplot+[only marks,mark size=0.2, each nth point=2] table [x=t, y=neuron, col sep=comma] {./raster_plot.csv};
 \end{axis}
 \end{tikzpicture}
@@ -54,9 +55,10 @@
   height=5cm,
   ymin=0,
   xmin=0,
-  xmax=1000
+  xmax=1000  % o to xmax milisec
 ]
 %\addplot+table [x=t, y=spikes, col sep=comma, each nth point=10] {./spiking_rate.csv};
+%%%%% input file path below
 \addplot+[dirac] table [x=t, y=spikes, col sep=comma, each nth point=1] {./spiking_rate.csv};
 \end{axis}
 \end{tikzpicture}

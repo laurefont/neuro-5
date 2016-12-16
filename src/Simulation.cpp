@@ -60,6 +60,7 @@ Simulation::Simulation( unsigned int const number_neurons,
 						gamma, 
 						epsilon,
 						external_factor,
+                        random_seed,
 						spike_interval)
 {}
 

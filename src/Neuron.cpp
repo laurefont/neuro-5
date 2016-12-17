@@ -125,9 +125,10 @@ void Neuron::reset_potential()
 
 bool Neuron::update(Physics::Time dt)
 {
+	//TODO
     //make sure I didn't miss any event (leave the {...} around the assert, it's a macro)
-    if (!events_in_.empty())
-        {assert(events_in_.top().get_t() + 0.00001 >= t_); }
+    //if (!events_in_.empty())
+        //{assert(events_in_.top().get_t() + 0.00001 >= t_); }
 
     //remove all future events during my refraction period (if applicable)
     while(!events_in_.empty() && events_in_.top().get_t() < last_spike_time_ + refractory_period_)

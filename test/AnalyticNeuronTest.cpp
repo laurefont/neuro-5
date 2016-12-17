@@ -180,84 +180,48 @@ TEST(TestsCategoryName, TestRefractoryPeriod)
 	
 }
 
-TEST(TestsCategoryName, TestLowVolateFiringReset)
+
+TEST(TestsCategoryName, TestVolateFiringReset)
 {
     Neuron neuron (NeuronType, true, false, FIRING_THRESHOLD, SIMULATION_TIME, REFRACTORY_PERIOD, RESTING_POTENTIAL,RESET_POTENTIAL, TRANSMISSION_DELAY, TAU, 
-					EXTERNAL_FACTOR, RANDOM_SEED, true, 7);
-    Physics::Time dt = 1.0;
+					EXTERNAL_FACTOR, RANDOM_SEED, true, 3);
+    Physics::Time dt = TIME_STEP;
     Physics::Time DT = TIME_STEP;
-    Physics::Potential weight = 0.2;
-    for(Physics::Time i(0.0); i< 40 ; i+=dt)
+    
+    for(Physics::Time i(0.0); i< 20 ; i+=dt)
     {
-		Event event(i, weight);
+		Event event(i,0.1);
 		neuron.add_event_in(event); 
 	}
-    while( neuron.get_t() < 40)
+	 for(Physics::Time i(20); i< 40 ; i+=dt)
+    {
+		Event event(i, 0.2);
+		neuron.add_event_in(event); 
+	}
+	 for(Physics::Time i(40); i< 60 ; i+=dt)
+    {
+		Event event(i, 0.35);
+		neuron.add_event_in(event); 
+	}
+	 for(Physics::Time i(60); i< 80 ; i+=dt)
+    {
+		Event event(i, 0.6);
+		neuron.add_event_in(event); 
+	}
+	 for(Physics::Time i(80); i< 100 ; i+=dt)
+    {
+		Event event(i,1);
+		neuron.add_event_in(event); 
+	}
+    while( neuron.get_t() < 100)
     {
 		neuron.update(DT);
 	}
 
 }
 
-/*
-TEST(TestsCategoryName, TestMediumVolateFiringReset)
-{
-    Neuron neuron (NeuronType, true, false, FIRING_THRESHOLD, SIMULATION_TIME, REFRACTORY_PERIOD, RESTING_POTENTIAL,RESET_POTENTIAL, TRANSMISSION_DELAY, TAU, 
-					EXTERNAL_FACTOR, RANDOM_SEED, true, 8);
-    Physics::Time dt = 1.0;
-    Physics::Time DT = TIME_STEP;
-    Physics::Potential weight = 5;
-    for(Physics::Time i(0.0); i< 40 ; i+=dt)
-    {
-		Event event(i, weight);
-		neuron.add_event_in(event); 
-	}
-    while( neuron.get_t() < 40)
-    {
-		neuron.update(DT);
-	}
-}
 
 
-TEST(TestsCategoryName, TestHighVolateFiringReset)
-{
-    Neuron neuron (NeuronType, true, false, FIRING_THRESHOLD, SIMULATION_TIME, REFRACTORY_PERIOD, RESTING_POTENTIAL,RESET_POTENTIAL, TRANSMISSION_DELAY, TAU, 
-					EXTERNAL_FACTOR, RANDOM_SEED, true, 9);
-    Physics::Time dt = 1.0;
-    Physics::Time DT = TIME_STEP;
-    Physics::Potential weight = 10;
-    for(Physics::Time i(0.0); i< 40 ; i+=dt)
-    {
-		Event event(i, weight);
-		neuron.add_event_in(event); 
-	}
-    while( neuron.get_t() < 40)
-    {
-		neuron.update(DT);
-	}
-}
-
-
-//FICHIER 12
-TEST(TestsCategoryName, TestVeryHighVolateFiringReset)
-{
-    Neuron neuron (NeuronType, true, false, FIRING_THRESHOLD, SIMULATION_TIME, REFRACTORY_PERIOD, RESTING_POTENTIAL,RESET_POTENTIAL, TRANSMISSION_DELAY, TAU, 
-					EXTERNAL_FACTOR, RANDOM_SEED, true, 12);
-    Physics::Time dt = 1.0;
-    Physics::Time DT = TIME_STEP;
-    Physics::Potential weight = 20;
-    for(Physics::Time i(0.0); i< 40 ; i+=dt)
-    {
-		Event event(i, weight);
-		neuron.add_event_in(event); 
-	}
-    while( neuron.get_t() < 40)
-    {
-		neuron.update(DT);
-	}
-}
-
-*/
 
 int main(int argc, char* argv[])
 {
